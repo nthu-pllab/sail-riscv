@@ -64,6 +64,13 @@ SAIL_DEFAULT_INST += riscv_insts_vext_fp_red.sail
 SAIL_DEFAULT_INST += riscv_insts_zicbom.sail
 SAIL_DEFAULT_INST += riscv_insts_zicboz.sail
 
+SAIL_DEFAULT_INST += riscv_insts_pext.sail
+ifeq ($(ARCH),RV32)
+  SAIL_DEFAULT_INST += riscv_insts_pext_rv32.sail
+else ifeq ($(ARCH),RV64)
+  SAIL_DEFAULT_INST += riscv_insts_pext_rv64.sail
+endif
+
 SAIL_SEQ_INST  = $(SAIL_DEFAULT_INST) riscv_jalr_seq.sail
 SAIL_RMEM_INST = $(SAIL_DEFAULT_INST) riscv_jalr_rmem.sail riscv_insts_rmem.sail
 

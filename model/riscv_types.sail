@@ -369,6 +369,16 @@ enum extop_zbb = {RISCV_SEXTB, RISCV_SEXTH, RISCV_ZEXTH}
 
 enum zicondop = {RISCV_CZERO_EQZ, RISCV_CZERO_NEZ}
 
+enum psimple = {CLS, CLSW, ABS, ABSW, REV, REV8, REV16}
+
+enum pshift_left_b = {PSLLI_B}
+
+enum pshift_left_h = {PSLLI_H, PSSLAI_H}
+
+enum pshift_left_w_rv32 = {SSLAI}
+
+enum pshift_left_w_rv64 = {PSLLI_W, PSSLAI_W}
+
 // Get the bit encoding of word_width.
 mapping size_enc : word_width <-> bits(2) = {
   BYTE   <-> 0b00,
