@@ -379,6 +379,14 @@ enum pshift_left_w_rv32 = {SSLAI}
 
 enum pshift_left_w_rv64 = {PSLLI_W, PSSLAI_W}
 
+enum p_ps = {PSABS_B, PSABS_H, PSEXTB_H, PSEXTB_W, PSEXTH_W}
+
+enum p_add_shift = {PSLL_B_B0, PADD_B_B0, PSLL_H_H0, PADD_H_H0, PSSHA_H_H0, PSSHAR_H_H0, PSLL_W_W0, PADD_W_W0, PSSHA_W_W0, PSSHAR_W_W0, SSHA, SSHAR, SHA, SHAR}
+
+enum p_shift_sat_b = {PSRLI_B, PSRAI_B}
+
+enum p_shift_sat_h = {PSRLI_H, PUSATI_H, PSRAI_H, PSRARI_H, PSATI_H}
+
 // Get the bit encoding of word_width.
 mapping size_enc : word_width <-> bits(2) = {
   BYTE   <-> 0b00,
