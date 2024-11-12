@@ -389,7 +389,17 @@ enum p_shift_sat_h = {PSRLI_H, PUSATI_H, PSRAI_H, PSRARI_H, PSATI_H}
 
 enum p_shift_sat_w = {PSRLI_W, PUSATI_W, PSRAI_W, PSRARI_W, PSATI_W}
 
+enum p_shift_sat = {USATI, SRARI, SATI}
+
 enum p_shift_sum = {PSRL_B_B0, PSRA_B_B0, PSRL_H_H0, PSRA_H_H0, PSRL_W_W0, PSRA_W_W0, PREDSUM_H, PREDSUMU_H, PREDSUM_W, PREDSUMU_W}
+
+enum p_elementary_b = {PADD_B, PSADD_B, PAADD_B, PSADDU_B, PAADDU_B, PSUB_B, PDIF_B, PSSUB_B, PASUB_B, PDIFU_B, PSSUBU_B, PASUBU_B}
+
+enum p_elementary_h = {PADD_H, PSADD_H, PAADD_H, PSADDU_H, PAADDU_H, PSUB_H, PDIF_H, PSSUB_H, PASUB_H, PDIFU_H, PSSUBU_H, PASUBU_H}
+
+enum p_elementary_w = {PADD_W, PSADD_W, PAADD_W, PSADDU_W, PAADDU_W, PSUB_W, PSSUB_W, PASUB_W, PSSUBU_W, PASUBU_W}
+
+enum p_elementary = {SADD, AADD, SADDU, AADDU, SSUB, ASUB, SSUBU, ASUBU}
 
 // Get the bit encoding of word_width.
 mapping size_enc : word_width <-> bits(2) = {
