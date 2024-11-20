@@ -401,7 +401,7 @@ enum p_elementary_w = {PADD_W, PSADD_W, PAADD_W, PSADDU_W, PAADDU_W, PSUB_W, PSS
 
 enum p_elementary = {SADD, AADD, SADDU, AADDU, SSUB, ASUB, SSUBU, ASUBU}
 
-enum p_p11 = {MVM, MVMN, MERGE, SRX}
+enum p_p11 = {MVM, MVMN, MERGE, SRX, PDIFSUMU_B, PDIFSUMAU_B, PMUL_H_BEO, PMULU_H_BEO, MUL_H01, MACC_H01, MULU_H01, MACCU_H01, PMUL_W_HEO, PMACC_W_HEO, PMULU_W_HEO, PMACCU_W_HEO, MUL_W01, MACC_W01, MULU_W01, MACCU_W01}
 
 // Get the bit encoding of word_width.
 mapping size_enc : word_width <-> bits(2) = {

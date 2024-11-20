@@ -12,7 +12,7 @@ val neg : forall 'n, 'n == 8 | 'n == 16 | 'n == 32 | 'n == 64.
   (bits ('n)) -> bits ('n)
 function neg (v) = not_vec(v) + 1
 
-val abs : forall 'n, 'n == 8 | 'n == 16 | 'n == 32.
+val abs : forall 'n, 'n == 8 | 'n == 16 | 'n == 32 | 'n == 64.
   (bits('n)) -> bits('n)
 function abs (v) =
   if v <_s zeros('n) then { pext_write_OV (0b1); neg(v) }
