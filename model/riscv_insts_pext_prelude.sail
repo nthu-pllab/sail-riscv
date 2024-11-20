@@ -168,3 +168,73 @@ function asubu (v1, v2) =
   let v1ext : bits(66) = EXTZ(v1) in
   let v2ext : bits(66) = EXTZ(v2) in
   slice ((v1ext - v2ext) >> 1, 0, 'n)
+
+val muls : forall 'n, 'n == 8 | 'n == 16 | 'n == 32.
+  (bits('n), bits('n)) -> bits(2 * 'n)
+function muls (v1, v2) =
+  to_bits (2 * 'n, signed(v1) * signed(v2))
+
+val mulu : forall 'n, 'n == 8 | 'n == 16 | 'n == 32.
+  (bits('n), bits('n)) -> bits(2 * 'n)
+function mulu (v1, v2) =
+  to_bits (2 * 'n, unsigned(v1) * unsigned(v2))
+
+val mulsu : forall 'n, 'n == 8 | 'n == 16 | 'n == 32.
+  (bits('n), bits('n)) -> bits(2 * 'n)
+function mulsu (v1, v2) =
+ to_bits (2 * 'n, signed(v1) * unsigned(v2))
+
+val mulh : forall 'n, 'n == 8 | 'n == 16 | 'n == 32.
+  (bits('n), bits('n)) -> bits('n)
+function mulh (v1, v2) =
+  slice(shift_right_arith(muls(v1, v2), 0x00 + 'n), 0, 'n)
+
+val mulhr : forall 'n, 'n == 8 | 'n == 16 | 'n == 32.
+  (bits('n), bits('n)) -> bits('n)
+function mulhr (v1, v2) =
+  slice(shift_right_arith_rounding(muls(v1, v2), 0x00 + 'n), 0, 'n)
+
+val mulq : forall 'n, 'n == 8 | 'n == 16 | 'n == 32.
+  (bits('n), bits('n)) -> bits(2 * 'n)
+function mulq (v1, v2) =
+  shift_right_arith(muls(v1, v2), 0x00 + 'n - 1)
+
+val mulqr : forall 'n, 'n == 8 | 'n == 16 | 'n == 32.
+  (bits('n), bits('n)) -> bits(2 * 'n)
+function mulqr (v1, v2) =
+  shift_right_arith_rounding(muls(v1, v2), 0x00 + 'n - 1)
+
+val mseq : forall 'n, 'n == 8 | 'n == 16 | 'n == 32.
+  (bits('n), bits('n)) -> bits('n)
+function mseq (v1, v2) =
+  if v1 == v2 then ones() else zeros()
+
+val mslt : forall 'n, 'n == 8 | 'n == 16 | 'n == 32.
+  (bits('n), bits('n)) -> bits('n)
+function mslt (v1, v2) =
+  if v1 <_s v2 then ones() else zeros()
+
+val msltu : forall 'n, 'n == 8 | 'n == 16 | 'n == 32.
+  (bits('n), bits('n)) -> bits('n)
+function msltu (v1, v2) =
+  if v1 <_u v2 then ones() else zeros()
+
+val mins : forall 'n, 'n == 8 | 'n == 16 | 'n == 32.
+  (bits('n), bits('n)) -> bits('n)
+function mins (v1, v2) =
+  if v1 <_s v2 then v1 else v2
+
+val minu : forall 'n, 'n == 8 | 'n == 16 | 'n == 32.
+  (bits('n), bits('n)) -> bits('n)
+function minu (v1, v2) =
+  if v1 <_u v2 then v1 else v2
+
+val maxs : forall 'n, 'n == 8 | 'n == 16 | 'n == 32.
+  (bits('n), bits('n)) -> bits('n)
+function maxs (v1, v2) =
+  if v1 >_s v2 then v1 else v2
+
+val maxu : forall 'n, 'n == 8 | 'n == 16 | 'n == 32.
+  (bits('n), bits('n)) -> bits('n)
+function maxu (v1, v2) =
+  if v1 >_u v2 then v1 else v2

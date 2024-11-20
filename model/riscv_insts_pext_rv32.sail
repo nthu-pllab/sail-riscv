@@ -35,3 +35,36 @@ mapping p_shift_sat_mapping : p_shift_sat <-> string = {
 
 mapping clause assembly = PEXT_SHIFT_SAT(imm5, rs1, rd, p_inst)
   <-> p_shift_sat_mapping(p_inst) ^ spc() ^ reg_name(rd) ^ sep() ^ reg_name(rs1) ^ sep() ^ hex_bits_5(imm5)
+
+/* ****************************************************************** */
+
+union clause ast = PEXT_PACK : (regidx, regidx, regidx, p_pack)
+
+mapping clause encdec = PEXT_PACK(rs1, rs2, rd, PACKBT) <->
+  0b1 @ 0b001 @ 0b0 @ 0b01 @ rs2 @ rs1 @ 0b100 @ rd @ 0b0111011
+mapping clause encdec = PEXT_PACK(rs1, rs2, rd, PACKTB) <->
+  0b1 @ 0b010 @ 0b0 @ 0b01 @ rs2 @ rs1 @ 0b100 @ rd @ 0b0111011
+mapping clause encdec = PEXT_PACK(rs1, rs2, rd, PACKT) <->
+  0b1 @ 0b011 @ 0b0 @ 0b01 @ rs2 @ rs1 @ 0b100 @ rd @ 0b0111011
+
+function clause execute (PEXT_PACK(rs1, rs2, rd, op)) = {
+  let rs1_val = X(rs1);
+  let rs2_val = X(rs2);
+  var result : xlenbits = zeros();
+  result = match op {
+    PACKBT => rs2_val[31..16] @ rs1_val[15..0],
+    PACKTB => rs2_val[15..0] @ rs1_val[31..16],
+    PACKT => rs2_val[31..16] @ rs1_val[31..16]
+  };
+  X(rd) = result;
+  RETIRE_SUCCESS
+}
+
+mapping p_pack_mapping : p_pack <-> string = {
+  PACKBT <-> "packbt",
+  PACKTB <-> "packtb",
+  PACKT <-> "packt"
+}
+
+mapping clause assembly = PEXT_PACK(rs1, rs2, rd, p_inst)
+  <-> p_pack_mapping(p_inst) ^ spc() ^ reg_name(rd) ^ sep() ^ reg_name(rs1) ^ sep() ^ reg_name(rs2)
