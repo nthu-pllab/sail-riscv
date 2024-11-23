@@ -35,6 +35,7 @@ type word = bits(32)
 
 type regidx  = bits(5)
 type cregidx = bits(3)    /* identifiers in RVC instructions */
+type pregidx  = bits(4)   /* identifiers in RVP instructions */
 type csreg   = bits(12)   /* CSR addressing */
 
 /* register file indexing */
@@ -447,6 +448,54 @@ enum p_comparison_b = {PMSEQ_B, PMSLT_B, PMSLTU_B, PMIN_B, PMINU_B, PMAX_B, PMAX
 enum p_comparison_h = {PMSEQ_H, PMSLT_H, PMSLTU_H, PMIN_H, PMINU_H, PMAX_H, PMAXU_H}
 
 enum p_comparison_w = {PMSEQ_W, PMSLT_W, PMSLTU_W, PMIN_W, PMINU_W, PMAX_W, PMAXU_W}
+
+enum p_widening_shift_left_imm_b = {PWSLLI_B, PWSLAI_B}
+
+enum p_widening_shift_left_imm_h = {PWSLLI_H, PWSLAI_H}
+
+enum p_widening_shift_left_imm_w = {WSLLI, WSLAI}
+
+enum p_load_imm_h_rv32 = {PLI_DH}
+
+enum p_load_imm_b_rv32 = {PLI_DB}
+
+enum p_load_upper_imm_h_rv32 = {PLUI_DH}
+
+enum p_widening_shift_left_b = {PWSLL_B_B0, PWSLA_B_B0}
+
+enum p_widening_shift_left_h = {PWSLL_H_H0, PWSLA_H_H0}
+
+enum p_widening_shift_left_w = {WSLL, WSLA}
+
+enum p_widening_zip = {WZIP8P, WZIP16P}
+
+enum p_widening_elementary_b = {PWADD_B, PWADDA_B, PWADDU_B, PWADDAU_B, PWMUL_B, PWMULU_B, PWSUB_B, PWSUBA_B, PWSUBU_B, PWSUBAU_B, PWMULSU_B}
+
+enum p_widening_elementary_h = {PWADD_H, PWADDA_H, PWADDU_H, PWADDAU_H, PWMUL_H, PWMACC_H, PWMULU_H, PWMACCU_H, PWSUB_H, PWSUBA_H, PWSUBU_H, PWSUBAU_H, PWMULSU_H, PWMACCSU_H}
+
+enum p_widening_elementary_w = {WADD, WADDA, WADDU, WADDAU, WMUL, WMACC, WMULU, WMACCU, WSUB, WSUBA, WSUBU, WSUBAU, WMULSU, WMACCSU}
+
+enum p_widening_mul2horizon_h = {PM2WADD_H, PM2WADDA_H, PM2WADD_HX, PM2WADDA_HX,
+                                 PM2WADDU_H, PM2WADDAU_H, PM2WADDSU_H, PM2WADDASU_H,
+                                 PM2WSUB_H, PM2WSUBA_H, PM2WSUB_HX, PM2WSUBA_HX}
+
+enum p_widening_mul_h = {PMQWACC_H, PMQRWACC_H}
+
+enum p_widening_mul_w = {PMQWACC, PMQRWACC}
+
+enum p_sum_rv32 = {PREDSUM_DH, PREDSUMU_DH}
+
+enum p_narrowing_shift_clip_imm_b = {PNSRLI_B, PNCLIPIU_B, PNCLIPRIU_B, PNSRAI_B, PNSRARI_B, PNCLIPI_B, PNCLIPRI_B}
+
+enum p_narrowing_shift_clip_imm_h = {PNSRLI_H, PNCLIPIU_H, PNCLIPRIU_H, PNSRAI_H, PNSRARI_H, PNCLIPI_H, PNCLIPRI_H}
+
+enum p_narrowing_shift_clip_imm_w = {NSRLI, NCLIPIU, NCLIPRIU, NSRAI, NSRARI, NCLIPI, NCLIPRI}
+
+enum p_narrowing_shift_clip_b = {PNSRL_B_B0, PNCLIPU_B_B0, PNCLIPRU_B_B0, PNSRA_B_B0, PNSRAR_B_B0, PNCLIP_B_B0, PNCLIPR_B_B0}
+
+enum p_narrowing_shift_clip_h = {PNSRL_H_H0, PNCLIPU_H_H0, PNCLIPRU_H_H0, PNSRA_H_H0, PNSRAR_H_H0, PNCLIP_H_H0, PNCLIPR_H_H0}
+
+enum p_narrowing_shift_clip_w = {NSRL, NCLIPU, NCLIPRU, NSRA, NSRAR, NCLIP, NCLIPR}
 
 // Get the bit encoding of word_width.
 mapping size_enc : word_width <-> bits(2) = {

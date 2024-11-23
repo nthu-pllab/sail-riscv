@@ -32,11 +32,18 @@ function shift_left_logic (v, m) =
   let extv : bits(xlen + 32) = EXTZ (v) in
   slice (extv << m, 0, 'n)
 
-val shift_right_logic : forall 'n, 'n == 8 | 'n == 16 | 'n == 32 | 'n == 64.
+val shift_right_logic : forall 'n, 'n == 8 | 'n == 9 | 'n == 16 | 'n == 17 | 'n == 32 |'n == 33 |'n == 64 |'n == 65.
   (bits ('n), bits(8)) -> bits ('n)
 function shift_right_logic (v, m) =
   let extv : bits(xlen + 65) = EXTZ (v) in
   slice (extv >> m, 0, 'n)
+
+val shift_right_logic_rounding : forall 'n, 'n == 8 | 'n == 16 | 'n == 32 | 'n == 64.
+  (bits ('n), bits(8)) -> bits ('n)
+function shift_right_logic_rounding (v, m) =
+  if m == 0x00 then v
+  else let res : bits(65) = add_bits(EXTZ(shift_right_logic(v @ 0b0, m)), EXTZ(0b1)) in
+  slice(res, 1, 'n)
 
 val sat_shift_left_arith : forall 'n, 'n == 8 | 'n == 16 | 'n == 32 | 'n == 64.
   (bits ('n), bits(8)) -> bits ('n)
@@ -49,18 +56,18 @@ function sat_shift_left_arith (v, m) =
   else if ub <_s shiftext then { pext_write_OV (0b1); ones ('n) >> 1 }
   else { slice (shiftext, 0, 'n) }
 
-val shift_right_arith : forall 'n, 'n == 8 | 'n == 16 | 'n == 32 |'n == 64.
+val shift_right_arith : forall 'n, 'n == 8 | 'n == 9 | 'n == 16 | 'n == 17 | 'n == 32 |'n == 33 |'n == 64 |'n == 65.
   (bits ('n), bits(8)) -> bits ('n)
 function shift_right_arith (v, m) =
-  let extv : bits(xlen + 65) = EXTS (v) in
+  let extv : bits(xlen + 98) = EXTS (v) in
   slice (extv >> m, 0, 'n)
 
 val shift_right_arith_rounding : forall 'n, 'n == 8 | 'n == 16 | 'n == 32 | 'n == 64.
   (bits ('n), bits(8)) -> bits ('n)
 function shift_right_arith_rounding (v, m) =
   if m == 0x00 then v
-  else let res : bits(65) = add_bits(EXTS(shift_right_arith(v, m - 0x01)), EXTZ(0b1)) in
-  slice(res >> 1, 0, 'n)
+  else let res : bits(65) = add_bits(EXTS(shift_right_arith(v @ 0b0, m)), EXTZ(0b1)) in
+  slice(res, 1, 'n)
 
 // TODO: It seems we have to set the OV flag in `ssha` and `sshar`
 
@@ -238,3 +245,39 @@ val maxu : forall 'n, 'n == 8 | 'n == 16 | 'n == 32.
   (bits('n), bits('n)) -> bits('n)
 function maxu (v1, v2) =
   if v1 >_u v2 then v1 else v2
+
+val nclips : forall 'n, 'n == 16 | 'n == 32 | 'n == 64.
+  (bits('n), bits(8)) -> bits('n)
+function nclips (v, m) =
+  let ub : bits('n) = EXTS(sail_ones ('n / 2) >> 1) in
+  let lb : bits('n) = not_vec (ub) in
+  let shiftext : bits('n) = shift_right_arith(v, m) in
+  if shiftext <_s lb then lb
+  else if ub <_s shiftext then ub
+  else shiftext
+
+val nclipu : forall 'n, 'n == 16 | 'n == 32 | 'n == 64.
+  (bits('n), bits(8)) -> bits('n)
+function nclipu (v, m) =
+  let ub : bits('n) = EXTZ(sail_ones ('n / 2)) in
+  let shiftext : bits('n) = shift_right_logic(v, m) in
+  if ub <_u shiftext then ub
+  else shiftext
+
+val ncliprs : forall 'n, 'n == 16 | 'n == 32 | 'n == 64.
+  (bits('n), bits(8)) -> bits('n)
+function ncliprs (v, m) =
+  let ub : bits('n) = EXTS(sail_ones ('n / 2) >> 1) in
+  let lb : bits('n) = not_vec (ub) in
+  let shiftext : bits('n) = shift_right_arith_rounding(v, m) in
+  if shiftext <_s lb then slice (lb, 0, 'n)
+  else if ub <_s shiftext then slice (ub, 0, 'n)
+  else slice (shiftext, 0, 'n)
+
+val nclipru : forall 'n, 'n == 16 | 'n == 32 | 'n == 64.
+  (bits('n), bits(8)) -> bits('n)
+function nclipru (v, m) =
+  let ub : bits('n) = EXTZ(sail_ones ('n / 2)) in
+  let shiftext : bits('n) = shift_right_logic_rounding(v, m) in
+  if ub <_u shiftext then slice (ub, 0, 'n)
+  else slice (shiftext, 0, 'n)

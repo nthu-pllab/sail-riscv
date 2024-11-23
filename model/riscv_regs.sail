@@ -199,6 +199,25 @@ mapping creg_name : cregidx <-> string = {
   0b111 <-> "a5"
 }
 
+mapping preg_name : pregidx <-> string = {
+    0b0000 <-> "zero",
+    0b0001 <-> "sp",
+    0b0010 <-> "tp",
+    0b0011 <-> "t1",
+    0b0100 <-> "fp",
+    0b0101 <-> "a0",
+    0b0110 <-> "a2",
+    0b0111 <-> "a4",
+    0b1000 <-> "a6",
+    0b1001 <-> "s2",
+    0b1010 <-> "s4",
+    0b1011 <-> "s6",
+    0b1100 <-> "s8",
+    0b1101 <-> "s10",
+    0b1110 <-> "t3",
+    0b1111 <-> "t5",
+}
+
 val init_base_regs : unit -> unit
 function init_base_regs () = {
   x1  = zero_reg;
