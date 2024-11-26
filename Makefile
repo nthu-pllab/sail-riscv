@@ -77,6 +77,7 @@ SAIL_DEFAULT_INST += riscv_insts_pext_p13.sail
 SAIL_DEFAULT_INST += riscv_insts_pext_p14.sail
 SAIL_DEFAULT_INST += riscv_insts_pext_p15.sail
 SAIL_DEFAULT_INST += riscv_insts_pext_p16.sail
+SAIL_DEFAULT_INST += riscv_insts_pext_p17.sail
 ifeq ($(ARCH),RV32)
 SAIL_DEFAULT_INST += riscv_insts_pext_rv32.sail
 SAIL_DEFAULT_INST += riscv_insts_pext_p18.sail

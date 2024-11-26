@@ -449,6 +449,8 @@ enum p_comparison_h = {PMSEQ_H, PMSLT_H, PMSLTU_H, PMIN_H, PMINU_H, PMAX_H, PMAX
 
 enum p_comparison_w = {PMSEQ_W, PMSLT_W, PMSLTU_W, PMIN_W, PMINU_W, PMAX_W, PMAXU_W}
 
+enum p_mul = {PMULH_H, PMHACC_H, PMULHU_H, PMHACCU_H, PMULHR_H, PMHRACC_H, PMULHRU_H, PMHRACCU_H}
+
 enum p_widening_shift_left_imm_b = {PWSLLI_B, PWSLAI_B}
 
 enum p_widening_shift_left_imm_h = {PWSLLI_H, PWSLAI_H}

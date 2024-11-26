@@ -196,10 +196,20 @@ val mulh : forall 'n, 'n == 8 | 'n == 16 | 'n == 32.
 function mulh (v1, v2) =
   slice(shift_right_arith(muls(v1, v2), 0x00 + 'n), 0, 'n)
 
+val mulhu : forall 'n, 'n == 8 | 'n == 16 | 'n == 32.
+  (bits('n), bits('n)) -> bits('n)
+function mulhu (v1, v2) =
+  slice(shift_right_logic(mulu(v1, v2), 0x00 + 'n), 0, 'n)
+
 val mulhr : forall 'n, 'n == 8 | 'n == 16 | 'n == 32.
   (bits('n), bits('n)) -> bits('n)
 function mulhr (v1, v2) =
   slice(shift_right_arith_rounding(muls(v1, v2), 0x00 + 'n), 0, 'n)
+
+val mulhru : forall 'n, 'n == 8 | 'n == 16 | 'n == 32.
+  (bits('n), bits('n)) -> bits('n)
+function mulhru (v1, v2) =
+  slice(shift_right_logic_rounding(mulu(v1, v2), 0x00 + 'n), 0, 'n)
 
 val mulq : forall 'n, 'n == 8 | 'n == 16 | 'n == 32.
   (bits('n), bits('n)) -> bits(2 * 'n)
