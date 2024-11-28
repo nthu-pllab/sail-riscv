@@ -41,11 +41,11 @@ function clause execute (PEXT_SIMPLE(rs1, rd, op)) = {
                         else done = true;
       X(rd) = to_bits(sizeof(xlen), result);
     },
-    ABS => X(rd) = not_vec(X(rs1)) + 1,
+    ABS => if X(rs1) <_s zeros() then X(rd) = not_vec(X(rs1)) + 1 else X(rd) = X(rs1),
     ABSW => { // TODO: Double check if this is correct.
       let rs1_val = X(rs1);
       let rs1_word = slice(rs1_val, 0, 32);
-      let result : xlenbits = EXTZ (not_vec(rs1_word) + 1);
+      let result : xlenbits = if rs1_word <_s zeros() then EXTZ (not_vec(rs1_word) + 1) else EXTZ(rs1_word);
       X(rd) = result;
     },
     REV => {
