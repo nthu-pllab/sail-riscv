@@ -83,6 +83,10 @@ SAIL_DEFAULT_INST += riscv_insts_pext_rv32.sail
 SAIL_DEFAULT_INST += riscv_insts_pext_p18.sail
 SAIL_DEFAULT_INST += riscv_insts_pext_p19.sail
 SAIL_DEFAULT_INST += riscv_insts_pext_p20.sail
+SAIL_DEFAULT_INST += riscv_insts_pext_p21.sail
+SAIL_DEFAULT_INST += riscv_insts_pext_p22.sail
+SAIL_DEFAULT_INST += riscv_insts_pext_p23.sail
+SAIL_DEFAULT_INST += riscv_insts_pext_p24.sail
 else
 SAIL_DEFAULT_INST += riscv_insts_pext_rv64.sail
 endif

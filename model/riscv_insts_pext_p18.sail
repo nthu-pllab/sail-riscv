@@ -118,7 +118,7 @@ mapping p_load_imm_h_rv32_mapping : p_load_imm_h_rv32 <-> string = {
 }
 
 mapping clause assembly = PEXT_LOAD_IMM_H_RV32(imm10, rdp, p_inst)
-  <-> p_load_imm_h_rv32_mapping(p_inst) ^ spc() ^ preg_name(rdp) ^ sep() ^ hex_bits_10(imm10[0] @ imm10[9..1])
+  <-> p_load_imm_h_rv32_mapping(p_inst) ^ spc() ^ preg_name(rdp) ^ sep() ^ hex_bits_10(imm10[8..0] @ imm10[9])
 
 /* ****************************************************************** */
 
@@ -172,4 +172,4 @@ mapping p_load_upper_imm_h_rv32_mapping : p_load_upper_imm_h_rv32 <-> string = {
 }
 
 mapping clause assembly = PEXT_LOAD_UPPER_IMM_H_RV32(imm10, rdp, p_inst)
-  <-> p_load_upper_imm_h_rv32_mapping(p_inst) ^ spc() ^ preg_name(rdp) ^ sep() ^ hex_bits_10(imm10[8..0] @ imm10[9])
+  <-> p_load_upper_imm_h_rv32_mapping(p_inst) ^ spc() ^ preg_name(rdp) ^ sep() ^ hex_bits_10(imm10[0] @ imm10[9..1])

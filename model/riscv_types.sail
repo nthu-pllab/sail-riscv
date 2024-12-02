@@ -380,6 +380,12 @@ enum pshift_left_w_rv32 = {SSLAI}
 
 enum pshift_left_w_rv64 = {PSLLI_W, PSSLAI_W}
 
+enum p_load_imm_h = {PLI_H}
+
+enum p_load_imm_w = {PLI_W}
+
+enum p_load_imm_b = {PLI_B}
+
 enum p_ps = {PSABS_B, PSABS_H, PSEXTB_H, PSEXTB_W, PSEXTH_W}
 
 enum p_add_shift = {PSLL_B_B0, PADD_B_B0, PSLL_H_H0, PADD_H_H0, PSSHA_H_H0, PSSHAR_H_H0, PSLL_W_W0, PADD_W_W0, PSSHA_W_W0, PSSHAR_W_W0, SSHA, SSHAR, SHA, SHAR}
@@ -498,6 +504,46 @@ enum p_narrowing_shift_clip_b = {PNSRL_B_B0, PNCLIPU_B_B0, PNCLIPRU_B_B0, PNSRA_
 enum p_narrowing_shift_clip_h = {PNSRL_H_H0, PNCLIPU_H_H0, PNCLIPRU_H_H0, PNSRA_H_H0, PNSRAR_H_H0, PNCLIP_H_H0, PNCLIPR_H_H0}
 
 enum p_narrowing_shift_clip_w = {NSRL, NCLIPU, NCLIPRU, NSRA, NSRAR, NCLIP, NCLIPR}
+
+enum p_shift_sat_imm_b_rv32 = {PSLLI_DB}
+
+enum p_shift_sat_imm_h_rv32 = {PSLLI_DH, PSSLAI_DH}
+
+enum p_shift_sat_imm_w_rv32 = {PSLLI_DW, PSSLAI_DW}
+
+enum p_ps_rv32 = {PSEXTB_DH, PSEXTB_DW, PSEXTH_DW, PSABS_DH, PSABS_DB}
+
+enum p_add_shift_rv32 = {PSLL_DH_H0, PADD_DH_H0, PSSHA_DH_H0, PSSHAR_DH_H0, PSLL_DW_W, PADD_DW_W, PSSHA_DW_W, PSSHAR_DW_W, PSLL_DB_B0, PADD_DB_B0}
+
+enum p_shift_sat_b_rv32 = {PSRLI_DB, PSRAI_DB}
+
+enum p_shift_sat_h_rv32 = {PSRLI_DH, PUSATI_DH, PSRAI_DH, PSRARI_DH, PSATI_DH}
+
+enum p_shift_sat_w_rv32 = {PSRLI_DW, PUSATI_DW, PSRAI_DW, PSRARI_DW, PSATI_DW}
+
+enum p_shift_rv32 = {PSRL_DB_B0, PSRA_DB_B0, PSRL_DH_H0, PSRA_DH_H0, PSRL_DW_W, PSRA_DW_W}
+
+enum p_elementary_b_rv32 = {PADD_DB, PSADD_DB, PAADD_DB, PSADDU_DB, PAADDU_DB, PSUB_DB, PDIF_DB, PSSUB_DB, PASUB_DB, PDIFU_DB, PSSUBU_DB, PASUBU_DB}
+
+enum p_elementary_h_rv32 = {PADD_DH, PSADD_DH, PAADD_DH, PSADDU_DH, PAADDU_DH, PSUB_DH, PDIF_DH, PSSUB_DH, PASUB_DH, PDIFU_DH, PSSUBU_DH, PASUBU_DH}
+
+enum p_elementary_w_rv32 = {PADD_DW, PSADD_DW, PAADD_DW, PSADDU_DW, PAADDU_DW, PSUB_DW, PSSUB_DW, PASUB_DW, PSSUBU_DW, PASUBU_DW}
+
+enum p_elementary_rv32 = {ADDD, SUBD}
+
+enum p_sh1add_rv32 = {PSH1ADD_DH, PSSH1SADD_DH, PSH1ADD_DW, PSSH1SADD_DW}
+
+enum p_pack_h_rv32 = {PPACK_DH, PPACKBT_DH, PPACKTB_DH, PPACKT_DH}
+
+enum p_pack_w_rv32 = {PPACK_DW, PPACKBT_DW, PPACKTB_DW, PPACKT_DW}
+
+enum p_addsub_h_rv32 = {PAS_DHX, PSA_DHX, PSAS_DHX, PSSA_DHX, PAAS_DHX, PASA_DHX}
+
+enum p_comparison_b_rv32 = {PMSEQ_DB, PMSLT_DB, PMSLTU_DB, PMIN_DB, PMINU_DB, PMAX_DB, PMAXU_DB}
+
+enum p_comparison_h_rv32 = {PMSEQ_DH, PMSLT_DH, PMSLTU_DH, PMIN_DH, PMINU_DH, PMAX_DH, PMAXU_DH}
+
+enum p_comparison_w_rv32 = {PMSEQ_DW, PMSLT_DW, PMSLTU_DW, PMIN_DW, PMINU_DW, PMAX_DW, PMAXU_DW}
 
 // Get the bit encoding of word_width.
 mapping size_enc : word_width <-> bits(2) = {

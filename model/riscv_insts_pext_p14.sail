@@ -12,7 +12,6 @@ mapping clause encdec = PEXT_PACK_H(rs1, rs2, rd, PPACKT_H) <->
 function clause execute (PEXT_PACK_H(rs1, rs2, rd, op)) = {
   let rs1_val = X(rs1);
   let rs2_val = X(rs2);
-  let rd_val = X(rd);
   var result : xlenbits = zeros();
   foreach (i from 0 to (sizeof(xlen) - 16) by 16) {
     let rs1_byte_even = slice(rs1_val, i, 8);
@@ -56,7 +55,6 @@ mapping clause encdec = PEXT_PACK_W(rs1, rs2, rd, PPACKT_W) if sizeof(xlen) == 6
 function clause execute (PEXT_PACK_W(rs1, rs2, rd, op)) = {
   let rs1_val = X(rs1);
   let rs2_val = X(rs2);
-  let rd_val = X(rd);
   var result : xlenbits = zeros();
   foreach (i from 0 to (sizeof(xlen) - 32) by 32) {
     let rs1_halfword_even = slice(rs1_val, i, 16);

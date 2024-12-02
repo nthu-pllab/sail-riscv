@@ -111,4 +111,77 @@ mapping p_shift_h_mapping : pshift_left_h <-> string = {
 mapping clause assembly = PEXT_SHIFT_LEFT_H(imm4, rs1, rd, p_inst)
   <-> p_shift_h_mapping(p_inst) ^ spc() ^ reg_name(rd) ^ sep() ^ reg_name(rs1) ^ sep() ^ hex_bits_4(imm4)
 
-// TODO: Figure out PLI and PLUI and implement them.
+/* ****************************************************************** */
+
+union clause ast = PEXT_LOAD_IMM_H : (bits(10), regidx, p_load_imm_h)
+
+mapping clause encdec = PEXT_LOAD_IMM_H(imm10, rd, PLI_H) <->
+  0b10110 @ 0b00 @ imm10 @ 0b010 @ rd @ 0b0011011
+
+function clause execute (PEXT_LOAD_IMM_H(imm10, rd, op)) = {
+  var result : xlenbits = zeros();
+  foreach (i from 0 to (sizeof(xlen) - 16) by 16) {
+    result[(i+15)..i] = match op {
+      PLI_H => if (imm10 & 0b0000000001) == 0b0000000001 then sail_ones(7) @ imm10[9..1] else sail_zeros(7) @ imm10[9..1]
+    };
+  };
+  X(rd) = result;
+  RETIRE_SUCCESS
+}
+
+mapping p_load_imm_h_mapping : p_load_imm_h <-> string = {
+  PLI_H <-> "pli.h"
+}
+
+mapping clause assembly = PEXT_LOAD_IMM_H(imm10, rd, p_inst)
+  <-> p_load_imm_h_mapping(p_inst) ^ spc() ^ reg_name(rd) ^ sep() ^ hex_bits_10(imm10[8..0] @ imm10[9])
+
+/* ****************************************************************** */
+
+union clause ast = PEXT_LOAD_IMM_W : (bits(10), regidx, p_load_imm_w)
+
+mapping clause encdec = PEXT_LOAD_IMM_W(imm10, rd, PLI_W) if sizeof(xlen) == 64 <->
+  0b10110 @ 0b01 @ imm10 @ 0b010 @ rd @ 0b0011011 if sizeof(xlen) == 64
+
+function clause execute (PEXT_LOAD_IMM_W(imm10, rd, op)) = {
+  var result : xlenbits = zeros();
+  foreach (i from 0 to (sizeof(xlen) - 32) by 32) {
+    result[(i+31)..i] = match op {
+      PLI_W => if (imm10 & 0b0000000001) == 0b0000000001 then sail_ones(23) @ imm10[9..1] else sail_zeros(23) @ imm10[9..1]
+    };
+  };
+  X(rd) = result;
+  RETIRE_SUCCESS
+}
+
+mapping p_load_imm_w_mapping : p_load_imm_w <-> string = {
+  PLI_W <-> "pli.w"
+}
+
+mapping clause assembly = PEXT_LOAD_IMM_W(imm10, rd, p_inst)
+  <-> p_load_imm_w_mapping(p_inst) ^ spc() ^ reg_name(rd) ^ sep() ^ hex_bits_10(imm10[8..0] @ imm10[9])
+
+/* ****************************************************************** */
+
+union clause ast = PEXT_LOAD_IMM_B : (bits(8), regidx, p_load_imm_b)
+
+mapping clause encdec = PEXT_LOAD_IMM_B(imm8, rd, PLI_B) <->
+  0b10110 @ 0b100 @ imm8 @ 0b0010 @ rd @ 0b0011011
+
+function clause execute (PEXT_LOAD_IMM_B(imm8, rd, op)) = {
+  var result : xlenbits = zeros();
+  foreach (i from 0 to (sizeof(xlen) - 8) by 8) {
+    result[(i+7)..i] = match op {
+      PLI_B => imm8
+    };
+  };
+  X(rd) = result;
+  RETIRE_SUCCESS
+}
+
+mapping p_load_imm_b_mapping : p_load_imm_b <-> string = {
+  PLI_B <-> "pli.b"
+}
+
+mapping clause assembly = PEXT_LOAD_IMM_B(imm8, rd, p_inst)
+  <-> p_load_imm_b_mapping(p_inst) ^ spc() ^ reg_name(rd) ^ sep() ^ hex_bits_8(imm8)

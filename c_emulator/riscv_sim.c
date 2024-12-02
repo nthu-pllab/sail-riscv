@@ -1028,6 +1028,7 @@ void run_sail(void)
       CREATE(sail_int)(&sail_step);
       CONVERT_OF(sail_int, mach_int)(&sail_step, step_no);
       stepped = zstep(sail_step);
+      fprintf(stdout, "\n");
       if (have_exception)
         goto step_exception;
       flush_logs();
