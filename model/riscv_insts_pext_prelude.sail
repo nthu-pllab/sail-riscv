@@ -211,6 +211,11 @@ val mulhru : forall 'n, 'n == 8 | 'n == 16 | 'n == 32.
 function mulhru (v1, v2) =
   slice(shift_right_logic_rounding(mulu(v1, v2), 0x00 + 'n), 0, 'n)
 
+val mulhsu : forall 'n, 'n == 8 | 'n == 16 | 'n == 32.
+  (bits('n), bits('n)) -> bits('n)
+function mulhsu (v1, v2) =
+  slice(shift_right_arith(mulsu(v1, v2), 0x00 + 'n), 0, 'n)
+
 val mulq : forall 'n, 'n == 8 | 'n == 16 | 'n == 32.
   (bits('n), bits('n)) -> bits(2 * 'n)
 function mulq (v1, v2) =
