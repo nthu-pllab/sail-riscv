@@ -7,4 +7,3 @@ _sbuild/
 *.o
 *.a
 /z3_problems
-c_emulator/riscv_sim_RV*
