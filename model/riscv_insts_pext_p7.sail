@@ -57,3 +57,53 @@ mapping p_ps_mapping : p_ps <-> string = {
 
 mapping clause assembly = PEXT_PS(rs1, rd, p_inst)
   <-> p_ps_mapping(p_inst) ^ spc() ^ reg_name(rd) ^ sep() ^ reg_name(rs1)
+
+/* ****************************************************************** */
+
+union clause ast = PEXT_LOAD_UPPER_IMM_H : (bits(10), regidx, p_load_upper_imm_h)
+
+mapping clause encdec = PEXT_LOAD_UPPER_IMM_H(imm10, rd, PLUI_H) <->
+  0b11110 @ 0b00 @ imm10 @ 0b010 @ rd @ 0b0011011
+
+function clause execute (PEXT_LOAD_UPPER_IMM_H(imm10, rd, op)) = {
+  var result : xlenbits = zeros();
+  foreach (i from 0 to (sizeof(xlen) - 16) by 16) {
+    result[(i+15)..i] = match op {
+      PLUI_H => imm10[8..0] @ imm10[9..9] @ sail_zeros(6)
+    };
+  };
+  X(rd) = result;
+  RETIRE_SUCCESS
+}
+
+mapping p_load_upper_imm_h_mapping : p_load_upper_imm_h <-> string = {
+  PLUI_H <-> "plui.h"
+}
+
+mapping clause assembly = PEXT_LOAD_UPPER_IMM_H(imm10, rd, p_inst)
+  <-> p_load_upper_imm_h_mapping(p_inst) ^ spc() ^ reg_name(rd) ^ sep() ^ hex_bits_10(imm10[0] @ imm10[9..1])
+
+/* ****************************************************************** */
+
+union clause ast = PEXT_LOAD_UPPER_IMM_W : (bits(10), regidx, p_load_upper_imm_w)
+
+mapping clause encdec = PEXT_LOAD_UPPER_IMM_W(imm10, rd, PLUI_W) if sizeof(xlen) == 64 <->
+  0b11110 @ 0b01 @ imm10 @ 0b010 @ rd @ 0b0011011 if sizeof(xlen) == 64
+
+function clause execute (PEXT_LOAD_UPPER_IMM_W(imm10, rd, op)) = {
+  var result : xlenbits = zeros();
+  foreach (i from 0 to (sizeof(xlen) - 32) by 32) {
+    result[(i+31)..i] = match op {
+      PLUI_W => imm10[8..0] @ imm10[9..9] @ sail_zeros(22)
+    };
+  };
+  X(rd) = result;
+  RETIRE_SUCCESS
+}
+
+mapping p_load_upper_imm_w_mapping : p_load_upper_imm_w <-> string = {
+  PLUI_W <-> "plui.w"
+}
+
+mapping clause assembly = PEXT_LOAD_UPPER_IMM_W(imm10, rd, p_inst)
+  <-> p_load_upper_imm_w_mapping(p_inst) ^ spc() ^ reg_name(rd) ^ sep() ^ hex_bits_10(imm10[0] @ imm10[9..1])

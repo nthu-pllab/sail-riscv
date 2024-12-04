@@ -386,6 +386,10 @@ enum p_load_imm_w = {PLI_W}
 
 enum p_load_imm_b = {PLI_B}
 
+enum p_load_upper_imm_h = {PLUI_H}
+
+enum p_load_upper_imm_w = {PLUI_W}
+
 enum p_ps = {PSABS_B, PSABS_H, PSEXTB_H, PSEXTB_W, PSEXTH_W}
 
 enum p_add_shift = {PSLL_B_B0, PADD_B_B0, PSLL_H_H0, PADD_H_H0, PSSHA_H_H0, PSSHAR_H_H0, PSLL_W_W0, PADD_W_W0, PSSHA_W_W0, PSSHAR_W_W0, SSHA, SSHAR, SHA, SHAR}
