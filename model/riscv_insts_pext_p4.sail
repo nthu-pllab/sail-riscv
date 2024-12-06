@@ -77,6 +77,7 @@ mapping p_simple_mapping : psimple <-> string = {
   CLS <-> "cls",
   CLSW <-> "clsw",
   ABS <-> "abs",
+  ABSW <-> "absw",
   REV <-> "rev",
   REV8 <-> "rev8",
   REV16 <-> "rev16"

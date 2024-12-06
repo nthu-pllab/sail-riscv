@@ -3,7 +3,7 @@ union clause ast = PEXT_SHIFT_SAT_B : (bits(3), regidx, regidx, p_shift_sat_b)
 mapping clause encdec = PEXT_SHIFT_SAT_B(imm3, rs1, rd, PSRLI_B) <->
   0b1 @ 0b000 @ 0b0 @ 0b0001 @ imm3 @ rs1 @ 0b100 @ rd @ 0b0011011
 mapping clause encdec = PEXT_SHIFT_SAT_B(imm3, rs1, rd, PSRAI_B) <->
-  0b1 @ 0b000 @ 0b0 @ 0b0001 @ imm3 @ rs1 @ 0b100 @ rd @ 0b0011011
+  0b1 @ 0b100 @ 0b0 @ 0b0001 @ imm3 @ rs1 @ 0b100 @ rd @ 0b0011011
 
 function clause execute (PEXT_SHIFT_SAT_B(imm3, rs1, rd, op)) = {
   let rs1_val = X(rs1);
