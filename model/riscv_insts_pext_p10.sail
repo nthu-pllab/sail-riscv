@@ -9,7 +9,7 @@ mapping clause encdec = PEXT_ELEMENTARY_B(rs1, rs2, rd, PAADD_B) <->
 mapping clause encdec = PEXT_ELEMENTARY_B(rs1, rs2, rd, PSADDU_B) <->
   0b1 @ 0b0110 @ 0b10 @ rs2 @ rs1 @ 0b000 @ rd @ 0b0111011
 mapping clause encdec = PEXT_ELEMENTARY_B(rs1, rs2, rd, PAADDU_B) <->
-  0b1 @ 0b0010 @ 0b10 @ rs2 @ rs1 @ 0b000 @ rd @ 0b0111011
+  0b1 @ 0b0111 @ 0b10 @ rs2 @ rs1 @ 0b000 @ rd @ 0b0111011
 mapping clause encdec = PEXT_ELEMENTARY_B(rs1, rs2, rd, PSUB_B) <->
   0b1 @ 0b1000 @ 0b10 @ rs2 @ rs1 @ 0b000 @ rd @ 0b0111011
 mapping clause encdec = PEXT_ELEMENTARY_B(rs1, rs2, rd, PDIF_B) <->
@@ -82,7 +82,7 @@ mapping clause encdec = PEXT_ELEMENTARY_H(rs1, rs2, rd, PAADD_H) <->
 mapping clause encdec = PEXT_ELEMENTARY_H(rs1, rs2, rd, PSADDU_H) <->
   0b1 @ 0b0110 @ 0b00 @ rs2 @ rs1 @ 0b000 @ rd @ 0b0111011
 mapping clause encdec = PEXT_ELEMENTARY_H(rs1, rs2, rd, PAADDU_H) <->
-  0b1 @ 0b0010 @ 0b00 @ rs2 @ rs1 @ 0b000 @ rd @ 0b0111011
+  0b1 @ 0b0111 @ 0b00 @ rs2 @ rs1 @ 0b000 @ rd @ 0b0111011
 mapping clause encdec = PEXT_ELEMENTARY_H(rs1, rs2, rd, PSUB_H) <->
   0b1 @ 0b1000 @ 0b00 @ rs2 @ rs1 @ 0b000 @ rd @ 0b0111011
 mapping clause encdec = PEXT_ELEMENTARY_H(rs1, rs2, rd, PDIF_H) <->
