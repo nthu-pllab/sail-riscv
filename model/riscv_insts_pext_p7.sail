@@ -29,17 +29,17 @@ function clause execute (PEXT_PS(rs1, rd, op)) = { // TODO: Double check if this
     },
     PSEXTB_H => {
       foreach (i from 0 to (sizeof(xlen) - 16) by 16) {
-        result[(i+15)..i] = EXTS(rs1_val[7..0])
+        result[(i+15)..i] = EXTS(rs1_val[(i+7)..i])
       };  
     },
     PSEXTB_W => {
       foreach (i from 0 to (sizeof(xlen) - 32) by 32) {
-        result[(i+31)..i] = EXTS(rs1_val[7..0])
+        result[(i+31)..i] = EXTS(rs1_val[(i+7)..i])
       };  
     },
     PSEXTH_W => {
       foreach (i from 0 to (sizeof(xlen) - 32) by 32) {
-        result[(i+31)..i] = EXTS(rs1_val[15..0])
+        result[(i+31)..i] = EXTS(rs1_val[(i+15)..i])
       };  
     }
   };
