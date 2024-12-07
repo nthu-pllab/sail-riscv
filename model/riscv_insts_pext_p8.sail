@@ -41,7 +41,7 @@ function clause execute (PEXT_ADD_SHIFT(rs1, rs2, rd, op)) = {
     },
     PADD_B_B0 => {
       foreach (i from 0 to (sizeof(xlen) - 8) by 8) {
-        result[(i+7)..i] = rs1_val[(i+7)..i] + rs2_val[(i+7)..i]
+        result[(i+7)..i] = rs1_val[(i+7)..i] + rs2_val[7..0]
       };
     },
     PSLL_H_H0 => {
@@ -51,7 +51,7 @@ function clause execute (PEXT_ADD_SHIFT(rs1, rs2, rd, op)) = {
     },
     PADD_H_H0 => {
       foreach (i from 0 to (sizeof(xlen) - 16) by 16) {
-        result[(i+15)..i] = rs1_val[(i+15)..i] + rs2_val[(i+15)..i]
+        result[(i+15)..i] = rs1_val[(i+15)..i] + rs2_val[15..0]
       };
     },
     PSSHA_H_H0 => {
@@ -71,7 +71,7 @@ function clause execute (PEXT_ADD_SHIFT(rs1, rs2, rd, op)) = {
     },
     PADD_W_W0 => {
       foreach (i from 0 to (sizeof(xlen) - 32) by 32) {
-        result[(i+31)..i] = rs1_val[(i+31)..i] + rs2_val[(i+31)..i]
+        result[(i+31)..i] = rs1_val[(i+31)..i] + rs2_val[31..0]
       };
     },
     PSSHA_W_W0 => {
