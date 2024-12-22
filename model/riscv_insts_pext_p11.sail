@@ -67,7 +67,7 @@ function clause execute (PEXT_P11(rs1, rs2, rd, op)) = {
     PDIFSUMU_B => {
       let s1 = X(rs1);
       let s2 = X(rs2);
-      var sum : bits(xlen) = X(rs2);
+      var sum : bits(xlen) = zeros();
       foreach (i from 0 to (sizeof(xlen) - 8) by 8) {
         let rs1_byte : bits(xlen) = EXTZ(s1[(i+7)..i]);
         let rs2_byte : bits(xlen) = EXTZ(s2[(i+7)..i]);
@@ -78,7 +78,7 @@ function clause execute (PEXT_P11(rs1, rs2, rd, op)) = {
     PDIFSUMAU_B => {
       let s1 = X(rs1);
       let s2 = X(rs2);
-      var sum : bits(xlen) = X(rs2);
+      var sum : bits(xlen) = zeros();
       foreach (i from 0 to (sizeof(xlen) - 8) by 8) {
         let rs1_byte : bits(xlen) = EXTZ(s1[(i+7)..i]);
         let rs2_byte : bits(xlen) = EXTZ(s2[(i+7)..i]);
