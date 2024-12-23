@@ -29,44 +29,44 @@ function sabs (v) =
 val shift_left_logic : forall 'n, 'n == 8 | 'n == 16 | 'n == 32 | 'n == 64.
   (bits ('n), bits(8)) -> bits ('n)
 function shift_left_logic (v, m) =
-  let extv : bits(xlen + 32) = EXTZ (v) in
+  let extv : bits(xlen + 64) = EXTZ (v) in
   slice (extv << m, 0, 'n)
 
-val shift_right_logic : forall 'n, 'n == 8 | 'n == 9 | 'n == 16 | 'n == 17 | 'n == 32 |'n == 33 |'n == 64 |'n == 65.
+val shift_right_logic : forall 'n, 'n == 8 | 'n == 9 | 'n == 16 | 'n == 17 | 'n == 32 |'n == 33 |'n == 64 | 'n == 65 | 'n == 128 | 'n == 129.
   (bits ('n), bits(8)) -> bits ('n)
 function shift_right_logic (v, m) =
-  let extv : bits(xlen + 65) = EXTZ (v) in
+  let extv : bits(xlen + 129) = EXTZ (v) in
   slice (extv >> m, 0, 'n)
 
-val shift_right_logic_rounding : forall 'n, 'n == 8 | 'n == 16 | 'n == 32 | 'n == 64.
+val shift_right_logic_rounding : forall 'n, 'n == 8 | 'n == 16 | 'n == 32 | 'n == 64 | 'n == 128.
   (bits ('n), bits(8)) -> bits ('n)
 function shift_right_logic_rounding (v, m) =
   if m == 0x00 then v
-  else let res : bits(65) = add_bits(EXTZ(shift_right_logic(v @ 0b0, m)), EXTZ(0b1)) in
+  else let res : bits(129) = add_bits(EXTZ(shift_right_logic(v @ 0b0, m)), EXTZ(0b1)) in
   slice(res, 1, 'n)
 
 val sat_shift_left_arith : forall 'n, 'n == 8 | 'n == 16 | 'n == 32 | 'n == 64.
   (bits ('n), bits(8)) -> bits ('n)
 function sat_shift_left_arith (v, m) =
-  let ub : bits(xlen + 32) = EXTS(sail_ones ('n) >> 1) in
-  let lb : bits(xlen + 32) = not_vec (ub) in
-  let vext : bits(xlen + 32) = EXTS(v) in
-  let shiftext : bits(xlen + 32) = vext << m in
+  let ub : bits(xlen + 64) = EXTS(sail_ones ('n) >> 1) in
+  let lb : bits(xlen + 64) = not_vec (ub) in
+  let vext : bits(xlen + 64) = EXTS(v) in
+  let shiftext : bits(xlen + 64) = vext << m in
   if shiftext <_s lb then { pext_write_OV (0b1); not_vec (ones ('n) >> 1) }
   else if ub <_s shiftext then { pext_write_OV (0b1); ones ('n) >> 1 }
   else { slice (shiftext, 0, 'n) }
 
-val shift_right_arith : forall 'n, 'n == 8 | 'n == 9 | 'n == 16 | 'n == 17 | 'n == 32 |'n == 33 |'n == 64 |'n == 65.
+val shift_right_arith : forall 'n, 'n == 8 | 'n == 9 | 'n == 16 | 'n == 17 | 'n == 32 | 'n == 33 | 'n == 64 | 'n == 65 | 'n == 128 | 'n == 129.
   (bits ('n), bits(8)) -> bits ('n)
 function shift_right_arith (v, m) =
-  let extv : bits(xlen + 98) = EXTS (v) in
+  let extv : bits(xlen + 129) = EXTS (v) in
   slice (extv >> m, 0, 'n)
 
-val shift_right_arith_rounding : forall 'n, 'n == 8 | 'n == 16 | 'n == 32 | 'n == 64.
+val shift_right_arith_rounding : forall 'n, 'n == 8 | 'n == 16 | 'n == 32 | 'n == 64 |'n == 128.
   (bits ('n), bits(8)) -> bits ('n)
 function shift_right_arith_rounding (v, m) =
   if m == 0x00 then v
-  else let res : bits(65) = add_bits(EXTS(shift_right_arith(v @ 0b0, m)), EXTZ(0b1)) in
+  else let res : bits(129) = add_bits(EXTS(shift_right_arith(v @ 0b0, m)), EXTZ(0b1)) in
   slice(res, 1, 'n)
 
 // TODO: It seems we have to set the OV flag in `ssha` and `sshar`
@@ -176,45 +176,50 @@ function asubu (v1, v2) =
   let v2ext : bits(66) = EXTZ(v2) in
   slice ((v1ext - v2ext) >> 1, 0, 'n)
 
-val muls : forall 'n, 'n == 8 | 'n == 16 | 'n == 32.
+val muls : forall 'n, 'n == 8 | 'n == 16 | 'n == 32 | 'n == 64.
   (bits('n), bits('n)) -> bits(2 * 'n)
 function muls (v1, v2) =
   to_bits (2 * 'n, signed(v1) * signed(v2))
 
-val mulu : forall 'n, 'n == 8 | 'n == 16 | 'n == 32.
+val mulu : forall 'n, 'n == 8 | 'n == 16 | 'n == 32 | 'n == 64.
   (bits('n), bits('n)) -> bits(2 * 'n)
 function mulu (v1, v2) =
   to_bits (2 * 'n, unsigned(v1) * unsigned(v2))
 
-val mulsu : forall 'n, 'n == 8 | 'n == 16 | 'n == 32.
+val mulsu : forall 'n, 'n == 8 | 'n == 16 | 'n == 32 | 'n == 64.
   (bits('n), bits('n)) -> bits(2 * 'n)
 function mulsu (v1, v2) =
  to_bits (2 * 'n, signed(v1) * unsigned(v2))
 
-val mulh : forall 'n, 'n == 8 | 'n == 16 | 'n == 32.
+val mulh : forall 'n, 'n == 8 | 'n == 16 | 'n == 32 | 'n == 64.
   (bits('n), bits('n)) -> bits('n)
 function mulh (v1, v2) =
   slice(shift_right_arith(muls(v1, v2), 0x00 + 'n), 0, 'n)
 
-val mulhu : forall 'n, 'n == 8 | 'n == 16 | 'n == 32.
+val mulhu : forall 'n, 'n == 8 | 'n == 16 | 'n == 32 | 'n == 64.
   (bits('n), bits('n)) -> bits('n)
 function mulhu (v1, v2) =
   slice(shift_right_logic(mulu(v1, v2), 0x00 + 'n), 0, 'n)
 
-val mulhr : forall 'n, 'n == 8 | 'n == 16 | 'n == 32.
+val mulhr : forall 'n, 'n == 8 | 'n == 16 | 'n == 32 | 'n == 64.
   (bits('n), bits('n)) -> bits('n)
 function mulhr (v1, v2) =
   slice(shift_right_arith_rounding(muls(v1, v2), 0x00 + 'n), 0, 'n)
 
-val mulhru : forall 'n, 'n == 8 | 'n == 16 | 'n == 32.
+val mulhru : forall 'n, 'n == 8 | 'n == 16 | 'n == 32 | 'n == 64.
   (bits('n), bits('n)) -> bits('n)
 function mulhru (v1, v2) =
   slice(shift_right_logic_rounding(mulu(v1, v2), 0x00 + 'n), 0, 'n)
 
-val mulhsu : forall 'n, 'n == 8 | 'n == 16 | 'n == 32.
+val mulhsu : forall 'n, 'n == 8 | 'n == 16 | 'n == 32 | 'n == 64.
   (bits('n), bits('n)) -> bits('n)
 function mulhsu (v1, v2) =
   slice(shift_right_arith(mulsu(v1, v2), 0x00 + 'n), 0, 'n)
+
+val mulhrsu : forall 'n, 'n == 8 | 'n == 16 | 'n == 32 | 'n == 64.
+  (bits('n), bits('n)) -> bits('n)
+function mulhrsu (v1, v2) =
+  slice(shift_right_logic_rounding(mulsu(v1, v2), 0x00 + 'n), 0, 'n)
 
 val mulq : forall 'n, 'n == 8 | 'n == 16 | 'n == 32.
   (bits('n), bits('n)) -> bits(2 * 'n)
