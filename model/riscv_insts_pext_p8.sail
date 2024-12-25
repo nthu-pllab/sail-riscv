@@ -84,10 +84,10 @@ function clause execute (PEXT_ADD_SHIFT(rs1, rs2, rd, op)) = {
         result[(i+31)..i] = sshar(rs1_val[(i+31)..i], EXTS(rs2_val[5..0]))
       };
     },
-    SSHA => result = ssha(rs1_val, EXTS(rs2_val[5..0])),
-    SSHAR => result = sshar(rs1_val, EXTS(rs2_val[5..0])),
-    SHA => result = sha(rs1_val, EXTS(rs2_val[5..0])),
-    SHAR => result = shar(rs1_val, EXTS(rs2_val[5..0]))
+    SSHA => result = ssha(rs1_val, EXTS(rs2_val[6..0])),
+    SSHAR => result = sshar(rs1_val, EXTS(rs2_val[6..0])),
+    SHA => result = sha(rs1_val, EXTS(rs2_val[6..0])),
+    SHAR => result = shar(rs1_val, EXTS(rs2_val[6..0]))
   };
   X(rd) = result;
   RETIRE_SUCCESS
