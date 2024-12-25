@@ -56,12 +56,12 @@ function clause execute (PEXT_ADD_SHIFT(rs1, rs2, rd, op)) = {
     },
     PSSHA_H_H0 => {
       foreach (i from 0 to (sizeof(xlen) - 16) by 16) {
-        result[(i+15)..i] = ssha(rs1_val[(i+15)..i], EXTS(rs2_val[4..0]))
+        result[(i+15)..i] = ssha(rs1_val[(i+15)..i], rs2_val[7..0])
       };
     },
     PSSHAR_H_H0 => {
       foreach (i from 0 to (sizeof(xlen) - 16) by 16) {
-        result[(i+15)..i] = sshar(rs1_val[(i+15)..i], EXTS(rs2_val[4..0]))
+        result[(i+15)..i] = sshar(rs1_val[(i+15)..i], rs2_val[7..0])
       };
     },
     PSLL_W_W0 => {
@@ -76,18 +76,18 @@ function clause execute (PEXT_ADD_SHIFT(rs1, rs2, rd, op)) = {
     },
     PSSHA_W_W0 => {
       foreach (i from 0 to (sizeof(xlen) - 32) by 32) {
-        result[(i+31)..i] = ssha(rs1_val[(i+31)..i], EXTS(rs2_val[5..0]))
+        result[(i+31)..i] = ssha(rs1_val[(i+31)..i], rs2_val[7..0])
       };
     },
     PSSHAR_W_W0 => {
       foreach (i from 0 to (sizeof(xlen) - 32) by 32) {
-        result[(i+31)..i] = sshar(rs1_val[(i+31)..i], EXTS(rs2_val[5..0]))
+        result[(i+31)..i] = sshar(rs1_val[(i+31)..i], rs2_val[7..0])
       };
     },
-    SSHA => result = ssha(rs1_val, EXTS(rs2_val[6..0])),
-    SSHAR => result = sshar(rs1_val, EXTS(rs2_val[6..0])),
-    SHA => result = sha(rs1_val, EXTS(rs2_val[6..0])),
-    SHAR => result = shar(rs1_val, EXTS(rs2_val[6..0]))
+    SSHA => result = ssha(rs1_val, rs2_val[7..0]),
+    SSHAR => result = sshar(rs1_val, rs2_val[7..0]),
+    SHA => result = sha(rs1_val, rs2_val[7..0]),
+    SHAR => result = shar(rs1_val, rs2_val[7..0])
   };
   X(rd) = result;
   RETIRE_SUCCESS
