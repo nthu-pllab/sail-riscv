@@ -29,29 +29,29 @@ function sabs (v) =
 val shift_left_logic : forall 'n, 'n == 8 | 'n == 16 | 'n == 32 | 'n == 64.
   (bits ('n), bits(8)) -> bits ('n)
 function shift_left_logic (v, m) =
-  let extv : bits(xlen + 64) = EXTZ (v) in
+  let extv : bits(xlen + 256) = EXTZ (v) in
   slice (extv << m, 0, 'n)
 
 val shift_right_logic : forall 'n, 'n == 8 | 'n == 9 | 'n == 16 | 'n == 17 | 'n == 32 |'n == 33 |'n == 64 | 'n == 65 | 'n == 128 | 'n == 129.
   (bits ('n), bits(8)) -> bits ('n)
 function shift_right_logic (v, m) =
-  let extv : bits(xlen + 129) = EXTZ (v) in
+  let extv : bits(xlen + 257) = EXTZ (v) in
   slice (extv >> m, 0, 'n)
 
 val shift_right_logic_rounding : forall 'n, 'n == 8 | 'n == 16 | 'n == 32 | 'n == 64 | 'n == 128.
   (bits ('n), bits(8)) -> bits ('n)
 function shift_right_logic_rounding (v, m) =
   if m == 0x00 then v
-  else let res : bits(129) = add_bits(EXTZ(shift_right_logic(v @ 0b0, m)), EXTZ(0b1)) in
+  else let res : bits(257) = add_bits(EXTZ(shift_right_logic(v @ 0b0, m)), EXTZ(0b1)) in
   slice(res, 1, 'n)
 
 val sat_shift_left_arith : forall 'n, 'n == 8 | 'n == 16 | 'n == 32 | 'n == 64.
   (bits ('n), bits(8)) -> bits ('n)
 function sat_shift_left_arith (v, m) =
-  let ub : bits(xlen + 64) = EXTS(sail_ones ('n) >> 1) in
-  let lb : bits(xlen + 64) = not_vec (ub) in
-  let vext : bits(xlen + 64) = EXTS(v) in
-  let shiftext : bits(xlen + 64) = vext << m in
+  let ub : bits(xlen + 256) = EXTS(sail_ones ('n) >> 1) in
+  let lb : bits(xlen + 256) = not_vec (ub) in
+  let vext : bits(xlen + 256) = EXTS(v) in
+  let shiftext : bits(xlen + 256) = vext << m in
   if shiftext <_s lb then { pext_write_OV (0b1); not_vec (ones ('n) >> 1) }
   else if ub <_s shiftext then { pext_write_OV (0b1); ones ('n) >> 1 }
   else { slice (shiftext, 0, 'n) }
@@ -59,14 +59,14 @@ function sat_shift_left_arith (v, m) =
 val shift_right_arith : forall 'n, 'n == 8 | 'n == 9 | 'n == 16 | 'n == 17 | 'n == 32 | 'n == 33 | 'n == 64 | 'n == 65 | 'n == 128 | 'n == 129.
   (bits ('n), bits(8)) -> bits ('n)
 function shift_right_arith (v, m) =
-  let extv : bits(xlen + 129) = EXTS (v) in
+  let extv : bits(xlen + 256) = EXTS (v) in
   slice (extv >> m, 0, 'n)
 
-val shift_right_arith_rounding : forall 'n, 'n == 8 | 'n == 16 | 'n == 32 | 'n == 64 |'n == 128.
+val shift_right_arith_rounding : forall 'n, 'n == 8 | 'n == 16 | 'n == 32 | 'n == 64 | 'n == 128.
   (bits ('n), bits(8)) -> bits ('n)
 function shift_right_arith_rounding (v, m) =
   if m == 0x00 then v
-  else let res : bits(129) = add_bits(EXTS(shift_right_arith(v @ 0b0, m)), EXTZ(0b1)) in
+  else let res : bits(257) = add_bits(EXTS(shift_right_arith(v @ 0b0, m)), EXTZ(0b1)) in
   slice(res, 1, 'n)
 
 // TODO: It seems we have to set the OV flag in `ssha` and `sshar`
@@ -75,17 +75,15 @@ val ssha : forall 'n, 'n == 8 | 'n == 16 | 'n == 32 | 'n == 64.
   (bits ('n), bits(8)) -> bits ('n)
 function ssha (v, m) =
   let rev : bits(8) = if m <_s 0x00 then not_vec (m) + 0x01 else m in
-  let sa : bits(8) = if rev == to_bits(8, 'n) then to_bits(8, 'n) - 0x01 else rev in
-  if m <_s 0x00 then shift_right_arith(v, sa)
-  else shift_left_logic(v, sa)
+  if m <_s 0x00 then shift_right_arith(v, rev)
+  else sat_shift_left_arith(v, rev)
 
 val sshar : forall 'n, 'n == 8 | 'n == 16 | 'n == 32 | 'n == 64.
   (bits ('n), bits(8)) -> bits ('n)
 function sshar (v, m) =
   let rev : bits(8) = if m <_s 0x00 then not_vec (m) + 0x01 else m in
-  let sa : bits(8) = if rev == to_bits(8, 'n) then to_bits(8, 'n) - 0x01 else rev in
-  if m <_s 0x00 then shift_right_arith_rounding(v, sa)
-  else shift_left_logic(v, sa)
+  if m <_s 0x00 then shift_right_arith_rounding(v, rev)
+  else sat_shift_left_arith(v, rev)
 
 // TODO: The below `sha` & `shar` functions are not in the original proposal and lack pseudo-code presentation.
 // Therefore, be prepared that these 2 functions are incorrectly implemented.
