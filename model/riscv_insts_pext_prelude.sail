@@ -59,7 +59,7 @@ function sat_shift_left_arith (v, m) =
 val shift_right_arith : forall 'n, 'n == 8 | 'n == 9 | 'n == 16 | 'n == 17 | 'n == 32 | 'n == 33 | 'n == 64 | 'n == 65 | 'n == 128 | 'n == 129.
   (bits ('n), bits(8)) -> bits ('n)
 function shift_right_arith (v, m) =
-  let extv : bits(xlen + 256) = EXTS (v) in
+  let extv : bits(xlen + 257) = EXTS (v) in
   slice (extv >> m, 0, 'n)
 
 val shift_right_arith_rounding : forall 'n, 'n == 8 | 'n == 16 | 'n == 32 | 'n == 64 | 'n == 128.
