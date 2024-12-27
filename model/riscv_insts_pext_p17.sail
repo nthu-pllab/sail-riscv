@@ -232,11 +232,11 @@ function clause execute (PEXT_MUL(rs1, rs2, rd, op)) = {
         result[(i+15)..i] = rd_halfword + mulhsu(rs1_halfword, rs2_halfword);
       }
     },
-    PMULQ_H => { // TODO: What part of `mulq` do we need to output?
+    PMULQ_H => {
       foreach (i from 0 to (sizeof(xlen) - 16) by 16) {
         let rs1_halfword = rs1_val[(i+15)..i];
         let rs2_halfword = rs2_val[(i+15)..i];
-        // result[(i+15)..i] = mulq(rs1_halfword, rs2_halfword);
+        result[(i+15)..i] = mulq(rs1_halfword, rs2_halfword);
       }
     },
     MQACC_H00 => {
@@ -254,7 +254,7 @@ function clause execute (PEXT_MUL(rs1, rs2, rd, op)) = {
         let rs1_halfword = rs1_val[(i+15)..i];
         let rs2_halfword = rs2_val[(i+15)..i];
         let rd_word = rd_val[(i+31)..i];
-        result[(i+31)..i] = rd_word + mulq(rs1_halfword, rs2_halfword);
+        result[(i+31)..i] = rd_word + EXTS(mulq(rs1_halfword, rs2_halfword));
       }
     },
     PMQACC_W_HOO => {
@@ -262,7 +262,7 @@ function clause execute (PEXT_MUL(rs1, rs2, rd, op)) = {
         let rs1_halfword = rs1_val[(i+31)..(i+16)];
         let rs2_halfword = rs2_val[(i+31)..(i+16)];
         let rd_word = rd_val[(i+31)..i];
-        result[(i+31)..i] = rd_word + mulq(rs1_halfword, rs2_halfword);
+        result[(i+31)..i] = rd_word + EXTS(mulq(rs1_halfword, rs2_halfword));
       }
     },
     PMULHR_H => {
@@ -340,11 +340,11 @@ function clause execute (PEXT_MUL(rs1, rs2, rd, op)) = {
         result[(i+15)..i] = rd_halfword + mulhrsu(rs1_halfword, rs2_halfword);
       }
     },
-    PMULQR_H => { // TODO: What part of `mulqr` do we need to output?
+    PMULQR_H => {
       foreach (i from 0 to (sizeof(xlen) - 16) by 16) {
         let rs1_halfword = rs1_val[(i+15)..i];
         let rs2_halfword = rs2_val[(i+15)..i];
-        // result[(i+15)..i] = mulqr(rs1_halfword, rs2_halfword);
+        result[(i+15)..i] = mulqr(rs1_halfword, rs2_halfword);
       }
     },
     MQRACC_H00 => {
@@ -361,14 +361,14 @@ function clause execute (PEXT_MUL(rs1, rs2, rd, op)) = {
       foreach (i from 0 to (sizeof(xlen) - 32) by 32) {
         let rs1_halfword = rs1_val[(i+15)..i];
         let rs2_halfword = rs2_val[(i+15)..i];
-        result[(i+31)..i] = mulqr(rs1_halfword, rs2_halfword);
+        result[(i+31)..i] = EXTS(mulqr(rs1_halfword, rs2_halfword));
       }
     },
     PMQRACC_W_HOO => {
       foreach (i from 0 to (sizeof(xlen) - 32) by 32) {
         let rs1_halfword = rs1_val[(i+31)..(i+16)];
         let rs2_halfword = rs2_val[(i+31)..(i+16)];
-        result[(i+31)..i] = mulqr(rs1_halfword, rs2_halfword);
+        result[(i+31)..i] = EXTS(mulqr(rs1_halfword, rs2_halfword));
       }
     },
     MHACC => {
@@ -471,22 +471,22 @@ function clause execute (PEXT_MUL(rs1, rs2, rd, op)) = {
         result[(i+31)..i] = rd_word + mulhsu(rs1_word, rs2_word);
       }
     },
-    PMULQ_W => { // TODO: What part of `mulq` do we need to output?
+    PMULQ_W => {
       foreach (i from 0 to (sizeof(xlen) - 32) by 32) {
         let rs1_word = rs1_val[(i+31)..i];
         let rs2_word = rs2_val[(i+31)..i];
-        // result[(i+31)..i] = mulq(rs1_word, rs2_word);
+        result[(i+31)..i] = mulq(rs1_word, rs2_word);
       }
     },
     MQACC_W00 if sizeof(xlen) == 64 => {
       let rs1_word = rs1_val[31..0];
       let rs2_word = rs2_val[31..0];
-      result = rd_val + mulq(rs1_word, rs2_word);
+      result = rd_val + EXTS(mulq(rs1_word, rs2_word));
     },
     MQACC_W11 if sizeof(xlen) == 64 => {
       let rs1_word = rs1_val[63..32];
       let rs2_word = rs2_val[63..32];
-      result = rd_val + mulq(rs1_word, rs2_word);
+      result = rd_val + EXTS(mulq(rs1_word, rs2_word));
     },
     MQACC_W00 => {
       result = result; // TODO: In order to please the coverage checker.
@@ -603,22 +603,22 @@ function clause execute (PEXT_MUL(rs1, rs2, rd, op)) = {
         result[(i+31)..i] = rd_word + mulhrsu(rs1_word, rs2_word);
       }
     },
-    PMULQR_W => { // TODO: What part of `mulq` do we need to output?
+    PMULQR_W => {
       foreach (i from 0 to (sizeof(xlen) - 32) by 32) {
         let rs1_word = rs1_val[(i+31)..i];
         let rs2_word = rs2_val[(i+31)..i];
-        // result[(i+31)..i] = mulqr(rs1_word, rs2_word);
+        result[(i+31)..i] = mulqr(rs1_word, rs2_word);
       }
     },
     MQRACC_W00 if sizeof(xlen) == 64 => {
       let rs1_word = rs1_val[31..0];
       let rs2_word = rs2_val[31..0];
-      result = rd_val + mulqr(rs1_word, rs2_word);
+      result = rd_val + EXTS(mulqr(rs1_word, rs2_word));
     },
     MQRACC_W11 if sizeof(xlen) == 64 => {
       let rs1_word = rs1_val[63..32];
       let rs2_word = rs2_val[63..32];
-      result = rd_val + mulqr(rs1_word, rs2_word);
+      result = rd_val + EXTS(mulqr(rs1_word, rs2_word));
     },
     MQRACC_W00 => {
       result = result; // TODO: In order to please the coverage checker.

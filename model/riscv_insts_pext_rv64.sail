@@ -148,8 +148,8 @@ function clause execute (PEXT_MUL_W(rs1, rs2, rd, op)) = {
     MACCU_W11 => rd_val + mulu(rs1_word_odd, rs2_word_odd),
     MACCSU_W00 => rd_val + mulsu(rs1_word_even, rs2_word_even),
     MACCSU_W11 => rd_val + mulsu(rs1_word_odd, rs2_word_odd),
-    MQACC_W01 => rd_val + mulq(rs1_word_even, rs2_word_odd),
-    MQRACC_W01 => rd_val + mulqr(rs1_word_even, rs2_word_odd)
+    MQACC_W01 => rd_val + EXTS(mulq(rs1_word_even, rs2_word_odd)),
+    MQRACC_W01 => rd_val + EXTS(mulqr(rs1_word_even, rs2_word_odd))
   };
   X(rd) = result;
   RETIRE_SUCCESS
@@ -263,14 +263,14 @@ function clause execute (PEXT_MUL2HORIZON_W(rs1, rs2, rd, op)) = {
     PM2ADDAU_W => rd_val + mulu(rs1_byte_odd, rs2_byte_odd) + mulu(rs1_byte_even, rs2_byte_even),
     PM2ADDSU_W => mulsu(rs1_byte_odd, rs2_byte_odd) + mulsu(rs1_byte_even, rs2_byte_even),
     PM2ADDASU_W => rd_val + mulsu(rs1_byte_odd, rs2_byte_odd) + mulsu(rs1_byte_even, rs2_byte_even),
-    PMQ2ADD_W => mulq(rs1_byte_odd, rs2_byte_odd) + mulq(rs1_byte_even, rs2_byte_even),
-    PMQ2ADDA_W => rd_val + mulq(rs1_byte_odd, rs2_byte_odd) + mulq(rs1_byte_even, rs2_byte_even),
-    PMQR2ADD_W => mulqr(rs1_byte_odd, rs2_byte_odd) + mulqr(rs1_byte_even, rs2_byte_even),
-    PMQR2ADDA_W => rd_val + mulqr(rs1_byte_odd, rs2_byte_odd) + mulqr(rs1_byte_even, rs2_byte_even),
-    PM2SUB_W => muls(rs1_byte_odd, rs2_byte_odd) - muls(rs1_byte_even, rs2_byte_even),
-    PM2SUBA_W => rd_val + muls(rs1_byte_odd, rs2_byte_odd) - muls(rs1_byte_even, rs2_byte_even),
-    PM2SUB_WX => muls(rs1_byte_odd, rs2_byte_even) - muls(rs1_byte_even, rs2_byte_odd),
-    PM2SUBA_WX => rd_val + muls(rs1_byte_odd, rs2_byte_even) - muls(rs1_byte_even, rs2_byte_odd)
+    PMQ2ADD_W => EXTS(mulq(rs1_byte_odd, rs2_byte_odd)) + EXTS(mulq(rs1_byte_even, rs2_byte_even)),
+    PMQ2ADDA_W => rd_val + EXTS(mulq(rs1_byte_odd, rs2_byte_odd)) + EXTS(mulq(rs1_byte_even, rs2_byte_even)),
+    PMQR2ADD_W => EXTS(mulqr(rs1_byte_odd, rs2_byte_odd)) + EXTS(mulqr(rs1_byte_even, rs2_byte_even)),
+    PMQR2ADDA_W => rd_val + EXTS(mulqr(rs1_byte_odd, rs2_byte_odd)) + EXTS(mulqr(rs1_byte_even, rs2_byte_even)),
+    PM2SUB_W => muls(rs1_byte_even, rs2_byte_even) - muls(rs1_byte_odd, rs2_byte_odd),
+    PM2SUBA_W => rd_val + muls(rs1_byte_even, rs2_byte_even) - muls(rs1_byte_odd, rs2_byte_odd),
+    PM2SUB_WX => muls(rs1_byte_even, rs2_byte_odd) - muls(rs1_byte_odd, rs2_byte_even),
+    PM2SUBA_WX => rd_val + muls(rs1_byte_even, rs2_byte_odd) - muls(rs1_byte_odd, rs2_byte_even)
   };
   X(rd) = result;
   RETIRE_SUCCESS

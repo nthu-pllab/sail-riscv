@@ -58,14 +58,14 @@ function clause execute (PEXT_MUL2HORIZON_H(rs1, rs2, rd, op)) = {
       PM2ADDASU_H => rd_val[(i+31)..i] + mulsu(rs1_halfword_odd, rs2_halfword_odd) + mulsu(rs1_halfword_even, rs2_halfword_even),
       PM2SADD_H => sadd(muls(rs1_halfword_odd, rs2_halfword_odd), muls(rs1_halfword_even, rs2_halfword_even)),
       PM2SADD_HX => sadd(muls(rs1_halfword_odd, rs2_halfword_even), muls(rs1_halfword_even, rs2_halfword_odd)),
-      PMQ2ADD_H => mulq(rs1_halfword_odd, rs2_halfword_odd) + mulq(rs1_halfword_even, rs2_halfword_even),
-      PMQ2ADDA_H => rd_val[(i+31)..i] + mulq(rs1_halfword_odd, rs2_halfword_odd) + mulq(rs1_halfword_even, rs2_halfword_even),
-      PMQR2ADD_H => mulqr(rs1_halfword_odd, rs2_halfword_odd) + mulqr(rs1_halfword_even, rs2_halfword_even),
-      PMQR2ADDA_H => rd_val[(i+31)..i] + mulqr(rs1_halfword_odd, rs2_halfword_odd) + mulqr(rs1_halfword_even, rs2_halfword_even),
-      PM2SUB_H => muls(rs1_halfword_odd, rs2_halfword_odd) - muls(rs1_halfword_even, rs2_halfword_even),
-      PM2SUBA_H => rd_val[(i+31)..i] + muls(rs1_halfword_odd, rs2_halfword_odd) - muls(rs1_halfword_even, rs2_halfword_even),
-      PM2SUB_HX => muls(rs1_halfword_odd, rs2_halfword_even) - muls(rs1_halfword_even, rs2_halfword_odd),
-      PM2SUBA_HX => rd_val[(i+31)..i] + muls(rs1_halfword_odd, rs2_halfword_even) - muls(rs1_halfword_even, rs2_halfword_odd)
+      PMQ2ADD_H => EXTS(mulq(rs1_halfword_odd, rs2_halfword_odd)) + EXTS(mulq(rs1_halfword_even, rs2_halfword_even)),
+      PMQ2ADDA_H => rd_val[(i+31)..i] + EXTS(mulq(rs1_halfword_odd, rs2_halfword_odd)) + EXTS(mulq(rs1_halfword_even, rs2_halfword_even)),
+      PMQR2ADD_H => EXTS(mulqr(rs1_halfword_odd, rs2_halfword_odd)) + EXTS(mulqr(rs1_halfword_even, rs2_halfword_even)),
+      PMQR2ADDA_H => rd_val[(i+31)..i] + EXTS(mulqr(rs1_halfword_odd, rs2_halfword_odd)) + EXTS(mulqr(rs1_halfword_even, rs2_halfword_even)),
+      PM2SUB_H => muls(rs1_halfword_even, rs2_halfword_even) - muls(rs1_halfword_odd, rs2_halfword_odd),
+      PM2SUBA_H => rd_val[(i+31)..i] + muls(rs1_halfword_even, rs2_halfword_even) - muls(rs1_halfword_odd, rs2_halfword_odd),
+      PM2SUB_HX => muls(rs1_halfword_even, rs2_halfword_odd) - muls(rs1_halfword_odd, rs2_halfword_even),
+      PM2SUBA_HX => rd_val[(i+31)..i] + muls(rs1_halfword_even, rs2_halfword_odd) - muls(rs1_halfword_odd, rs2_halfword_even)
     };
   };
   X(rd) = result;
