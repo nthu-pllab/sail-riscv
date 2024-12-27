@@ -220,14 +220,14 @@ function mulhrsu (v1, v2) =
   slice(shift_right_logic_rounding(mulsu(v1, v2), 0x00 + 'n), 0, 'n)
 
 val mulq : forall 'n, 'n == 8 | 'n == 16 | 'n == 32.
-  (bits('n), bits('n)) -> bits('n)
+  (bits('n), bits('n)) -> bits(2 * 'n)
 function mulq (v1, v2) =
-  slice(shift_right_arith(muls(v1, v2), 0x00 + 'n - 1), 0, 'n)
+  shift_right_arith(muls(v1, v2), 0x00 + 'n - 1)
 
 val mulqr : forall 'n, 'n == 8 | 'n == 16 | 'n == 32.
-  (bits('n), bits('n)) -> bits('n)
+  (bits('n), bits('n)) -> bits(2 * 'n)
 function mulqr (v1, v2) =
-  slice(shift_right_arith_rounding(muls(v1, v2), 0x00 + 'n - 1), 0, 'n)
+  shift_right_arith_rounding(muls(v1, v2), 0x00 + 'n - 1)
 
 val mseq : forall 'n, 'n == 8 | 'n == 16 | 'n == 32.
   (bits('n), bits('n)) -> bits('n)

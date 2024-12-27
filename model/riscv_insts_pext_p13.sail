@@ -131,8 +131,8 @@ function clause execute (PEXT_MUL_H(rs1, rs2, rd, op)) = {
       PMACCU_W_HOO => rd_val[(i+31)..i] + mulu(rs1_halfword_odd, rs2_halfword_odd),
       PMACCSU_W_HEE => rd_val[(i+31)..i] + mulsu(rs1_halfword_even, rs2_halfword_even),
       PMACCSU_W_HOO => rd_val[(i+31)..i] + mulsu(rs1_halfword_odd, rs2_halfword_odd),
-      PMQRACC_W_HEO => rd_val[(i+31)..i] + EXTS(mulqr(rs1_halfword_even, rs2_halfword_odd)),
-      PMQACC_W_HEO => rd_val[(i+31)..i] + EXTS(mulq(rs1_halfword_even, rs2_halfword_odd)),
+      PMQRACC_W_HEO => rd_val[(i+31)..i] + mulqr(rs1_halfword_even, rs2_halfword_odd),
+      PMQACC_W_HEO => rd_val[(i+31)..i] + mulq(rs1_halfword_even, rs2_halfword_odd),
       MUL_H00 => muls(rs1_halfword_even, rs2_halfword_even),
       MUL_H11 => muls(rs1_halfword_odd, rs2_halfword_odd),
       MULU_H00 => mulu(rs1_halfword_even, rs2_halfword_even),
@@ -145,8 +145,8 @@ function clause execute (PEXT_MUL_H(rs1, rs2, rd, op)) = {
       MACCU_H11 => rd_val[(i+31)..i] + mulu(rs1_halfword_odd, rs2_halfword_odd),
       MACCSU_H00 => rd_val[(i+31)..i] + mulsu(rs1_halfword_even, rs2_halfword_even),
       MACCSU_H11 => rd_val[(i+31)..i] + mulsu(rs1_halfword_odd, rs2_halfword_odd),
-      MQRACC_H01 => rd_val[(i+31)..i] + EXTS(mulqr(rs1_halfword_even, rs2_halfword_odd)),
-      MQACC_H01 => rd_val[(i+31)..i] + EXTS(mulq(rs1_halfword_even, rs2_halfword_odd))
+      MQRACC_H01 => rd_val[(i+31)..i] + mulqr(rs1_halfword_even, rs2_halfword_odd),
+      MQACC_H01 => rd_val[(i+31)..i] + mulq(rs1_halfword_even, rs2_halfword_odd)
     };
   };
   X(rd) = result;
