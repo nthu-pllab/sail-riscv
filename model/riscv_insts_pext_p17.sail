@@ -21,7 +21,7 @@ mapping clause encdec = PEXT_MUL(rs1, rs2, rd, PMULHSU_H) <->
 mapping clause encdec = PEXT_MUL(rs1, rs2, rd, PMHACCSU_H) <->
   0b1 @ 0b1001 @ 0b00 @ rs2 @ rs1 @ 0b111 @ rd @ 0b0111011
 mapping clause encdec = PEXT_MUL(rs1, rs2, rd, PMULQ_H) <->
-  0b1 @ 0b1001 @ 0b00 @ rs2 @ rs1 @ 0b111 @ rd @ 0b0111011
+  0b1 @ 0b1010 @ 0b00 @ rs2 @ rs1 @ 0b111 @ rd @ 0b0111011
 mapping clause encdec = PEXT_MUL(rs1, rs2, rd, MQACC_H00) if sizeof(xlen) == 32 <->
   0b1 @ 0b1101 @ 0b00 @ rs2 @ rs1 @ 0b111 @ rd @ 0b0111011 if sizeof(xlen) == 32
 mapping clause encdec = PEXT_MUL(rs1, rs2, rd, MQACC_H11) if sizeof(xlen) == 32 <->
