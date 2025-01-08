@@ -230,7 +230,7 @@ mapping p_p11_mapping : p_p11 <-> string = {
   PMULU_W_HEO <-> "pmulu.w.heo",
   PMACCU_W_HEO <-> "pmaccu.w.heo",
   MUL_W01 <-> "mul.w01",
-  MACC_W01 <-> "macc_w01",
+  MACC_W01 <-> "macc.w01",
   MULU_W01 <-> "mulu.w01",
   MACCU_W01 <-> "maccu.w01"
 }
