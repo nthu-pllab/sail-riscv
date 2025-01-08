@@ -111,30 +111,30 @@ function clause execute (PEXT_P11(rs1, rs2, rd, op)) = {
     MUL_H01 => {
       let s1 = X(rs1);
       let s2 = X(rs2);
-      let rs1_byte = signed(s1[7..0]);
-      let rs2_byte = signed(s2[15..8]);
-      X(rd) = to_bits(sizeof(xlen), rs1_byte * rs2_byte);
+      let rs1_halfword = signed(s1[15..0]);
+      let rs2_halfword = signed(s2[31..16]);
+      X(rd) = to_bits(sizeof(xlen), rs1_halfword * rs2_halfword);
     },
     MACC_H01 => {
       let s1 = X(rs1);
       let s2 = X(rs2);
-      let rs1_byte = signed(s1[7..0]);
-      let rs2_byte = signed(s2[15..8]);
-      X(rd) = X(rd) + to_bits(sizeof(xlen), rs1_byte * rs2_byte);
+      let rs1_halfword = signed(s1[15..0]);
+      let rs2_halfword = signed(s2[31..16]);
+      X(rd) = X(rd) + to_bits(sizeof(xlen), rs1_halfword * rs2_halfword);
     },
     MULU_H01 => {
       let s1 = X(rs1);
       let s2 = X(rs2);
-      let rs1_byte = unsigned(s1[7..0]);
-      let rs2_byte = unsigned(s2[15..8]);
-      X(rd) = to_bits(sizeof(xlen), rs1_byte * rs2_byte);
+      let rs1_halfword = unsigned(s1[15..0]);
+      let rs2_halfword = unsigned(s2[31..16]);
+      X(rd) = to_bits(sizeof(xlen), rs1_halfword * rs2_halfword);
     },
     MACCU_H01 => {
       let s1 = X(rs1);
       let s2 = X(rs2);
-      let rs1_byte = unsigned(s1[7..0]);
-      let rs2_byte = unsigned(s2[15..8]);
-      X(rd) = X(rd) + to_bits(sizeof(xlen), rs1_byte * rs2_byte);
+      let rs1_halfword = unsigned(s1[15..0]);
+      let rs2_halfword = unsigned(s2[31..16]);
+      X(rd) = X(rd) + to_bits(sizeof(xlen), rs1_halfword * rs2_halfword);
     },
     PMUL_W_HEO => {
       let s1 = X(rs1);
@@ -183,30 +183,30 @@ function clause execute (PEXT_P11(rs1, rs2, rd, op)) = {
     MUL_W01 => {
       let s1 = X(rs1);
       let s2 = X(rs2);
-      let rs1_halfword = signed(s1[15..0]);
-      let rs2_halfword = signed(s2[31..16]);
-      X(rd) = to_bits(sizeof(xlen), rs1_halfword * rs2_halfword);
+      let rs1_word = signed(s1[31..0]);
+      let rs2_word = signed(s2[63..32]);
+      X(rd) = to_bits(sizeof(xlen), rs1_word * rs2_word);
     },
     MACC_W01 => {
       let s1 = X(rs1);
       let s2 = X(rs2);
-      let rs1_halfword = signed(s1[15..0]);
-      let rs2_halfword = signed(s2[31..16]);
-      X(rd) = X(rd) + to_bits(sizeof(xlen), rs1_halfword * rs2_halfword);
+      let rs1_word = signed(s1[31..0]);
+      let rs2_word = signed(s2[63..32]);
+      X(rd) = X(rd) + to_bits(sizeof(xlen), rs1_word * rs2_word);
     },
     MULU_W01 => {
       let s1 = X(rs1);
       let s2 = X(rs2);
-      let rs1_halfword = unsigned(s1[15..0]);
-      let rs2_halfword = unsigned(s2[31..16]);
-      X(rd) = to_bits(sizeof(xlen), rs1_halfword * rs2_halfword);
+      let rs1_word = unsigned(s1[31..0]);
+      let rs2_word = unsigned(s2[63..32]);
+      X(rd) = to_bits(sizeof(xlen), rs1_word * rs2_word);
     },
     MACCU_W01 => {
       let s1 = X(rs1);
       let s2 = X(rs2);
-      let rs1_halfword = unsigned(s1[15..0]);
-      let rs2_halfword = unsigned(s2[31..16]);
-      X(rd) = X(rd) + to_bits(sizeof(xlen), rs1_halfword * rs2_halfword);
+      let rs1_word = unsigned(s1[31..0]);
+      let rs2_word = unsigned(s2[63..32]);
+      X(rd) = X(rd) + to_bits(sizeof(xlen), rs1_word * rs2_word);
     }
   };
   RETIRE_SUCCESS
