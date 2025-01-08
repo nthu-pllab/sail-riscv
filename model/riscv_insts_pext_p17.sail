@@ -314,7 +314,7 @@ function clause execute (PEXT_MUL(rs1, rs2, rd, op)) = {
       foreach (i from 0 to (sizeof(xlen) - 16) by 16) {
         let rs1_halfword = rs1_val[(i+15)..i];
         let rs2_halfword = EXTZ(16, rs2_val[(i+15)..(i+8)]);
-        result[(i+15)..i] = mulhu(rs1_halfword, rs2_halfword);
+        result[(i+15)..i] = mulhsu(rs1_halfword, rs2_halfword);
       }
     },
     PMHACCSU_H_BO => {
