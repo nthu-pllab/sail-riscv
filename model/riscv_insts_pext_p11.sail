@@ -180,33 +180,45 @@ function clause execute (PEXT_P11(rs1, rs2, rd, op)) = {
       };
       X(rd) = result;
     },
-    MUL_W01 => {
+    MUL_W01 if sizeof(xlen) == 64 => {
       let s1 = X(rs1);
       let s2 = X(rs2);
       let rs1_word = signed(s1[31..0]);
       let rs2_word = signed(s2[63..32]);
       X(rd) = to_bits(sizeof(xlen), rs1_word * rs2_word);
+    },
+    MACC_W01 if sizeof(xlen) == 64 => {
+      let s1 = X(rs1);
+      let s2 = X(rs2);
+      let rs1_word = signed(s1[31..0]);
+      let rs2_word = signed(s2[63..32]);
+      X(rd) = X(rd) + to_bits(sizeof(xlen), rs1_word * rs2_word);
+    },
+    MULU_W01 if sizeof(xlen) == 64 => {
+      let s1 = X(rs1);
+      let s2 = X(rs2);
+      let rs1_word = unsigned(s1[31..0]);
+      let rs2_word = unsigned(s2[63..32]);
+      X(rd) = to_bits(sizeof(xlen), rs1_word * rs2_word);
+    },
+    MACCU_W01 if sizeof(xlen) == 64 => {
+      let s1 = X(rs1);
+      let s2 = X(rs2);
+      let rs1_word = unsigned(s1[31..0]);
+      let rs2_word = unsigned(s2[63..32]);
+      X(rd) = X(rd) + to_bits(sizeof(xlen), rs1_word * rs2_word);
+    },
+    MUL_W01 => {
+      return RETIRE_FAIL; // TODO: In order to please the coverage checker.
     },
     MACC_W01 => {
-      let s1 = X(rs1);
-      let s2 = X(rs2);
-      let rs1_word = signed(s1[31..0]);
-      let rs2_word = signed(s2[63..32]);
-      X(rd) = X(rd) + to_bits(sizeof(xlen), rs1_word * rs2_word);
+      return RETIRE_FAIL; // TODO: In order to please the coverage checker.
     },
     MULU_W01 => {
-      let s1 = X(rs1);
-      let s2 = X(rs2);
-      let rs1_word = unsigned(s1[31..0]);
-      let rs2_word = unsigned(s2[63..32]);
-      X(rd) = to_bits(sizeof(xlen), rs1_word * rs2_word);
+      return RETIRE_FAIL; // TODO: In order to please the coverage checker.
     },
     MACCU_W01 => {
-      let s1 = X(rs1);
-      let s2 = X(rs2);
-      let rs1_word = unsigned(s1[31..0]);
-      let rs2_word = unsigned(s2[63..32]);
-      X(rd) = X(rd) + to_bits(sizeof(xlen), rs1_word * rs2_word);
+      return RETIRE_FAIL; // TODO: In order to please the coverage checker.
     }
   };
   RETIRE_SUCCESS
