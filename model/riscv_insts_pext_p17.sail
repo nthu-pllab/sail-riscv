@@ -307,7 +307,7 @@ function clause execute (PEXT_MUL(rs1, rs2, rd, op)) = {
         let rs1_halfword = rs1_val[(i+15)..i];
         let rs2_halfword = EXTZ(16, rs2_val[(i+7)..i]);
         let rd_halfword = rd_val[(i+15)..i];
-        result[(i+15)..i] = rd_halfword + mulhu(rs1_halfword, rs2_halfword);
+        result[(i+15)..i] = rd_halfword + mulhsu(rs1_halfword, rs2_halfword);
       }
     },
     PMULHSU_H_BO => {
@@ -322,7 +322,7 @@ function clause execute (PEXT_MUL(rs1, rs2, rd, op)) = {
         let rs1_halfword = rs1_val[(i+15)..i];
         let rs2_halfword = EXTZ(16, rs2_val[(i+15)..(i+8)]);
         let rd_halfword = rd_val[(i+15)..i];
-        result[(i+15)..i] = rd_halfword + mulhu(rs1_halfword, rs2_halfword);
+        result[(i+15)..i] = rd_halfword + mulhsu(rs1_halfword, rs2_halfword);
       }
     },
     PMULHRSU_H => {
