@@ -155,7 +155,7 @@ mapping clause encdec = PEXT_ELEMENTARY_W(rs1, rs2, rd, PAADD_W) if sizeof(xlen)
 mapping clause encdec = PEXT_ELEMENTARY_W(rs1, rs2, rd, PSADDU_W) if sizeof(xlen) == 64 <->
   0b1 @ 0b0110 @ 0b01 @ rs2 @ rs1 @ 0b000 @ rd @ 0b0111011 if sizeof(xlen) == 64
 mapping clause encdec = PEXT_ELEMENTARY_W(rs1, rs2, rd, PAADDU_W) if sizeof(xlen) == 64 <->
-  0b1 @ 0b0010 @ 0b01 @ rs2 @ rs1 @ 0b000 @ rd @ 0b0111011 if sizeof(xlen) == 64
+  0b1 @ 0b0111 @ 0b01 @ rs2 @ rs1 @ 0b000 @ rd @ 0b0111011 if sizeof(xlen) == 64
 mapping clause encdec = PEXT_ELEMENTARY_W(rs1, rs2, rd, PSUB_W) if sizeof(xlen) == 64 <->
   0b1 @ 0b1000 @ 0b01 @ rs2 @ rs1 @ 0b000 @ rd @ 0b0111011 if sizeof(xlen) == 64
 mapping clause encdec = PEXT_ELEMENTARY_W(rs1, rs2, rd, PSSUB_W) if sizeof(xlen) == 64 <->
@@ -218,7 +218,7 @@ mapping clause encdec = PEXT_ELEMENTARY(rs1, rs2, rd, AADD) if sizeof(xlen) == 3
 mapping clause encdec = PEXT_ELEMENTARY(rs1, rs2, rd, SADDU) if sizeof(xlen) == 32 <->
   0b1 @ 0b0110 @ 0b01 @ rs2 @ rs1 @ 0b000 @ rd @ 0b0111011 if sizeof(xlen) == 32
 mapping clause encdec = PEXT_ELEMENTARY(rs1, rs2, rd, AADDU) if sizeof(xlen) == 32 <->
-  0b1 @ 0b0010 @ 0b01 @ rs2 @ rs1 @ 0b000 @ rd @ 0b0111011 if sizeof(xlen) == 32
+  0b1 @ 0b0111 @ 0b01 @ rs2 @ rs1 @ 0b000 @ rd @ 0b0111011 if sizeof(xlen) == 32
 mapping clause encdec = PEXT_ELEMENTARY(rs1, rs2, rd, SSUB) if sizeof(xlen) == 32 <->
   0b1 @ 0b1010 @ 0b01 @ rs2 @ rs1 @ 0b000 @ rd @ 0b0111011 if sizeof(xlen) == 32
 mapping clause encdec = PEXT_ELEMENTARY(rs1, rs2, rd, ASUB) if sizeof(xlen) == 32 <->
