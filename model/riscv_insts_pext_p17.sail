@@ -8,13 +8,13 @@ mapping clause encdec = PEXT_MUL(rs1, rs2, rd, PMULHU_H) <->
   0b1 @ 0b0010 @ 0b00 @ rs2 @ rs1 @ 0b111 @ rd @ 0b0111011
 mapping clause encdec = PEXT_MUL(rs1, rs2, rd, PMHACCU_H) <->
   0b1 @ 0b0011 @ 0b00 @ rs2 @ rs1 @ 0b111 @ rd @ 0b0111011
-mapping clause encdec = PEXT_MUL(rs1, rs2, rd, PMULH_H_BE) <->
+mapping clause encdec = PEXT_MUL(rs1, rs2, rd, PMULH_H_B0) <->
   0b1 @ 0b0100 @ 0b00 @ rs2 @ rs1 @ 0b111 @ rd @ 0b0111011
-mapping clause encdec = PEXT_MUL(rs1, rs2, rd, PMHACC_H_BE) <->
+mapping clause encdec = PEXT_MUL(rs1, rs2, rd, PMHACC_H_B0) <->
   0b1 @ 0b0101 @ 0b00 @ rs2 @ rs1 @ 0b111 @ rd @ 0b0111011
-mapping clause encdec = PEXT_MUL(rs1, rs2, rd, PMULH_H_BO) <->
+mapping clause encdec = PEXT_MUL(rs1, rs2, rd, PMULH_H_B1) <->
   0b1 @ 0b0110 @ 0b00 @ rs2 @ rs1 @ 0b111 @ rd @ 0b0111011
-mapping clause encdec = PEXT_MUL(rs1, rs2, rd, PMHACC_H_BO) <->
+mapping clause encdec = PEXT_MUL(rs1, rs2, rd, PMHACC_H_B1) <->
   0b1 @ 0b0111 @ 0b00 @ rs2 @ rs1 @ 0b111 @ rd @ 0b0111011
 mapping clause encdec = PEXT_MUL(rs1, rs2, rd, PMULHSU_H) <->
   0b1 @ 0b1000 @ 0b00 @ rs2 @ rs1 @ 0b111 @ rd @ 0b0111011
@@ -26,9 +26,9 @@ mapping clause encdec = PEXT_MUL(rs1, rs2, rd, MQACC_H00) if sizeof(xlen) == 32 
   0b1 @ 0b1101 @ 0b00 @ rs2 @ rs1 @ 0b111 @ rd @ 0b0111011 if sizeof(xlen) == 32
 mapping clause encdec = PEXT_MUL(rs1, rs2, rd, MQACC_H11) if sizeof(xlen) == 32 <->
   0b1 @ 0b1111 @ 0b00 @ rs2 @ rs1 @ 0b111 @ rd @ 0b0111011 if sizeof(xlen) == 32
-mapping clause encdec = PEXT_MUL(rs1, rs2, rd, PMQACC_W_HEE) if sizeof(xlen) == 64 <->
+mapping clause encdec = PEXT_MUL(rs1, rs2, rd, PMQACC_W_H00) if sizeof(xlen) == 64 <->
   0b1 @ 0b1101 @ 0b00 @ rs2 @ rs1 @ 0b111 @ rd @ 0b0111011 if sizeof(xlen) == 64
-mapping clause encdec = PEXT_MUL(rs1, rs2, rd, PMQACC_W_HOO) if sizeof(xlen) == 64 <->
+mapping clause encdec = PEXT_MUL(rs1, rs2, rd, PMQACC_W_H11) if sizeof(xlen) == 64 <->
   0b1 @ 0b1111 @ 0b00 @ rs2 @ rs1 @ 0b111 @ rd @ 0b0111011 if sizeof(xlen) == 64
 mapping clause encdec = PEXT_MUL(rs1, rs2, rd, PMULHR_H) <->
   0b1 @ 0b0000 @ 0b10 @ rs2 @ rs1 @ 0b111 @ rd @ 0b0111011
@@ -38,13 +38,13 @@ mapping clause encdec = PEXT_MUL(rs1, rs2, rd, PMULHRU_H) <->
   0b1 @ 0b0010 @ 0b10 @ rs2 @ rs1 @ 0b111 @ rd @ 0b0111011
 mapping clause encdec = PEXT_MUL(rs1, rs2, rd, PMHRACCU_H) <->
   0b1 @ 0b0011 @ 0b10 @ rs2 @ rs1 @ 0b111 @ rd @ 0b0111011
-mapping clause encdec = PEXT_MUL(rs1, rs2, rd, PMULHSU_H_BE) <->
+mapping clause encdec = PEXT_MUL(rs1, rs2, rd, PMULHSU_H_B0) <->
   0b1 @ 0b0100 @ 0b10 @ rs2 @ rs1 @ 0b111 @ rd @ 0b0111011
-mapping clause encdec = PEXT_MUL(rs1, rs2, rd, PMHACCSU_H_BE) <->
+mapping clause encdec = PEXT_MUL(rs1, rs2, rd, PMHACCSU_H_B0) <->
   0b1 @ 0b0101 @ 0b10 @ rs2 @ rs1 @ 0b111 @ rd @ 0b0111011
-mapping clause encdec = PEXT_MUL(rs1, rs2, rd, PMULHSU_H_BO) <->
+mapping clause encdec = PEXT_MUL(rs1, rs2, rd, PMULHSU_H_B1) <->
   0b1 @ 0b0110 @ 0b10 @ rs2 @ rs1 @ 0b111 @ rd @ 0b0111011
-mapping clause encdec = PEXT_MUL(rs1, rs2, rd, PMHACCSU_H_BO) <->
+mapping clause encdec = PEXT_MUL(rs1, rs2, rd, PMHACCSU_H_B1) <->
   0b1 @ 0b0111 @ 0b10 @ rs2 @ rs1 @ 0b111 @ rd @ 0b0111011
 mapping clause encdec = PEXT_MUL(rs1, rs2, rd, PMULHRSU_H) <->
   0b1 @ 0b1000 @ 0b10 @ rs2 @ rs1 @ 0b111 @ rd @ 0b0111011
@@ -56,9 +56,9 @@ mapping clause encdec = PEXT_MUL(rs1, rs2, rd, MQRACC_H00) if sizeof(xlen) == 32
   0b1 @ 0b1101 @ 0b10 @ rs2 @ rs1 @ 0b111 @ rd @ 0b0111011 if sizeof(xlen) == 32
 mapping clause encdec = PEXT_MUL(rs1, rs2, rd, MQRACC_H11) if sizeof(xlen) == 32 <->
   0b1 @ 0b1111 @ 0b10 @ rs2 @ rs1 @ 0b111 @ rd @ 0b0111011 if sizeof(xlen) == 32
-mapping clause encdec = PEXT_MUL(rs1, rs2, rd, PMQRACC_W_HEE) if sizeof(xlen) == 64 <->
+mapping clause encdec = PEXT_MUL(rs1, rs2, rd, PMQRACC_W_H00) if sizeof(xlen) == 64 <->
   0b1 @ 0b1101 @ 0b10 @ rs2 @ rs1 @ 0b111 @ rd @ 0b0111011 if sizeof(xlen) == 64
-mapping clause encdec = PEXT_MUL(rs1, rs2, rd, PMQRACC_W_HOO) if sizeof(xlen) == 64 <->
+mapping clause encdec = PEXT_MUL(rs1, rs2, rd, PMQRACC_W_H11) if sizeof(xlen) == 64 <->
   0b1 @ 0b1111 @ 0b10 @ rs2 @ rs1 @ 0b111 @ rd @ 0b0111011 if sizeof(xlen) == 64
 mapping clause encdec = PEXT_MUL(rs1, rs2, rd, MHACC) if sizeof(xlen) == 32 <->
   0b1 @ 0b0001 @ 0b01 @ rs2 @ rs1 @ 0b111 @ rd @ 0b0111011 if sizeof(xlen) == 32
@@ -84,13 +84,13 @@ mapping clause encdec = PEXT_MUL(rs1, rs2, rd, PMULHU_W) if sizeof(xlen) == 64 <
   0b1 @ 0b0010 @ 0b01 @ rs2 @ rs1 @ 0b111 @ rd @ 0b0111011 if sizeof(xlen) == 64
 mapping clause encdec = PEXT_MUL(rs1, rs2, rd, PMHACCU_W) if sizeof(xlen) == 64 <->
   0b1 @ 0b0011 @ 0b01 @ rs2 @ rs1 @ 0b111 @ rd @ 0b0111011 if sizeof(xlen) == 64
-mapping clause encdec = PEXT_MUL(rs1, rs2, rd, PMULH_W_HE) if sizeof(xlen) == 64 <->
+mapping clause encdec = PEXT_MUL(rs1, rs2, rd, PMULH_W_H0) if sizeof(xlen) == 64 <->
   0b1 @ 0b0100 @ 0b01 @ rs2 @ rs1 @ 0b111 @ rd @ 0b0111011 if sizeof(xlen) == 64
-mapping clause encdec = PEXT_MUL(rs1, rs2, rd, PMHACC_W_HE) if sizeof(xlen) == 64 <->
+mapping clause encdec = PEXT_MUL(rs1, rs2, rd, PMHACC_W_H0) if sizeof(xlen) == 64 <->
   0b1 @ 0b0101 @ 0b01 @ rs2 @ rs1 @ 0b111 @ rd @ 0b0111011 if sizeof(xlen) == 64
-mapping clause encdec = PEXT_MUL(rs1, rs2, rd, PMULH_W_HO) if sizeof(xlen) == 64 <->
+mapping clause encdec = PEXT_MUL(rs1, rs2, rd, PMULH_W_H1) if sizeof(xlen) == 64 <->
   0b1 @ 0b0110 @ 0b01 @ rs2 @ rs1 @ 0b111 @ rd @ 0b0111011 if sizeof(xlen) == 64
-mapping clause encdec = PEXT_MUL(rs1, rs2, rd, PMHACC_W_HO) if sizeof(xlen) == 64 <->
+mapping clause encdec = PEXT_MUL(rs1, rs2, rd, PMHACC_W_H1) if sizeof(xlen) == 64 <->
   0b1 @ 0b0111 @ 0b01 @ rs2 @ rs1 @ 0b111 @ rd @ 0b0111011 if sizeof(xlen) == 64
 mapping clause encdec = PEXT_MUL(rs1, rs2, rd, PMULHSU_W) if sizeof(xlen) == 64 <->
   0b1 @ 0b1000 @ 0b01 @ rs2 @ rs1 @ 0b111 @ rd @ 0b0111011 if sizeof(xlen) == 64
@@ -132,13 +132,13 @@ mapping clause encdec = PEXT_MUL(rs1, rs2, rd, PMULHRU_W) if sizeof(xlen) == 64 
   0b1 @ 0b0010 @ 0b11 @ rs2 @ rs1 @ 0b111 @ rd @ 0b0111011 if sizeof(xlen) == 64
 mapping clause encdec = PEXT_MUL(rs1, rs2, rd, PMHRACCU_W) if sizeof(xlen) == 64 <->
   0b1 @ 0b0011 @ 0b11 @ rs2 @ rs1 @ 0b111 @ rd @ 0b0111011 if sizeof(xlen) == 64
-mapping clause encdec = PEXT_MUL(rs1, rs2, rd, PMULHSU_W_HE) if sizeof(xlen) == 64 <->
+mapping clause encdec = PEXT_MUL(rs1, rs2, rd, PMULHSU_W_H0) if sizeof(xlen) == 64 <->
   0b1 @ 0b0100 @ 0b11 @ rs2 @ rs1 @ 0b111 @ rd @ 0b0111011 if sizeof(xlen) == 64
-mapping clause encdec = PEXT_MUL(rs1, rs2, rd, PMHACCSU_W_HE) if sizeof(xlen) == 64 <->
+mapping clause encdec = PEXT_MUL(rs1, rs2, rd, PMHACCSU_W_H0) if sizeof(xlen) == 64 <->
   0b1 @ 0b0101 @ 0b11 @ rs2 @ rs1 @ 0b111 @ rd @ 0b0111011 if sizeof(xlen) == 64
-mapping clause encdec = PEXT_MUL(rs1, rs2, rd, PMULHSU_W_HO) if sizeof(xlen) == 64 <->
+mapping clause encdec = PEXT_MUL(rs1, rs2, rd, PMULHSU_W_H1) if sizeof(xlen) == 64 <->
   0b1 @ 0b0110 @ 0b11 @ rs2 @ rs1 @ 0b111 @ rd @ 0b0111011 if sizeof(xlen) == 64
-mapping clause encdec = PEXT_MUL(rs1, rs2, rd, PMHACCSU_W_HO) if sizeof(xlen) == 64 <->
+mapping clause encdec = PEXT_MUL(rs1, rs2, rd, PMHACCSU_W_H1) if sizeof(xlen) == 64 <->
   0b1 @ 0b0111 @ 0b11 @ rs2 @ rs1 @ 0b111 @ rd @ 0b0111011 if sizeof(xlen) == 64
 mapping clause encdec = PEXT_MUL(rs1, rs2, rd, PMULHRSU_W) if sizeof(xlen) == 64 <->
   0b1 @ 0b1000 @ 0b11 @ rs2 @ rs1 @ 0b111 @ rd @ 0b0111011 if sizeof(xlen) == 64
@@ -187,14 +187,14 @@ function clause execute (PEXT_MUL(rs1, rs2, rd, op)) = {
         result[(i+15)..i] = rd_halfword + mulhu(rs1_halfword, rs2_halfword);
       }
     },
-    PMULH_H_BE => {
+    PMULH_H_B0 => {
       foreach (i from 0 to (sizeof(xlen) - 16) by 16) {
         let rs1_halfword = rs1_val[(i+15)..i];
         let rs2_halfword = EXTS(16, rs2_val[(i+7)..i]);
         result[(i+15)..i] = mulh(rs1_halfword, rs2_halfword);
       }
     },
-    PMHACC_H_BE => {
+    PMHACC_H_B0 => {
       foreach (i from 0 to (sizeof(xlen) - 16) by 16) {
         let rs1_halfword = rs1_val[(i+15)..i];
         let rs2_halfword = EXTS(16, rs2_val[(i+7)..i]);
@@ -202,14 +202,14 @@ function clause execute (PEXT_MUL(rs1, rs2, rd, op)) = {
         result[(i+15)..i] = rd_halfword + mulh(rs1_halfword, rs2_halfword);
       }
     },
-    PMULH_H_BO => {
+    PMULH_H_B1 => {
       foreach (i from 0 to (sizeof(xlen) - 16) by 16) {
         let rs1_halfword = rs1_val[(i+15)..i];
         let rs2_halfword = EXTS(16, rs2_val[(i+15)..(i+8)]);
         result[(i+15)..i] = mulh(rs1_halfword, rs2_halfword);
       }
     },
-    PMHACC_H_BO => {
+    PMHACC_H_B1 => {
       foreach (i from 0 to (sizeof(xlen) - 16) by 16) {
         let rs1_halfword = rs1_val[(i+15)..i];
         let rs2_halfword = EXTS(16, rs2_val[(i+15)..(i+8)]);
@@ -249,7 +249,7 @@ function clause execute (PEXT_MUL(rs1, rs2, rd, op)) = {
       let rs2_halfword = rs2_val[31..16];
       result = rd_val + EXTS(mulq(rs1_halfword, rs2_halfword));
     },
-    PMQACC_W_HEE => {
+    PMQACC_W_H00 => {
       foreach (i from 0 to (sizeof(xlen) - 32) by 32) {
         let rs1_halfword = rs1_val[(i+15)..i];
         let rs2_halfword = rs2_val[(i+15)..i];
@@ -257,7 +257,7 @@ function clause execute (PEXT_MUL(rs1, rs2, rd, op)) = {
         result[(i+31)..i] = rd_word + mulq(rs1_halfword, rs2_halfword);
       }
     },
-    PMQACC_W_HOO => {
+    PMQACC_W_H11 => {
       foreach (i from 0 to (sizeof(xlen) - 32) by 32) {
         let rs1_halfword = rs1_val[(i+31)..(i+16)];
         let rs2_halfword = rs2_val[(i+31)..(i+16)];
@@ -295,14 +295,14 @@ function clause execute (PEXT_MUL(rs1, rs2, rd, op)) = {
         result[(i+15)..i] = rd_halfword + mulhru(rs1_halfword, rs2_halfword);
       }
     },
-    PMULHSU_H_BE => {
+    PMULHSU_H_B0 => {
       foreach (i from 0 to (sizeof(xlen) - 16) by 16) {
         let rs1_halfword = rs1_val[(i+15)..i];
         let rs2_halfword = EXTZ(16, rs2_val[(i+7)..i]);
         result[(i+15)..i] = mulhsu(rs1_halfword, rs2_halfword);
       }
     },
-    PMHACCSU_H_BE => {
+    PMHACCSU_H_B0 => {
       foreach (i from 0 to (sizeof(xlen) - 16) by 16) {
         let rs1_halfword = rs1_val[(i+15)..i];
         let rs2_halfword = EXTZ(16, rs2_val[(i+7)..i]);
@@ -310,14 +310,14 @@ function clause execute (PEXT_MUL(rs1, rs2, rd, op)) = {
         result[(i+15)..i] = rd_halfword + mulhsu(rs1_halfword, rs2_halfword);
       }
     },
-    PMULHSU_H_BO => {
+    PMULHSU_H_B1 => {
       foreach (i from 0 to (sizeof(xlen) - 16) by 16) {
         let rs1_halfword = rs1_val[(i+15)..i];
         let rs2_halfword = EXTZ(16, rs2_val[(i+15)..(i+8)]);
         result[(i+15)..i] = mulhsu(rs1_halfword, rs2_halfword);
       }
     },
-    PMHACCSU_H_BO => {
+    PMHACCSU_H_B1 => {
       foreach (i from 0 to (sizeof(xlen) - 16) by 16) {
         let rs1_halfword = rs1_val[(i+15)..i];
         let rs2_halfword = EXTZ(16, rs2_val[(i+15)..(i+8)]);
@@ -357,14 +357,14 @@ function clause execute (PEXT_MUL(rs1, rs2, rd, op)) = {
       let rs2_halfword = rs2_val[31..16];
       result = rd_val + EXTS(mulqr(rs1_halfword, rs2_halfword));
     },
-    PMQRACC_W_HEE => {
+    PMQRACC_W_H00 => {
       foreach (i from 0 to (sizeof(xlen) - 32) by 32) {
         let rs1_halfword = rs1_val[(i+15)..i];
         let rs2_halfword = rs2_val[(i+15)..i];
         result[(i+31)..i] = mulqr(rs1_halfword, rs2_halfword);
       }
     },
-    PMQRACC_W_HOO => {
+    PMQRACC_W_H11 => {
       foreach (i from 0 to (sizeof(xlen) - 32) by 32) {
         let rs1_halfword = rs1_val[(i+31)..(i+16)];
         let rs2_halfword = rs2_val[(i+31)..(i+16)];
@@ -425,14 +425,14 @@ function clause execute (PEXT_MUL(rs1, rs2, rd, op)) = {
         result[(i+31)..i] = rd_word + mulhu(rs1_word, rs2_word);
       }
     },
-    PMULH_W_HE => {
+    PMULH_W_H0 => {
       foreach (i from 0 to (sizeof(xlen) - 32) by 32) {
         let rs1_word = rs1_val[(i+31)..i];
         let rs2_word = EXTS(32, rs2_val[(i+15)..i]);
         result[(i+31)..i] = mulh(rs1_word, rs2_word);
       }
     },
-    PMHACC_W_HE => {
+    PMHACC_W_H0 => {
       foreach (i from 0 to (sizeof(xlen) - 32) by 32) {
         let rs1_word = rs1_val[(i+31)..i];
         let rs2_word = EXTS(32, rs2_val[(i+15)..i]);
@@ -440,14 +440,14 @@ function clause execute (PEXT_MUL(rs1, rs2, rd, op)) = {
         result[(i+31)..i] = rd_word + mulh(rs1_word, rs2_word);
       }
     },
-    PMULH_W_HO => {
+    PMULH_W_H1 => {
       foreach (i from 0 to (sizeof(xlen) - 32) by 32) {
         let rs1_word = rs1_val[(i+31)..i];
         let rs2_word = EXTS(32, rs2_val[(i+31)..(i+16)]);
         result[(i+31)..i] = mulh(rs1_word, rs2_word);
       }
     },
-    PMHACC_W_HO => {
+    PMHACC_W_H1 => {
       foreach (i from 0 to (sizeof(xlen) - 32) by 32) {
         let rs1_word = rs1_val[(i+31)..i];
         let rs2_word = EXTS(32, rs2_val[(i+31)..(i+16)]);
@@ -556,14 +556,14 @@ function clause execute (PEXT_MUL(rs1, rs2, rd, op)) = {
         result[(i+31)..i] = rd_word + mulhru(rs1_word, rs2_word);
       }
     },
-    PMULHSU_W_HE => {
+    PMULHSU_W_H0 => {
       foreach (i from 0 to (sizeof(xlen) - 32) by 32) {
         let rs1_word = rs1_val[(i+31)..i];
         let rs2_word = EXTS(32, rs2_val[(i+15)..i]);
         result[(i+31)..i] = mulhsu(rs1_word, rs2_word);
       }
     },
-    PMHACCSU_W_HE => {
+    PMHACCSU_W_H0 => {
       foreach (i from 0 to (sizeof(xlen) - 32) by 32) {
         let rs1_word = rs1_val[(i+31)..i];
         let rs2_word = EXTS(32, rs2_val[(i+15)..i]);
@@ -571,14 +571,14 @@ function clause execute (PEXT_MUL(rs1, rs2, rd, op)) = {
         result[(i+31)..i] = rd_word + mulhsu(rs1_word, rs2_word);
       }
     },
-    PMULHSU_W_HO => {
+    PMULHSU_W_H1 => {
       foreach (i from 0 to (sizeof(xlen) - 32) by 32) {
         let rs1_word = rs1_val[(i+31)..i];
         let rs2_word = EXTS(32, rs2_val[(i+31)..(i+16)]);
         result[(i+31)..i] = mulhsu(rs1_word, rs2_word);
       }
     },
-    PMHACCSU_W_HO => {
+    PMHACCSU_W_H1 => {
       foreach (i from 0 to (sizeof(xlen) - 32) by 32) {
         let rs1_word = rs1_val[(i+31)..i];
         let rs2_word = EXTS(32, rs2_val[(i+31)..(i+16)]);
@@ -634,32 +634,32 @@ mapping p_mul_mapping : p_mul <-> string = {
   PMHACC_H <-> "pmhacc.h",
   PMULHU_H <-> "pmulhu.h",
   PMHACCU_H <-> "pmhaccu.h",
-  PMULH_H_BE <-> "pmulh.h.be",
-  PMHACC_H_BE <-> "pmhacc.h.be",
-  PMULH_H_BO <-> "pmulh.h.bo",
-  PMHACC_H_BO <-> "pmhacc.h.bo",
+  PMULH_H_B0 <-> "pmulh.h.b0",
+  PMHACC_H_B0 <-> "pmhacc.h.b0",
+  PMULH_H_B1 <-> "pmulh.h.b1",
+  PMHACC_H_B1 <-> "pmhacc.h.b1",
   PMULHSU_H <-> "pmulhsu.h",
   PMHACCSU_H <-> "pmhaccsu.h",
   PMULQ_H <-> "pmulq.h",
   MQACC_H00 <-> "mqacc.h00",
   MQACC_H11 <-> "mqacc.h11",
-  PMQACC_W_HEE <-> "pmqacc.w.hee",
-  PMQACC_W_HOO <-> "pmqacc.w.hoo",
+  PMQACC_W_H00 <-> "pmqacc.w.h00",
+  PMQACC_W_H11 <-> "pmqacc.w.h11",
   PMULHR_H <-> "pmulhr.h",
   PMHRACC_H <-> "pmhracc.h",
   PMULHRU_H <-> "pmulhru.h",
   PMHRACCU_H <-> "pmhraccu.h",
-  PMULHSU_H_BE <-> "pmulhsu.h.be",
-  PMHACCSU_H_BE <-> "pmhaccsu.h.be",
-  PMULHSU_H_BO <-> "pmulhsu.h.bo",
-  PMHACCSU_H_BO <-> "pmhaccsu.h.bo",
+  PMULHSU_H_B0 <-> "pmulhsu.h.b0",
+  PMHACCSU_H_B0 <-> "pmhaccsu.h.b0",
+  PMULHSU_H_B1 <-> "pmulhsu.h.b1",
+  PMHACCSU_H_B1 <-> "pmhaccsu.h.b1",
   PMULHRSU_H <-> "pmulhrsu.h",
   PMHRACCSU_H <-> "pmhraccsu.h",
   PMULQR_H <-> "pmulqr.h",
   MQRACC_H00 <-> "mqracc.h00",
   MQRACC_H11 <-> "mqracc.h11",
-  PMQRACC_W_HEE <-> "pmqracc.w.hee",
-  PMQRACC_W_HOO <-> "pmqracc.w.hoo",
+  PMQRACC_W_H00 <-> "pmqracc.w.h00",
+  PMQRACC_W_H11 <-> "pmqracc.w.h11",
   MHACC <-> "mhacc",
   MHACCU <-> "mhaccu",
   MULH_H0 <-> "mulh.h0",
@@ -672,10 +672,10 @@ mapping p_mul_mapping : p_mul <-> string = {
   PMHACC_W <-> "pmhacc.w",
   PMULHU_W <-> "pmulhu.w",
   PMHACCU_W <-> "pmhaccu.w",
-  PMULH_W_HE <-> "pmulh.w.he",
-  PMHACC_W_HE <-> "pmhacc.w.he",
-  PMULH_W_HO <-> "pmulh.w.ho",
-  PMHACC_W_HO <-> "pmhacc.w.ho",
+  PMULH_W_H0 <-> "pmulh.w.h0",
+  PMHACC_W_H0 <-> "pmhacc.w.h0",
+  PMULH_W_H1 <-> "pmulh.w.h1",
+  PMHACC_W_H1 <-> "pmhacc.w.h1",
   PMULHSU_W <-> "pmulhsu.w",
   PMHACCSU_W <-> "pmhaccsu.w",
   PMULQ_W <-> "pmulq.w",
@@ -696,10 +696,10 @@ mapping p_mul_mapping : p_mul <-> string = {
   PMHRACC_W <-> "pmhracc.w",
   PMULHRU_W <-> "pmulhru.w",
   PMHRACCU_W <-> "pmhraccu.w",
-  PMULHSU_W_HE <-> "pmulhsu.w.he",
-  PMHACCSU_W_HE <-> "pmhaccsu.w.he",
-  PMULHSU_W_HO <-> "pmulhsu.w.ho",
-  PMHACCSU_W_HO <-> "pmhaccsu.w.ho",
+  PMULHSU_W_H0 <-> "pmulhsu.w.h0",
+  PMHACCSU_W_H0 <-> "pmhaccsu.w.h0",
+  PMULHSU_W_H1 <-> "pmulhsu.w.h1",
+  PMHACCSU_W_H1 <-> "pmhaccsu.w.h1",
   PMULHRSU_W <-> "pmulhrsu.w",
   PMHRACCSU_W <-> "pmhraccsu.w",
   PMULQR_W <-> "pmulqr.w",

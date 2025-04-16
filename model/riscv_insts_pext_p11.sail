@@ -12,9 +12,9 @@ mapping clause encdec = PEXT_P11(rs1, rs2, rd, PDIFSUMU_B) <->
   0b1 @ 0b0110 @ 0b10 @ rs2 @ rs1 @ 0b001 @ rd @ 0b0111011
 mapping clause encdec = PEXT_P11(rs1, rs2, rd, PDIFSUMAU_B) <->
   0b1 @ 0b0111 @ 0b10 @ rs2 @ rs1 @ 0b001 @ rd @ 0b0111011
-mapping clause encdec = PEXT_P11(rs1, rs2, rd, PMUL_H_BEO) <->
+mapping clause encdec = PEXT_P11(rs1, rs2, rd, PMUL_H_B01) <->
   0b1 @ 0b0010 @ 0b00 @ rs2 @ rs1 @ 0b001 @ rd @ 0b0111011
-mapping clause encdec = PEXT_P11(rs1, rs2, rd, PMULU_H_BEO) <->
+mapping clause encdec = PEXT_P11(rs1, rs2, rd, PMULU_H_B01) <->
   0b1 @ 0b0110 @ 0b00 @ rs2 @ rs1 @ 0b001 @ rd @ 0b0111011
 mapping clause encdec = PEXT_P11(rs1, rs2, rd, MUL_H01) if sizeof(xlen) == 32 <->
   0b1 @ 0b0010 @ 0b01 @ rs2 @ rs1 @ 0b001 @ rd @ 0b0111011 if sizeof(xlen) == 32
@@ -24,13 +24,13 @@ mapping clause encdec = PEXT_P11(rs1, rs2, rd, MULU_H01) if sizeof(xlen) == 32 <
   0b1 @ 0b0110 @ 0b01 @ rs2 @ rs1 @ 0b001 @ rd @ 0b0111011 if sizeof(xlen) == 32
 mapping clause encdec = PEXT_P11(rs1, rs2, rd, MACCU_H01) if sizeof(xlen) == 32 <->
   0b1 @ 0b0111 @ 0b01 @ rs2 @ rs1 @ 0b001 @ rd @ 0b0111011 if sizeof(xlen) == 32
-mapping clause encdec = PEXT_P11(rs1, rs2, rd, PMUL_W_HEO) if sizeof(xlen) == 64 <->
+mapping clause encdec = PEXT_P11(rs1, rs2, rd, PMUL_W_H01) if sizeof(xlen) == 64 <->
   0b1 @ 0b0010 @ 0b01 @ rs2 @ rs1 @ 0b001 @ rd @ 0b0111011 if sizeof(xlen) == 64
-mapping clause encdec = PEXT_P11(rs1, rs2, rd, PMACC_W_HEO) if sizeof(xlen) == 64 <->
+mapping clause encdec = PEXT_P11(rs1, rs2, rd, PMACC_W_H01) if sizeof(xlen) == 64 <->
   0b1 @ 0b0011 @ 0b01 @ rs2 @ rs1 @ 0b001 @ rd @ 0b0111011 if sizeof(xlen) == 64
-mapping clause encdec = PEXT_P11(rs1, rs2, rd, PMULU_W_HEO) if sizeof(xlen) == 64 <->
+mapping clause encdec = PEXT_P11(rs1, rs2, rd, PMULU_W_H01) if sizeof(xlen) == 64 <->
   0b1 @ 0b0110 @ 0b01 @ rs2 @ rs1 @ 0b001 @ rd @ 0b0111011 if sizeof(xlen) == 64
-mapping clause encdec = PEXT_P11(rs1, rs2, rd, PMACCU_W_HEO) if sizeof(xlen) == 64 <->
+mapping clause encdec = PEXT_P11(rs1, rs2, rd, PMACCU_W_H01) if sizeof(xlen) == 64 <->
   0b1 @ 0b0111 @ 0b01 @ rs2 @ rs1 @ 0b001 @ rd @ 0b0111011 if sizeof(xlen) == 64
 mapping clause encdec = PEXT_P11(rs1, rs2, rd, MUL_W01) if sizeof(xlen) == 64 <->
   0b1 @ 0b0010 @ 0b11 @ rs2 @ rs1 @ 0b001 @ rd @ 0b0111011 if sizeof(xlen) == 64
@@ -86,7 +86,7 @@ function clause execute (PEXT_P11(rs1, rs2, rd, op)) = {
       };
       X(rd) = X(rd) + sum;
     },
-    PMUL_H_BEO => {
+    PMUL_H_B01 => {
       let s1 = X(rs1);
       let s2 = X(rs2);
       var result : xlenbits = zeros();
@@ -97,7 +97,7 @@ function clause execute (PEXT_P11(rs1, rs2, rd, op)) = {
       };
       X(rd) = result;
     },
-    PMULU_H_BEO => {
+    PMULU_H_B01 => {
       let s1 = X(rs1);
       let s2 = X(rs2);
       var result : xlenbits = zeros();
@@ -136,7 +136,7 @@ function clause execute (PEXT_P11(rs1, rs2, rd, op)) = {
       let rs2_halfword = unsigned(s2[31..16]);
       X(rd) = X(rd) + to_bits(sizeof(xlen), rs1_halfword * rs2_halfword);
     },
-    PMUL_W_HEO => {
+    PMUL_W_H01 => {
       let s1 = X(rs1);
       let s2 = X(rs2);
       var result : xlenbits = zeros();
@@ -147,7 +147,7 @@ function clause execute (PEXT_P11(rs1, rs2, rd, op)) = {
       };
       X(rd) = result;
     },
-    PMACC_W_HEO => {
+    PMACC_W_H01 => {
       let s1 = X(rs1);
       let s2 = X(rs2);
       var result : xlenbits = zeros();
@@ -158,7 +158,7 @@ function clause execute (PEXT_P11(rs1, rs2, rd, op)) = {
       };
       X(rd) = result;
     },
-    PMULU_W_HEO => {
+    PMULU_W_H01 => {
       let s1 = X(rs1);
       let s2 = X(rs2);
       var result : xlenbits = zeros();
@@ -169,7 +169,7 @@ function clause execute (PEXT_P11(rs1, rs2, rd, op)) = {
       };
       X(rd) = result;
     },
-    PMACCU_W_HEO => {
+    PMACCU_W_H01 => {
       let s1 = X(rs1);
       let s2 = X(rs2);
       var result : xlenbits = zeros();
@@ -231,16 +231,16 @@ mapping p_p11_mapping : p_p11 <-> string = {
   SRX <-> "srx",
   PDIFSUMU_B <-> "pdifsumu.b",
   PDIFSUMAU_B <-> "pdifsumau.b",
-  PMUL_H_BEO <-> "pmul.h.beo",
-  PMULU_H_BEO <-> "pmulu.h.beo",
+  PMUL_H_B01 <-> "pmul.h.b01",
+  PMULU_H_B01 <-> "pmulu.h.b01",
   MUL_H01 <-> "mul.h01",
   MACC_H01 <-> "macc.h01",
   MULU_H01 <-> "mulu.h01",
   MACCU_H01 <-> "maccu.h01",
-  PMUL_W_HEO <-> "pmul.w.heo",
-  PMACC_W_HEO <-> "pmacc.w.heo",
-  PMULU_W_HEO <-> "pmulu.w.heo",
-  PMACCU_W_HEO <-> "pmaccu.w.heo",
+  PMUL_W_H01 <-> "pmul.w.h01",
+  PMACC_W_H01 <-> "pmacc.w.h01",
+  PMULU_W_H01 <-> "pmulu.w.h01",
+  PMACCU_W_H01 <-> "pmaccu.w.h01",
   MUL_W01 <-> "mul.w01",
   MACC_W01 <-> "macc.w01",
   MULU_W01 <-> "mulu.w01",

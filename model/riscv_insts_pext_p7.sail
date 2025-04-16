@@ -4,11 +4,11 @@ mapping clause encdec = PEXT_PS(rs1, rd, PSABS_B) <->
   0b11100 @ 0b10 @ 0b00111 @ rs1 @ 0b010 @ rd @ 0b0011011
 mapping clause encdec = PEXT_PS(rs1, rd, PSABS_H) <->
   0b11100 @ 0b00 @ 0b00111 @ rs1 @ 0b010 @ rd @ 0b0011011
-mapping clause encdec = PEXT_PS(rs1, rd, PSEXTB_H) <->
+mapping clause encdec = PEXT_PS(rs1, rd, PSEXT_H_B) <->
   0b11100 @ 0b00 @ 0b00100 @ rs1 @ 0b010 @ rd @ 0b0011011
-mapping clause encdec = PEXT_PS(rs1, rd, PSEXTB_W) if sizeof(xlen) == 64 <->
+mapping clause encdec = PEXT_PS(rs1, rd, PSEXT_W_B) if sizeof(xlen) == 64 <->
   0b11100 @ 0b01 @ 0b00100 @ rs1 @ 0b010 @ rd @ 0b0011011 if sizeof(xlen) == 64
-mapping clause encdec = PEXT_PS(rs1, rd, PSEXTH_W) if sizeof(xlen) == 64 <->
+mapping clause encdec = PEXT_PS(rs1, rd, PSEXT_W_H) if sizeof(xlen) == 64 <->
   0b11100 @ 0b01 @ 0b00101 @ rs1 @ 0b010 @ rd @ 0b0011011 if sizeof(xlen) == 64
 
 function clause execute (PEXT_PS(rs1, rd, op)) = { // TODO: Double check if this is correct.
@@ -27,17 +27,17 @@ function clause execute (PEXT_PS(rs1, rd, op)) = { // TODO: Double check if this
         result[(i+15)..i] = sabs(rs1_halfword)
       };
     },
-    PSEXTB_H => {
+    PSEXT_H_B => {
       foreach (i from 0 to (sizeof(xlen) - 16) by 16) {
         result[(i+15)..i] = EXTS(rs1_val[(i+7)..i])
       };  
     },
-    PSEXTB_W => {
+    PSEXT_W_B => {
       foreach (i from 0 to (sizeof(xlen) - 32) by 32) {
         result[(i+31)..i] = EXTS(rs1_val[(i+7)..i])
       };  
     },
-    PSEXTH_W => {
+    PSEXT_W_H => {
       foreach (i from 0 to (sizeof(xlen) - 32) by 32) {
         result[(i+31)..i] = EXTS(rs1_val[(i+15)..i])
       };  
@@ -50,9 +50,9 @@ function clause execute (PEXT_PS(rs1, rd, op)) = { // TODO: Double check if this
 mapping p_ps_mapping : p_ps <-> string = {
   PSABS_B <-> "psabs.b",
   PSABS_H <-> "psabs.h",
-  PSEXTB_H <-> "psextb.h",
-  PSEXTB_W <-> "psextb.w",
-  PSEXTH_W <-> "psexth.w"
+  PSEXT_H_B <-> "psext.h.b",
+  PSEXT_W_B <-> "psext.w.b",
+  PSEXT_W_H <-> "psext.w.h"
 }
 
 mapping clause assembly = PEXT_PS(rs1, rd, p_inst)

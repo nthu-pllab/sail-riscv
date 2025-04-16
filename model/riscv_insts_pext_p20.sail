@@ -1,8 +1,8 @@
 union clause ast = PEXT_SUM_RV32 : (pregidx, regidx, regidx, p_sum_rv32)
 
-mapping clause encdec = PEXT_SUM_RV32(rs1p, rs2, rd, PREDSUM_DH) <->
+mapping clause encdec = PEXT_SUM_RV32(rs1p, rs2, rd, PREDSUM_DHS) <->
   0b0 @ 0b001 @ 0b1 @ 0b00 @ rs2 @ rs1p @ 0b0100 @ rd @ 0b0011011
-mapping clause encdec = PEXT_SUM_RV32(rs1p, rs2, rd, PREDSUMU_DH) <->
+mapping clause encdec = PEXT_SUM_RV32(rs1p, rs2, rd, PREDSUMU_DHS) <->
   0b0 @ 0b011 @ 0b1 @ 0b00 @ rs2 @ rs1p @ 0b0100 @ rd @ 0b0011011
 
 function clause execute (PEXT_SUM_RV32(rs1p, rs2, rd, op)) = {
@@ -10,8 +10,8 @@ function clause execute (PEXT_SUM_RV32(rs1p, rs2, rd, op)) = {
   var result : bits(32) = X(rs2);
   foreach (i from 0 to (64 - 16) by 16) {
     result = match op {
-      PREDSUM_DH => result + EXTS(rs1_val[(i+15)..i]),
-      PREDSUMU_DH => result + EXTZ(rs1_val[(i+15)..i])
+      PREDSUM_DHS => result + EXTS(rs1_val[(i+15)..i]),
+      PREDSUMU_DHS => result + EXTZ(rs1_val[(i+15)..i])
     };
   };
   X(rd) = result;
@@ -19,8 +19,8 @@ function clause execute (PEXT_SUM_RV32(rs1p, rs2, rd, op)) = {
 }
 
 mapping p_sum_rv32_mapping : p_sum_rv32 <-> string = {
-  PREDSUM_DH <-> "predsum.dh",
-  PREDSUMU_DH <-> "predsumu.dh"
+  PREDSUM_DHS <-> "predsum.dhs",
+  PREDSUMU_DHS <-> "predsumu.dhs"
 }
 
 mapping clause assembly = PEXT_SUM_RV32(rs1p, rs2, rd, p_inst)
@@ -181,19 +181,19 @@ mapping clause assembly = PEXT_NARROWING_SHIFT_CLIP_IMM_W(imm6, rs1p, rd, p_inst
 
 union clause ast = PEXT_NARROWING_SHIFT_CLIP_B : (regidx, pregidx, regidx, p_narrowing_shift_clip_b)
 
-mapping clause encdec = PEXT_NARROWING_SHIFT_CLIP_B(rs2, rs1p, rd, PNSRL_B_B0) <->
+mapping clause encdec = PEXT_NARROWING_SHIFT_CLIP_B(rs2, rs1p, rd, PNSRL_BS) <->
   0b0 @ 0b000 @ 0b1 @ 0b00 @ rs2 @ rs1p @ 0b1100 @ rd @ 0b0011011
-mapping clause encdec = PEXT_NARROWING_SHIFT_CLIP_B(rs2, rs1p, rd, PNCLIPU_B_B0) <->
+mapping clause encdec = PEXT_NARROWING_SHIFT_CLIP_B(rs2, rs1p, rd, PNCLIPU_BS) <->
   0b0 @ 0b010 @ 0b1 @ 0b00 @ rs2 @ rs1p @ 0b1100 @ rd @ 0b0011011
-mapping clause encdec = PEXT_NARROWING_SHIFT_CLIP_B(rs2, rs1p, rd, PNCLIPRU_B_B0) <->
+mapping clause encdec = PEXT_NARROWING_SHIFT_CLIP_B(rs2, rs1p, rd, PNCLIPRU_BS) <->
   0b0 @ 0b011 @ 0b1 @ 0b00 @ rs2 @ rs1p @ 0b1100 @ rd @ 0b0011011
-mapping clause encdec = PEXT_NARROWING_SHIFT_CLIP_B(rs2, rs1p, rd, PNSRA_B_B0) <->
+mapping clause encdec = PEXT_NARROWING_SHIFT_CLIP_B(rs2, rs1p, rd, PNSRA_BS) <->
   0b0 @ 0b100 @ 0b1 @ 0b00 @ rs2 @ rs1p @ 0b1100 @ rd @ 0b0011011
-mapping clause encdec = PEXT_NARROWING_SHIFT_CLIP_B(rs2, rs1p, rd, PNSRAR_B_B0) <->
+mapping clause encdec = PEXT_NARROWING_SHIFT_CLIP_B(rs2, rs1p, rd, PNSRAR_BS) <->
   0b0 @ 0b101 @ 0b1 @ 0b00 @ rs2 @ rs1p @ 0b1100 @ rd @ 0b0011011
-mapping clause encdec = PEXT_NARROWING_SHIFT_CLIP_B(rs2, rs1p, rd, PNCLIP_B_B0) <->
+mapping clause encdec = PEXT_NARROWING_SHIFT_CLIP_B(rs2, rs1p, rd, PNCLIP_BS) <->
   0b0 @ 0b110 @ 0b1 @ 0b00 @ rs2 @ rs1p @ 0b1100 @ rd @ 0b0011011
-mapping clause encdec = PEXT_NARROWING_SHIFT_CLIP_B(rs2, rs1p, rd, PNCLIPR_B_B0) <->
+mapping clause encdec = PEXT_NARROWING_SHIFT_CLIP_B(rs2, rs1p, rd, PNCLIPR_BS) <->
   0b0 @ 0b111 @ 0b1 @ 0b00 @ rs2 @ rs1p @ 0b1100 @ rd @ 0b0011011
 
 function clause execute (PEXT_NARROWING_SHIFT_CLIP_B(rs2, rs1p, rd, op)) = {
@@ -202,13 +202,13 @@ function clause execute (PEXT_NARROWING_SHIFT_CLIP_B(rs2, rs1p, rd, op)) = {
   var result : bits(32) = zeros();
   foreach (i from 0 to (32 - 8) by 8) {
     result[(i+7)..i] = match op {
-      PNSRL_B_B0 => shift_right_logic(rs1_val[(2*i+15)..(2*i)], sa)[7..0],
-      PNCLIPU_B_B0 => nclipu(rs1_val[(2*i+15)..(2*i)], sa)[7..0],
-      PNCLIPRU_B_B0 => nclipru(rs1_val[(2*i+15)..(2*i)], sa)[7..0],
-      PNSRA_B_B0 => shift_right_arith(rs1_val[(2*i+15)..(2*i)], sa)[7..0],
-      PNSRAR_B_B0 => shift_right_arith_rounding(rs1_val[(2*i+15)..(2*i)], sa)[7..0],
-      PNCLIP_B_B0 => nclips(rs1_val[(2*i+15)..(2*i)], sa)[7..0],
-      PNCLIPR_B_B0 => ncliprs(rs1_val[(2*i+15)..(2*i)], sa)[7..0]
+      PNSRL_BS => shift_right_logic(rs1_val[(2*i+15)..(2*i)], sa)[7..0],
+      PNCLIPU_BS => nclipu(rs1_val[(2*i+15)..(2*i)], sa)[7..0],
+      PNCLIPRU_BS => nclipru(rs1_val[(2*i+15)..(2*i)], sa)[7..0],
+      PNSRA_BS => shift_right_arith(rs1_val[(2*i+15)..(2*i)], sa)[7..0],
+      PNSRAR_BS => shift_right_arith_rounding(rs1_val[(2*i+15)..(2*i)], sa)[7..0],
+      PNCLIP_BS => nclips(rs1_val[(2*i+15)..(2*i)], sa)[7..0],
+      PNCLIPR_BS => ncliprs(rs1_val[(2*i+15)..(2*i)], sa)[7..0]
     };
   };
   X(rd) = result;
@@ -216,13 +216,13 @@ function clause execute (PEXT_NARROWING_SHIFT_CLIP_B(rs2, rs1p, rd, op)) = {
 }
 
 mapping p_narrowing_shift_clip_b_mapping : p_narrowing_shift_clip_b <-> string = {
-  PNSRL_B_B0 <-> "pnsrl.b.b0",
-  PNCLIPU_B_B0 <-> "pnclipu.b.b0",
-  PNCLIPRU_B_B0 <-> "pnclipru.b.b0",
-  PNSRA_B_B0 <-> "pnsra.b.b0",
-  PNSRAR_B_B0 <-> "pnsrar.b.b0",
-  PNCLIP_B_B0 <-> "pnclip.b.b0",
-  PNCLIPR_B_B0 <-> "pnclipr.b.b0"
+  PNSRL_BS <-> "pnsrl.bs",
+  PNCLIPU_BS <-> "pnclipu.bs",
+  PNCLIPRU_BS <-> "pnclipru.bs",
+  PNSRA_BS <-> "pnsra.bs",
+  PNSRAR_BS <-> "pnsrar.bs",
+  PNCLIP_BS <-> "pnclip.bs",
+  PNCLIPR_BS <-> "pnclipr.bs"
 }
 
 mapping clause assembly = PEXT_NARROWING_SHIFT_CLIP_B(rs2, rs1p, rd, p_inst)
@@ -232,19 +232,19 @@ mapping clause assembly = PEXT_NARROWING_SHIFT_CLIP_B(rs2, rs1p, rd, p_inst)
 
 union clause ast = PEXT_NARROWING_SHIFT_CLIP_H : (regidx, pregidx, regidx, p_narrowing_shift_clip_h)
 
-mapping clause encdec = PEXT_NARROWING_SHIFT_CLIP_H(rs2, rs1p, rd, PNSRL_H_H0) <->
+mapping clause encdec = PEXT_NARROWING_SHIFT_CLIP_H(rs2, rs1p, rd, PNSRL_HS) <->
   0b0 @ 0b000 @ 0b1 @ 0b01 @ rs2 @ rs1p @ 0b1100 @ rd @ 0b0011011
-mapping clause encdec = PEXT_NARROWING_SHIFT_CLIP_H(rs2, rs1p, rd, PNCLIPU_H_H0) <->
+mapping clause encdec = PEXT_NARROWING_SHIFT_CLIP_H(rs2, rs1p, rd, PNCLIPU_HS) <->
   0b0 @ 0b010 @ 0b1 @ 0b01 @ rs2 @ rs1p @ 0b1100 @ rd @ 0b0011011
-mapping clause encdec = PEXT_NARROWING_SHIFT_CLIP_H(rs2, rs1p, rd, PNCLIPRU_H_H0) <->
+mapping clause encdec = PEXT_NARROWING_SHIFT_CLIP_H(rs2, rs1p, rd, PNCLIPRU_HS) <->
   0b0 @ 0b011 @ 0b1 @ 0b01 @ rs2 @ rs1p @ 0b1100 @ rd @ 0b0011011
-mapping clause encdec = PEXT_NARROWING_SHIFT_CLIP_H(rs2, rs1p, rd, PNSRA_H_H0) <->
+mapping clause encdec = PEXT_NARROWING_SHIFT_CLIP_H(rs2, rs1p, rd, PNSRA_HS) <->
   0b0 @ 0b100 @ 0b1 @ 0b01 @ rs2 @ rs1p @ 0b1100 @ rd @ 0b0011011
-mapping clause encdec = PEXT_NARROWING_SHIFT_CLIP_H(rs2, rs1p, rd, PNSRAR_H_H0) <->
+mapping clause encdec = PEXT_NARROWING_SHIFT_CLIP_H(rs2, rs1p, rd, PNSRAR_HS) <->
   0b0 @ 0b101 @ 0b1 @ 0b01 @ rs2 @ rs1p @ 0b1100 @ rd @ 0b0011011
-mapping clause encdec = PEXT_NARROWING_SHIFT_CLIP_H(rs2, rs1p, rd, PNCLIP_H_H0) <->
+mapping clause encdec = PEXT_NARROWING_SHIFT_CLIP_H(rs2, rs1p, rd, PNCLIP_HS) <->
   0b0 @ 0b110 @ 0b1 @ 0b01 @ rs2 @ rs1p @ 0b1100 @ rd @ 0b0011011
-mapping clause encdec = PEXT_NARROWING_SHIFT_CLIP_H(rs2, rs1p, rd, PNCLIPR_H_H0) <->
+mapping clause encdec = PEXT_NARROWING_SHIFT_CLIP_H(rs2, rs1p, rd, PNCLIPR_HS) <->
   0b0 @ 0b111 @ 0b1 @ 0b01 @ rs2 @ rs1p @ 0b1100 @ rd @ 0b0011011
 
 function clause execute (PEXT_NARROWING_SHIFT_CLIP_H(rs2, rs1p, rd, op)) = {
@@ -253,13 +253,13 @@ function clause execute (PEXT_NARROWING_SHIFT_CLIP_H(rs2, rs1p, rd, op)) = {
   var result : bits(32) = zeros();
   foreach (i from 0 to (32 - 16) by 16) {
     result[(i+15)..i] = match op {
-      PNSRL_H_H0 => shift_right_logic(rs1_val[(2*i+31)..(2*i)], sa)[15..0],
-      PNCLIPU_H_H0 => nclipu(rs1_val[(2*i+31)..(2*i)], sa)[15..0],
-      PNCLIPRU_H_H0 => nclipru(rs1_val[(2*i+31)..(2*i)], sa)[15..0],
-      PNSRA_H_H0 => shift_right_arith(rs1_val[(2*i+31)..(2*i)], sa)[15..0],
-      PNSRAR_H_H0 => shift_right_arith_rounding(rs1_val[(2*i+31)..(2*i)], sa)[15..0],
-      PNCLIP_H_H0 => nclips(rs1_val[(2*i+31)..(2*i)], sa)[15..0],
-      PNCLIPR_H_H0 => ncliprs(rs1_val[(2*i+31)..(2*i)], sa)[15..0]
+      PNSRL_HS => shift_right_logic(rs1_val[(2*i+31)..(2*i)], sa)[15..0],
+      PNCLIPU_HS => nclipu(rs1_val[(2*i+31)..(2*i)], sa)[15..0],
+      PNCLIPRU_HS => nclipru(rs1_val[(2*i+31)..(2*i)], sa)[15..0],
+      PNSRA_HS => shift_right_arith(rs1_val[(2*i+31)..(2*i)], sa)[15..0],
+      PNSRAR_HS => shift_right_arith_rounding(rs1_val[(2*i+31)..(2*i)], sa)[15..0],
+      PNCLIP_HS => nclips(rs1_val[(2*i+31)..(2*i)], sa)[15..0],
+      PNCLIPR_HS => ncliprs(rs1_val[(2*i+31)..(2*i)], sa)[15..0]
     };
   };
   X(rd) = result;
@@ -267,13 +267,13 @@ function clause execute (PEXT_NARROWING_SHIFT_CLIP_H(rs2, rs1p, rd, op)) = {
 }
 
 mapping p_narrowing_shift_clip_h_mapping : p_narrowing_shift_clip_h <-> string = {
-  PNSRL_H_H0 <-> "pnsrl.h.h0",
-  PNCLIPU_H_H0 <-> "pnclipu.h.h0",
-  PNCLIPRU_H_H0 <-> "pnclipru.h.h0",
-  PNSRA_H_H0 <-> "pnsra.h.h0",
-  PNSRAR_H_H0 <-> "pnsrar.h.h0",
-  PNCLIP_H_H0 <-> "pnclip.h.h0",
-  PNCLIPR_H_H0 <-> "pnclipr.h.h0"
+  PNSRL_HS <-> "pnsrl.hs",
+  PNCLIPU_HS <-> "pnclipu.hs",
+  PNCLIPRU_HS <-> "pnclipru.hs",
+  PNSRA_HS <-> "pnsra.hs",
+  PNSRAR_HS <-> "pnsrar.hs",
+  PNCLIP_HS <-> "pnclip.hs",
+  PNCLIPR_HS <-> "pnclipr.hs"
 }
 
 mapping clause assembly = PEXT_NARROWING_SHIFT_CLIP_H(rs2, rs1p, rd, p_inst)

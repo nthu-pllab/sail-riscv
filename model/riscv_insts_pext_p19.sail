@@ -1,8 +1,8 @@
 union clause ast = PEXT_WIDENING_SHIFT_LEFT_B : (regidx, regidx, pregidx, p_widening_shift_left_b)
 
-mapping clause encdec = PEXT_WIDENING_SHIFT_LEFT_B(rs1, rs2, rdp, PWSLL_B_B0) <->
+mapping clause encdec = PEXT_WIDENING_SHIFT_LEFT_B(rs1, rs2, rdp, PWSLL_BS) <->
   0b0 @ 0b000 @ 0b1 @ 0b00 @ rs2 @ rs1 @ 0b010 @ rdp @ 0b00011011
-mapping clause encdec = PEXT_WIDENING_SHIFT_LEFT_B(rs1, rs2, rdp, PWSLA_B_B0) <->
+mapping clause encdec = PEXT_WIDENING_SHIFT_LEFT_B(rs1, rs2, rdp, PWSLA_BS) <->
   0b0 @ 0b100 @ 0b1 @ 0b00 @ rs2 @ rs1 @ 0b010 @ rdp @ 0b00011011
 
 function clause execute (PEXT_WIDENING_SHIFT_LEFT_B(rs1, rs2, rdp, op)) = {
@@ -12,8 +12,8 @@ function clause execute (PEXT_WIDENING_SHIFT_LEFT_B(rs1, rs2, rdp, op)) = {
   var result : bits(64) = zeros();
   foreach (i from 0 to (sizeof(xlen) - 8) by 8) {
     result[(2*i+15)..(2*i)] = match op {
-      PWSLL_B_B0 => shift_left_logic(0x00 @ rs1_val[(i+7)..i], sa),
-      PWSLA_B_B0 => shift_left_logic(sign_extend(16, rs1_val[(i+7)..i]), sa)
+      PWSLL_BS => shift_left_logic(0x00 @ rs1_val[(i+7)..i], sa),
+      PWSLA_BS => shift_left_logic(sign_extend(16, rs1_val[(i+7)..i]), sa)
     };
   };
   X(rdp @ 0b1) = result[63..32];
@@ -22,8 +22,8 @@ function clause execute (PEXT_WIDENING_SHIFT_LEFT_B(rs1, rs2, rdp, op)) = {
 }}
 
 mapping p_widening_shift_left_b_mapping : p_widening_shift_left_b <-> string = {
-  PWSLL_B_B0 <-> "pwsll.b.b0",
-  PWSLA_B_B0 <-> "pwsla.b.b0"
+  PWSLL_BS <-> "pwsll.bs",
+  PWSLA_BS <-> "pwsla.bs"
 }
 
 mapping clause assembly = PEXT_WIDENING_SHIFT_LEFT_B(rs1, rs2, rdp, p_inst)
@@ -33,9 +33,9 @@ mapping clause assembly = PEXT_WIDENING_SHIFT_LEFT_B(rs1, rs2, rdp, p_inst)
 
 union clause ast = PEXT_WIDENING_SHIFT_LEFT_H : (regidx, regidx, pregidx, p_widening_shift_left_h)
 
-mapping clause encdec = PEXT_WIDENING_SHIFT_LEFT_H(rs1, rs2, rdp, PWSLL_H_H0) <->
+mapping clause encdec = PEXT_WIDENING_SHIFT_LEFT_H(rs1, rs2, rdp, PWSLL_HS) <->
   0b0 @ 0b000 @ 0b1 @ 0b01 @ rs2 @ rs1 @ 0b010 @ rdp @ 0b00011011
-mapping clause encdec = PEXT_WIDENING_SHIFT_LEFT_H(rs1, rs2, rdp, PWSLA_H_H0) <->
+mapping clause encdec = PEXT_WIDENING_SHIFT_LEFT_H(rs1, rs2, rdp, PWSLA_HS) <->
   0b0 @ 0b100 @ 0b1 @ 0b01 @ rs2 @ rs1 @ 0b010 @ rdp @ 0b00011011
 
 function clause execute (PEXT_WIDENING_SHIFT_LEFT_H(rs1, rs2, rdp, op)) = {
@@ -45,8 +45,8 @@ function clause execute (PEXT_WIDENING_SHIFT_LEFT_H(rs1, rs2, rdp, op)) = {
   var result : bits(64) = zeros();
   foreach (i from 0 to (sizeof(xlen) - 16) by 16) {
     result[(2*i+31)..(2*i)] = match op {
-      PWSLL_H_H0 => shift_left_logic(0x0000 @ rs1_val[(i+15)..i], sa),
-      PWSLA_H_H0 => shift_left_logic(sign_extend(32, rs1_val[(i+15)..i]), sa)
+      PWSLL_HS => shift_left_logic(0x0000 @ rs1_val[(i+15)..i], sa),
+      PWSLA_HS => shift_left_logic(sign_extend(32, rs1_val[(i+15)..i]), sa)
     };
   };
   X(rdp @ 0b1) = result[63..32];
@@ -55,8 +55,8 @@ function clause execute (PEXT_WIDENING_SHIFT_LEFT_H(rs1, rs2, rdp, op)) = {
 }}
 
 mapping p_widening_shift_left_h_mapping : p_widening_shift_left_h <-> string = {
-  PWSLL_H_H0 <-> "pwsll.h.h0",
-  PWSLA_H_H0 <-> "pwsla.h.h0"
+  PWSLL_HS <-> "pwsll.hs",
+  PWSLA_HS <-> "pwsla.hs"
 }
 
 mapping clause assembly = PEXT_WIDENING_SHIFT_LEFT_H(rs1, rs2, rdp, p_inst)

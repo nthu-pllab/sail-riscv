@@ -137,17 +137,17 @@ mapping clause assembly = PEXT_SHIFT_SAT_W_RV32(imm5, rs1p, rdp, p_inst)
 
 union clause ast = PEXT_SHIFT_RV32 : (pregidx, regidx, pregidx, p_shift_rv32)
 
-mapping clause encdec = PEXT_SHIFT_RV32(rs1p, rs2, rdp, PSRL_DB_B0) <->
+mapping clause encdec = PEXT_SHIFT_RV32(rs1p, rs2, rdp, PSRL_DBS) <->
   0b0 @ 0b000 @ 0b1 @ 0b10 @ rs2 @ rs1p @ 0b1100 @ rdp @ 0b00011011
-mapping clause encdec = PEXT_SHIFT_RV32(rs1p, rs2, rdp, PSRA_DB_B0) <->
+mapping clause encdec = PEXT_SHIFT_RV32(rs1p, rs2, rdp, PSRA_DBS) <->
   0b0 @ 0b100 @ 0b1 @ 0b10 @ rs2 @ rs1p @ 0b1100 @ rdp @ 0b00011011
-mapping clause encdec = PEXT_SHIFT_RV32(rs1p, rs2, rdp, PSRL_DH_H0) <->
+mapping clause encdec = PEXT_SHIFT_RV32(rs1p, rs2, rdp, PSRL_DHS) <->
   0b0 @ 0b000 @ 0b1 @ 0b00 @ rs2 @ rs1p @ 0b1100 @ rdp @ 0b00011011
-mapping clause encdec = PEXT_SHIFT_RV32(rs1p, rs2, rdp, PSRA_DH_H0) <->
+mapping clause encdec = PEXT_SHIFT_RV32(rs1p, rs2, rdp, PSRA_DHS) <->
   0b0 @ 0b100 @ 0b1 @ 0b00 @ rs2 @ rs1p @ 0b1100 @ rdp @ 0b00011011
-mapping clause encdec = PEXT_SHIFT_RV32(rs1p, rs2, rdp, PSRL_DW_W) <->
+mapping clause encdec = PEXT_SHIFT_RV32(rs1p, rs2, rdp, PSRL_DWS) <->
   0b0 @ 0b000 @ 0b1 @ 0b01 @ rs2 @ rs1p @ 0b1100 @ rdp @ 0b00011011
-mapping clause encdec = PEXT_SHIFT_RV32(rs1p, rs2, rdp, PSRA_DW_W) <->
+mapping clause encdec = PEXT_SHIFT_RV32(rs1p, rs2, rdp, PSRA_DWS) <->
   0b0 @ 0b100 @ 0b1 @ 0b01 @ rs2 @ rs1p @ 0b1100 @ rdp @ 0b00011011
 
 function clause execute (PEXT_SHIFT_RV32(rs1p, rs2, rdp, op)) = {
@@ -155,37 +155,37 @@ function clause execute (PEXT_SHIFT_RV32(rs1p, rs2, rdp, op)) = {
   let rs2_val = X(rs2);
   var result : bits(64) = zeros();
   match op {
-    PSRL_DB_B0 => {
+    PSRL_DBS => {
       foreach (i from 0 to (64 - 8) by 8) {
         let rs1_byte = slice(rs1_val, i, 8);
         result[(i+7)..i] = shift_right_logic(rs1_byte, EXTZ(rs2_val[2..0]));
       };
     },
-    PSRA_DB_B0 => {
+    PSRA_DBS => {
       foreach (i from 0 to (64 - 8) by 8) {
         let rs1_byte = slice(rs1_val, i, 8);
         result[(i+7)..i] = shift_right_arith(rs1_byte, EXTZ(rs2_val[2..0]));
       };
     },
-    PSRL_DH_H0 => {
+    PSRL_DHS => {
       foreach (i from 0 to (64 - 16) by 16) {
         let rs1_halfword = slice(rs1_val, i, 16);
         result[(i+15)..i] = shift_right_logic(rs1_halfword, EXTZ(rs2_val[3..0]));
       };
     },
-    PSRA_DH_H0 => {
+    PSRA_DHS => {
       foreach (i from 0 to (64 - 16) by 16) {
         let rs1_halfword = slice(rs1_val, i, 16);
         result[(i+15)..i] = shift_right_arith(rs1_halfword, EXTZ(rs2_val[3..0]));
       };
     },
-    PSRL_DW_W => {
+    PSRL_DWS => {
       foreach (i from 0 to (64 - 32) by 32) {
         let rs1_word = slice(rs1_val, i, 32);
         result[(i+31)..i] = shift_right_logic(rs1_word, EXTZ(rs2_val[4..0]));
       };
     },
-    PSRA_DW_W => {
+    PSRA_DWS => {
       foreach (i from 0 to (64 - 32) by 32) {
         let rs1_word = slice(rs1_val, i, 32);
         result[(i+31)..i] = shift_right_arith(rs1_word, EXTZ(rs2_val[4..0]));
@@ -198,12 +198,12 @@ function clause execute (PEXT_SHIFT_RV32(rs1p, rs2, rdp, op)) = {
 }
 
 mapping p_shift_rv32_mapping : p_shift_rv32 <-> string = {
-  PSRL_DB_B0 <-> "psrl.db.b0",
-  PSRA_DB_B0 <-> "psra.db.b0",
-  PSRL_DH_H0 <-> "psrl.dh.h0",
-  PSRA_DH_H0 <-> "psra.dh.h0",
-  PSRL_DW_W <-> "psrl.dw.w",
-  PSRA_DW_W <-> "psra.dw.w"
+  PSRL_DBS <-> "psrl.dbs",
+  PSRA_DBS <-> "psra.dbs",
+  PSRL_DHS <-> "psrl.dhs",
+  PSRA_DHS <-> "psra.dhs",
+  PSRL_DWS <-> "psrl.dws",
+  PSRA_DWS <-> "psra.dws"
 }
 
 mapping clause assembly = PEXT_SHIFT_RV32(rs1p, rs2, rdp, p_inst)

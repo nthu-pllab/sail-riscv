@@ -92,11 +92,11 @@ mapping clause assembly = PEXT_SHIFT_SAT_IMM_W_RV32(imm5, rs1p, rdp, p_inst)
 
 union clause ast = PEXT_PS_RV32 : (pregidx, pregidx, p_ps_rv32)
 
-mapping clause encdec = PEXT_PS_RV32(rs1p, rdp, PSEXTB_DH) <->
+mapping clause encdec = PEXT_PS_RV32(rs1p, rdp, PSEXT_DH_B) <->
   0b01100 @ 0b00 @ 0b00100 @ rs1p @ 0b0110 @ rdp @ 0b00011011
-mapping clause encdec = PEXT_PS_RV32(rs1p, rdp, PSEXTB_DW) <->
+mapping clause encdec = PEXT_PS_RV32(rs1p, rdp, PSEXT_DW_B) <->
   0b01100 @ 0b01 @ 0b00100 @ rs1p @ 0b0110 @ rdp @ 0b00011011
-mapping clause encdec = PEXT_PS_RV32(rs1p, rdp, PSEXTH_DW) <->
+mapping clause encdec = PEXT_PS_RV32(rs1p, rdp, PSEXT_DW_H) <->
   0b01100 @ 0b01 @ 0b00101 @ rs1p @ 0b0110 @ rdp @ 0b00011011
 mapping clause encdec = PEXT_PS_RV32(rs1p, rdp, PSABS_DH) <->
   0b01100 @ 0b00 @ 0b00111 @ rs1p @ 0b0110 @ rdp @ 0b00011011
@@ -107,17 +107,17 @@ function clause execute (PEXT_PS_RV32(rs1p, rdp, op)) = {
   let rs1_val = X(rs1p @ 0b1) @ X(rs1p @ 0b0);
   var result : bits(64) = zeros();
   match op {
-    PSEXTB_DH => {
+    PSEXT_DH_B => {
       foreach (i from 0 to (64 - 16) by 16) {
         result[(i+15)..i] = EXTS(rs1_val[(i+7)..i])
       };
     },
-    PSEXTB_DW => {
+    PSEXT_DW_B => {
       foreach (i from 0 to (64 - 32) by 32) {
         result[(i+31)..i] = EXTS(rs1_val[(i+7)..i])
       };
     },
-    PSEXTH_DW => {
+    PSEXT_DW_H => {
       foreach (i from 0 to (64 - 32) by 32) {
         result[(i+31)..i] = EXTS(rs1_val[(i+15)..i])
       };
@@ -139,9 +139,9 @@ function clause execute (PEXT_PS_RV32(rs1p, rdp, op)) = {
 }
 
 mapping p_ps_rv32_mapping : p_ps_rv32 <-> string = {
-  PSEXTB_DH <-> "psextb.dh",
-  PSEXTB_DW <-> "psextb.dw",
-  PSEXTH_DW <-> "psexth.dw",
+  PSEXT_DH_B <-> "psext.dh.b",
+  PSEXT_DW_B <-> "psext.dw.b",
+  PSEXT_DW_H <-> "psext.dw.h",
   PSABS_DH <-> "psabs.dh",
   PSABS_DB <-> "psabs.dw"
 }
@@ -153,25 +153,25 @@ mapping clause assembly = PEXT_PS_RV32(rs1p, rdp, p_inst)
 
 union clause ast = PEXT_ADD_SHIFT_RV32 : (pregidx, regidx, pregidx, p_add_shift_rv32)
 
-mapping clause encdec = PEXT_ADD_SHIFT_RV32(rs1p, rs2, rdp, PSLL_DH_H0) <->
+mapping clause encdec = PEXT_ADD_SHIFT_RV32(rs1p, rs2, rdp, PSLL_DHS) <->
   0b0 @ 0b000 @ 0b1 @ 0b00 @ rs2 @ rs1p @ 0b0110 @ rdp @ 0b00011011
-mapping clause encdec = PEXT_ADD_SHIFT_RV32(rs1p, rs2, rdp, PADD_DH_H0) <->
+mapping clause encdec = PEXT_ADD_SHIFT_RV32(rs1p, rs2, rdp, PADD_DHS) <->
   0b0 @ 0b001 @ 0b1 @ 0b00 @ rs2 @ rs1p @ 0b0110 @ rdp @ 0b00011011
-mapping clause encdec = PEXT_ADD_SHIFT_RV32(rs1p, rs2, rdp, PSSHA_DH_H0) <->
+mapping clause encdec = PEXT_ADD_SHIFT_RV32(rs1p, rs2, rdp, PSSHA_DHS) <->
   0b0 @ 0b110 @ 0b1 @ 0b00 @ rs2 @ rs1p @ 0b0110 @ rdp @ 0b00011011
-mapping clause encdec = PEXT_ADD_SHIFT_RV32(rs1p, rs2, rdp, PSSHAR_DH_H0) <->
+mapping clause encdec = PEXT_ADD_SHIFT_RV32(rs1p, rs2, rdp, PSSHAR_DHS) <->
   0b0 @ 0b111 @ 0b1 @ 0b00 @ rs2 @ rs1p @ 0b0110 @ rdp @ 0b00011011
-mapping clause encdec = PEXT_ADD_SHIFT_RV32(rs1p, rs2, rdp, PSLL_DW_W) <->
+mapping clause encdec = PEXT_ADD_SHIFT_RV32(rs1p, rs2, rdp, PSLL_DWS) <->
   0b0 @ 0b000 @ 0b1 @ 0b01 @ rs2 @ rs1p @ 0b0110 @ rdp @ 0b00011011
-mapping clause encdec = PEXT_ADD_SHIFT_RV32(rs1p, rs2, rdp, PADD_DW_W) <->
+mapping clause encdec = PEXT_ADD_SHIFT_RV32(rs1p, rs2, rdp, PADD_DWS) <->
   0b0 @ 0b001 @ 0b1 @ 0b01 @ rs2 @ rs1p @ 0b0110 @ rdp @ 0b00011011
-mapping clause encdec = PEXT_ADD_SHIFT_RV32(rs1p, rs2, rdp, PSSHA_DW_W) <->
+mapping clause encdec = PEXT_ADD_SHIFT_RV32(rs1p, rs2, rdp, PSSHA_DWS) <->
   0b0 @ 0b110 @ 0b1 @ 0b01 @ rs2 @ rs1p @ 0b0110 @ rdp @ 0b00011011
-mapping clause encdec = PEXT_ADD_SHIFT_RV32(rs1p, rs2, rdp, PSSHAR_DW_W) <->
+mapping clause encdec = PEXT_ADD_SHIFT_RV32(rs1p, rs2, rdp, PSSHAR_DWS) <->
   0b0 @ 0b111 @ 0b1 @ 0b01 @ rs2 @ rs1p @ 0b0110 @ rdp @ 0b00011011
-mapping clause encdec = PEXT_ADD_SHIFT_RV32(rs1p, rs2, rdp, PSLL_DB_B0) <->
+mapping clause encdec = PEXT_ADD_SHIFT_RV32(rs1p, rs2, rdp, PSLL_DBS) <->
   0b0 @ 0b000 @ 0b1 @ 0b10 @ rs2 @ rs1p @ 0b0110 @ rdp @ 0b00011011
-mapping clause encdec = PEXT_ADD_SHIFT_RV32(rs1p, rs2, rdp, PADD_DB_B0) <->
+mapping clause encdec = PEXT_ADD_SHIFT_RV32(rs1p, rs2, rdp, PADD_DBS) <->
   0b0 @ 0b001 @ 0b1 @ 0b10 @ rs2 @ rs1p @ 0b0110 @ rdp @ 0b00011011
 
 function clause execute (PEXT_ADD_SHIFT_RV32(rs1p, rs2, rdp, op)) = {
@@ -179,52 +179,52 @@ function clause execute (PEXT_ADD_SHIFT_RV32(rs1p, rs2, rdp, op)) = {
   let rs2_val = X(rs2);
   var result : bits(64) = zeros();
   match op {
-    PSLL_DH_H0 => {
+    PSLL_DHS => {
       foreach (i from 0 to (64 - 16) by 16) {
         result[(i+15)..i] = shift_left_logic(rs1_val[(i+15)..i], rs2_val[7..0])
       };
     },
-    PADD_DH_H0 => {
+    PADD_DHS => {
       foreach (i from 0 to (64 - 16) by 16) {
         result[(i+15)..i] = rs1_val[(i+15)..i] + rs2_val[15..0]
       };
     },
-    PSSHA_DH_H0 => {
+    PSSHA_DHS => {
       foreach (i from 0 to (64 - 16) by 16) {
         result[(i+15)..i] = ssha(rs1_val[(i+15)..i], rs2_val[7..0])
       };
     },
-    PSSHAR_DH_H0 => {
+    PSSHAR_DHS => {
       foreach (i from 0 to (64 - 16) by 16) {
         result[(i+15)..i] = sshar(rs1_val[(i+15)..i], rs2_val[7..0])
       };
     },
-    PSLL_DW_W => {
+    PSLL_DWS => {
       foreach (i from 0 to (64 - 32) by 32) {
         result[(i+31)..i] = shift_left_logic(rs1_val[(i+31)..i], rs2_val[7..0])
       };
     },
-    PADD_DW_W => {
+    PADD_DWS => {
       foreach (i from 0 to (64 - 32) by 32) {
         result[(i+31)..i] = rs1_val[(i+31)..i] + rs2_val[31..0]
       };
     },
-    PSSHA_DW_W => {
+    PSSHA_DWS => {
       foreach (i from 0 to (64 - 32) by 32) {
         result[(i+31)..i] = ssha(rs1_val[(i+31)..i], rs2_val[7..0])
       };
     },
-    PSSHAR_DW_W => {
+    PSSHAR_DWS => {
       foreach (i from 0 to (64 - 32) by 32) {
         result[(i+31)..i] = sshar(rs1_val[(i+31)..i], rs2_val[7..0])
       };
     },
-    PSLL_DB_B0 => {
+    PSLL_DBS => {
       foreach (i from 0 to (64 - 8) by 8) {
         result[(i+7)..i] = shift_left_logic(rs1_val[(i+7)..i], rs2_val[7..0])
       };
     },
-    PADD_DB_B0 => {
+    PADD_DBS => {
       foreach (i from 0 to (64 - 8) by 8) {
         result[(i+7)..i] = rs1_val[(i+7)..i] + rs2_val[7..0]
       };
@@ -236,16 +236,16 @@ function clause execute (PEXT_ADD_SHIFT_RV32(rs1p, rs2, rdp, op)) = {
 }
 
 mapping p_add_shift_rv32_mapping : p_add_shift_rv32 <-> string = {
-  PSLL_DH_H0 <-> "psll.dh.h0",
-  PADD_DH_H0 <-> "padd.dh.h0",
-  PSSHA_DH_H0 <-> "pssha.dh.h0",
-  PSSHAR_DH_H0 <-> "psshar.dh.h0",
-  PSLL_DW_W <-> "psll.dw.w",
-  PADD_DW_W <-> "padd.dw.w",
-  PSSHA_DW_W <-> "pssha.dw.w",
-  PSSHAR_DW_W <-> "psshar.dw.w",
-  PSLL_DB_B0 <-> "psll.db.b0",
-  PADD_DB_B0 <-> "padd.db.b0"
+  PSLL_DHS <-> "psll.dhs",
+  PADD_DHS <-> "padd.dhs",
+  PSSHA_DHS <-> "pssha.dhs",
+  PSSHAR_DHS <-> "psshar.dhs",
+  PSLL_DWS <-> "psll.dws",
+  PADD_DWS <-> "padd.dws",
+  PSSHA_DWS <-> "pssha.dws",
+  PSSHAR_DWS <-> "psshar.dws",
+  PSLL_DBS <-> "psll.dbs",
+  PADD_DBS <-> "padd.dbs"
 }
 
 mapping clause assembly = PEXT_ADD_SHIFT_RV32(rs1p, rs2, rdp, p_inst)

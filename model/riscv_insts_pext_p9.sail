@@ -134,25 +134,25 @@ mapping clause assembly = PEXT_SHIFT_SAT_W(imm5, rs1, rd, p_inst)
 
 union clause ast = PEXT_SHIFT_SUM : (regidx, regidx, regidx, p_shift_sum)
 
-mapping clause encdec = PEXT_SHIFT_SUM(rs1, rs2, rd, PSRL_B_B0) <->
+mapping clause encdec = PEXT_SHIFT_SUM(rs1, rs2, rd, PSRL_BS) <->
   0b1 @ 0b000 @ 0b1 @ 0b10 @ rs2 @ rs1 @ 0b100 @ rd @ 0b0011011
-mapping clause encdec = PEXT_SHIFT_SUM(rs1, rs2, rd, PSRA_B_B0) <->
+mapping clause encdec = PEXT_SHIFT_SUM(rs1, rs2, rd, PSRA_BS) <->
   0b1 @ 0b100 @ 0b1 @ 0b10 @ rs2 @ rs1 @ 0b100 @ rd @ 0b0011011
-mapping clause encdec = PEXT_SHIFT_SUM(rs1, rs2, rd, PSRL_H_H0) <->
+mapping clause encdec = PEXT_SHIFT_SUM(rs1, rs2, rd, PSRL_HS) <->
   0b1 @ 0b000 @ 0b1 @ 0b00 @ rs2 @ rs1 @ 0b100 @ rd @ 0b0011011
-mapping clause encdec = PEXT_SHIFT_SUM(rs1, rs2, rd, PSRA_H_H0) <->
+mapping clause encdec = PEXT_SHIFT_SUM(rs1, rs2, rd, PSRA_HS) <->
   0b1 @ 0b100 @ 0b1 @ 0b00 @ rs2 @ rs1 @ 0b100 @ rd @ 0b0011011
-mapping clause encdec = PEXT_SHIFT_SUM(rs1, rs2, rd, PSRL_W_W0) if sizeof(xlen) == 64 <->
+mapping clause encdec = PEXT_SHIFT_SUM(rs1, rs2, rd, PSRL_WS) if sizeof(xlen) == 64 <->
   0b1 @ 0b000 @ 0b1 @ 0b01 @ rs2 @ rs1 @ 0b100 @ rd @ 0b0011011 if sizeof(xlen) == 64
-mapping clause encdec = PEXT_SHIFT_SUM(rs1, rs2, rd, PSRA_W_W0) if sizeof(xlen) == 64 <->
+mapping clause encdec = PEXT_SHIFT_SUM(rs1, rs2, rd, PSRA_WS) if sizeof(xlen) == 64 <->
   0b1 @ 0b100 @ 0b1 @ 0b01 @ rs2 @ rs1 @ 0b100 @ rd @ 0b0011011 if sizeof(xlen) == 64
-mapping clause encdec = PEXT_SHIFT_SUM(rs1, rs2, rd, PREDSUM_H) <->
+mapping clause encdec = PEXT_SHIFT_SUM(rs1, rs2, rd, PREDSUM_HS) <->
   0b1 @ 0b001 @ 0b1 @ 0b00 @ rs2 @ rs1 @ 0b100 @ rd @ 0b0011011
-mapping clause encdec = PEXT_SHIFT_SUM(rs1, rs2, rd, PREDSUMU_H) <->
+mapping clause encdec = PEXT_SHIFT_SUM(rs1, rs2, rd, PREDSUMU_HS) <->
   0b1 @ 0b011 @ 0b1 @ 0b00 @ rs2 @ rs1 @ 0b100 @ rd @ 0b0011011
-mapping clause encdec = PEXT_SHIFT_SUM(rs1, rs2, rd, PREDSUM_W) if sizeof(xlen) == 64 <->
+mapping clause encdec = PEXT_SHIFT_SUM(rs1, rs2, rd, PREDSUM_WS) if sizeof(xlen) == 64 <->
   0b1 @ 0b001 @ 0b1 @ 0b01 @ rs2 @ rs1 @ 0b100 @ rd @ 0b0011011 if sizeof(xlen) == 64
-mapping clause encdec = PEXT_SHIFT_SUM(rs1, rs2, rd, PREDSUMU_W) if sizeof(xlen) == 64 <->
+mapping clause encdec = PEXT_SHIFT_SUM(rs1, rs2, rd, PREDSUMU_WS) if sizeof(xlen) == 64 <->
   0b1 @ 0b011 @ 0b1 @ 0b01 @ rs2 @ rs1 @ 0b100 @ rd @ 0b0011011 if sizeof(xlen) == 64
 
 function clause execute (PEXT_SHIFT_SUM(rs1, rs2, rd, op)) = {
@@ -160,43 +160,43 @@ function clause execute (PEXT_SHIFT_SUM(rs1, rs2, rd, op)) = {
   let rs2_val = X(rs2);
   var result : xlenbits = zeros();
   match op {
-    PSRL_B_B0 => {
+    PSRL_BS => {
       foreach (i from 0 to (sizeof(xlen) - 8) by 8) {
         let rs1_byte = slice(rs1_val, i, 8);
         result[(i+7)..i] = shift_right_logic(rs1_byte, EXTZ(rs2_val[2..0]));
       };
     },
-    PSRA_B_B0 => {
+    PSRA_BS => {
       foreach (i from 0 to (sizeof(xlen) - 8) by 8) {
         let rs1_byte = slice(rs1_val, i, 8);
         result[(i+7)..i] = shift_right_arith(rs1_byte, EXTZ(rs2_val[2..0]));
       };
     },
-    PSRL_H_H0 => {
+    PSRL_HS => {
       foreach (i from 0 to (sizeof(xlen) - 16) by 16) {
         let rs1_halfword = slice(rs1_val, i, 16);
         result[(i+15)..i] = shift_right_logic(rs1_halfword, EXTZ(rs2_val[3..0]));
       };
     },
-    PSRA_H_H0 => {
+    PSRA_HS => {
       foreach (i from 0 to (sizeof(xlen) - 16) by 16) {
         let rs1_halfword = slice(rs1_val, i, 16);
         result[(i+15)..i] = shift_right_arith(rs1_halfword, EXTZ(rs2_val[3..0]));
       };
     },
-    PSRL_W_W0 => {
+    PSRL_WS => {
       foreach (i from 0 to (sizeof(xlen) - 32) by 32) {
         let rs1_word = slice(rs1_val, i, 32);
         result[(i+31)..i] = shift_right_logic(rs1_word, EXTZ(rs2_val[4..0]));
       };
     },
-    PSRA_W_W0 => {
+    PSRA_WS => {
       foreach (i from 0 to (sizeof(xlen) - 32) by 32) {
         let rs1_word = slice(rs1_val, i, 32);
         result[(i+31)..i] = shift_right_arith(rs1_word, EXTZ(rs2_val[4..0]));
       };
     },
-    PREDSUM_H => {
+    PREDSUM_HS => {
       let s1 = X(rs1);
       var sum : bits(xlen) = X(rs2);
       foreach (i from 0 to (sizeof(xlen) - 16) by 16) {
@@ -205,7 +205,7 @@ function clause execute (PEXT_SHIFT_SUM(rs1, rs2, rd, op)) = {
       };
       result = sum;
     },
-    PREDSUMU_H => {
+    PREDSUMU_HS => {
       let s1 = X(rs1);
       var sum : bits(xlen) = X(rs2);
       foreach (i from 0 to (sizeof(xlen) - 16) by 16) {
@@ -214,7 +214,7 @@ function clause execute (PEXT_SHIFT_SUM(rs1, rs2, rd, op)) = {
       };
       result = sum;
     },
-    PREDSUM_W => {
+    PREDSUM_WS => {
       let s1 = X(rs1);
       var sum : bits(xlen) = X(rs2);
       foreach (i from 0 to (sizeof(xlen) - 32) by 32) {
@@ -223,7 +223,7 @@ function clause execute (PEXT_SHIFT_SUM(rs1, rs2, rd, op)) = {
       };
       result = sum;
     },
-    PREDSUMU_W => {
+    PREDSUMU_WS => {
       let s1 = X(rs1);
       var sum : bits(xlen) = X(rs2);
       foreach (i from 0 to (sizeof(xlen) - 32) by 32) {
@@ -238,16 +238,16 @@ function clause execute (PEXT_SHIFT_SUM(rs1, rs2, rd, op)) = {
 }
 
 mapping p_shift_sum_mapping : p_shift_sum <-> string = {
-  PSRL_B_B0 <-> "psrl.b.b0",
-  PSRA_B_B0 <-> "psra.b.b0",
-  PSRL_H_H0 <-> "psrl.h.h0",
-  PSRA_H_H0 <-> "psra.h.h0",
-  PSRL_W_W0 <-> "psrl.w.w0",
-  PSRA_W_W0 <-> "psra.w.w0",
-  PREDSUM_H <-> "predsum.h",
-  PREDSUMU_H <-> "predsumu.h",
-  PREDSUM_W <-> "predsum.w",
-  PREDSUMU_W <-> "predsumu.w"
+  PSRL_BS <-> "psrl.bs",
+  PSRA_BS <-> "psra.bs",
+  PSRL_HS <-> "psrl.hs",
+  PSRA_HS <-> "psra.hs",
+  PSRL_WS <-> "psrl.ws",
+  PSRA_WS <-> "psra.ws",
+  PREDSUM_HS <-> "predsum.hs",
+  PREDSUMU_HS <-> "predsumu.hs",
+  PREDSUM_WS <-> "predsum.ws",
+  PREDSUMU_WS <-> "predsumu.ws"
 }
 
 mapping clause assembly = PEXT_SHIFT_SUM(rs1, rs2, rd, p_inst)
