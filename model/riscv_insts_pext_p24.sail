@@ -243,3 +243,57 @@ mapping p_comparison_h_rv32_mapping : p_comparison_h_rv32 <-> string = {
 
 mapping clause assembly = PEXT_COMPARISON_H_RV32(rs1p, rs2p, rdp, p_inst)
   <-> p_comparison_h_rv32_mapping(p_inst) ^ spc() ^ preg_name(rdp) ^ sep() ^ preg_name(rs1p) ^ sep() ^ preg_name(rs2p)
+
+/* ****************************************************************** */
+
+union clause ast = PEXT_COMPARISON_W_RV32 : (pregidx, pregidx, pregidx, p_comparison_w_rv32)
+
+mapping clause encdec = PEXT_COMPARISON_W_RV32(rs1p, rs2p, rdp, PMSEQ_DW) <->
+  0b1 @ 0b1000 @ 0b01 @ rs2p @ 0b1 @ rs1p @ 0b1110 @ rdp @ 0b00011011
+mapping clause encdec = PEXT_COMPARISON_W_RV32(rs1p, rs2p, rdp, PMSLT_DW) <->
+  0b1 @ 0b1010 @ 0b01 @ rs2p @ 0b1 @ rs1p @ 0b1110 @ rdp @ 0b00011011
+mapping clause encdec = PEXT_COMPARISON_W_RV32(rs1p, rs2p, rdp, PMSLTU_DW) <->
+  0b1 @ 0b1011 @ 0b01 @ rs2p @ 0b1 @ rs1p @ 0b1110 @ rdp @ 0b00011011
+mapping clause encdec = PEXT_COMPARISON_W_RV32(rs1p, rs2p, rdp, PMIN_DW) <->
+  0b1 @ 0b1100 @ 0b01 @ rs2p @ 0b1 @ rs1p @ 0b1110 @ rdp @ 0b00011011
+mapping clause encdec = PEXT_COMPARISON_W_RV32(rs1p, rs2p, rdp, PMINU_DW) <->
+  0b1 @ 0b1101 @ 0b01 @ rs2p @ 0b1 @ rs1p @ 0b1110 @ rdp @ 0b00011011
+mapping clause encdec = PEXT_COMPARISON_W_RV32(rs1p, rs2p, rdp, PMAX_DW) <->
+  0b1 @ 0b1110 @ 0b01 @ rs2p @ 0b1 @ rs1p @ 0b1110 @ rdp @ 0b00011011
+mapping clause encdec = PEXT_COMPARISON_W_RV32(rs1p, rs2p, rdp, PMAXU_DW) <->
+  0b1 @ 0b1111 @ 0b01 @ rs2p @ 0b1 @ rs1p @ 0b1110 @ rdp @ 0b00011011
+
+function clause execute (PEXT_COMPARISON_W_RV32(rs1p, rs2p, rdp, op)) = {
+  let rs1_val = X(rs1p @ 0b1) @ X(rs1p @ 0b0);
+  let rs2_val = X(rs2p @ 0b1) @ X(rs2p @ 0b0);
+  var result : bits(64) = zeros();
+  foreach (i from 0 to (64 - 32) by 32) {
+    let rs1_word = slice(rs1_val, i, 32);
+    let rs2_word = slice(rs2_val, i, 32);
+    result[(i+31)..i] = match op {
+      PMSEQ_DW => mseq(rs1_word, rs2_word),
+      PMSLT_DW => mslt(rs1_word, rs2_word),
+      PMSLTU_DW => msltu(rs1_word, rs2_word),
+      PMIN_DW => mins(rs1_word, rs2_word),
+      PMINU_DW => minu(rs1_word, rs2_word),
+      PMAX_DW => maxs(rs1_word, rs2_word),
+      PMAXU_DW => maxu(rs1_word, rs2_word)
+    };
+  };
+  X(rdp @ 0b1) = result[63..32];
+  X(rdp @ 0b0) = result[31..0];
+  RETIRE_SUCCESS
+}
+
+mapping p_comparison_w_rv32_mapping : p_comparison_w_rv32 <-> string = {
+  PMSEQ_DW <-> "pmseq.dw",
+  PMSLT_DW <-> "pmslt.dw",
+  PMSLTU_DW <-> "pmsltu.dw",
+  PMIN_DW <-> "pmin.dw",
+  PMINU_DW <-> "pmin.dw",
+  PMAX_DW <-> "pmax.dw",
+  PMAXU_DW <-> "pmax.dw"
+}
+
+mapping clause assembly = PEXT_COMPARISON_W_RV32(rs1p, rs2p, rdp, p_inst)
+  <-> p_comparison_w_rv32_mapping(p_inst) ^ spc() ^ preg_name(rdp) ^ sep() ^ preg_name(rs1p) ^ sep() ^ preg_name(rs2p)
