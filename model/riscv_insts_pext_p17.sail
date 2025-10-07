@@ -361,14 +361,16 @@ function clause execute (PEXT_MUL(rs1, rs2, rd, op)) = {
       foreach (i from 0 to (sizeof(xlen) - 32) by 32) {
         let rs1_halfword = rs1_val[(i+15)..i];
         let rs2_halfword = rs2_val[(i+15)..i];
-        result[(i+31)..i] = mulqr(rs1_halfword, rs2_halfword);
+        let rd_word = rd_val[(i+31)..i];
+        result[(i+31)..i] = rd_word + mulqr(rs1_halfword, rs2_halfword);
       }
     },
     PMQRACC_W_H11 => {
       foreach (i from 0 to (sizeof(xlen) - 32) by 32) {
         let rs1_halfword = rs1_val[(i+31)..(i+16)];
         let rs2_halfword = rs2_val[(i+31)..(i+16)];
-        result[(i+31)..i] = mulqr(rs1_halfword, rs2_halfword);
+        let rd_word = rd_val[(i+31)..i];
+        result[(i+31)..i] = rd_word + mulqr(rs1_halfword, rs2_halfword);
       }
     },
     MHACC => {
