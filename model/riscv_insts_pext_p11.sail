@@ -152,8 +152,8 @@ function clause execute (PEXT_P11(rs1, rs2, rd, op)) = {
       let s2 = X(rs2);
       var result : xlenbits = zeros();
       foreach (i from 0 to (sizeof(xlen) - 32) by 32) {
-        let rs1_byte = signed(s1[7..0]);
-        let rs2_byte = signed(s2[15..8]);
+        let rs1_byte = signed(s1[(i+15)..i]);
+        let rs2_byte = signed(s2[(i+31)..(i+16)]);
         result[(i+31)..i] = X(rd)[(i+31)..i] + to_bits(32, rs1_byte * rs2_byte);
       };
       X(rd) = result;
@@ -163,8 +163,8 @@ function clause execute (PEXT_P11(rs1, rs2, rd, op)) = {
       let s2 = X(rs2);
       var result : xlenbits = zeros();
       foreach (i from 0 to (sizeof(xlen) - 32) by 32) {
-        let rs1_byte = unsigned(s1[7..0]);
-        let rs2_byte = unsigned(s2[15..8]);
+        let rs1_byte = unsigned(s1[(i+15)..i]);
+        let rs2_byte = unsigned(s2[(i+31)..(i+16)]);
         result[(i+31)..i] = to_bits(32, rs1_byte * rs2_byte);
       };
       X(rd) = result;
@@ -174,8 +174,8 @@ function clause execute (PEXT_P11(rs1, rs2, rd, op)) = {
       let s2 = X(rs2);
       var result : xlenbits = zeros();
       foreach (i from 0 to (sizeof(xlen) - 32) by 32) {
-        let rs1_byte = unsigned(s1[7..0]);
-        let rs2_byte = unsigned(s2[15..8]);
+        let rs1_byte = unsigned(s1[(i+15)..i]);
+        let rs2_byte = unsigned(s2[(i+31)..(i+16)]);
         result[(i+31)..i] = X(rd)[(i+31)..i] + to_bits(32, rs1_byte * rs2_byte);
       };
       X(rd) = result;
