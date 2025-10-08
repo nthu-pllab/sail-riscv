@@ -158,10 +158,16 @@ mapping clause assembly = PEXT_COMPARISON_H(rs1, rs2, rd, p_inst)
 
 union clause ast = PEXT_COMPARISON_W : (regidx, regidx, regidx, p_comparison_w)
 
+mapping clause encdec = PEXT_COMPARISON_W(rs1, rs2, rd, MSEQ) if sizeof(xlen) == 32 <->
+  0b1 @ 0b1000 @ 0b01 @ rs2 @ rs1 @ 0b110 @ rd @ 0b0111011 if sizeof(xlen) == 32
 mapping clause encdec = PEXT_COMPARISON_W(rs1, rs2, rd, PMSEQ_W) if sizeof(xlen) == 64 <->
   0b1 @ 0b1000 @ 0b01 @ rs2 @ rs1 @ 0b110 @ rd @ 0b0111011 if sizeof(xlen) == 64
+mapping clause encdec = PEXT_COMPARISON_W(rs1, rs2, rd, MSLT) if sizeof(xlen) == 32 <->
+  0b1 @ 0b1010 @ 0b01 @ rs2 @ rs1 @ 0b110 @ rd @ 0b0111011 if sizeof(xlen) == 32
 mapping clause encdec = PEXT_COMPARISON_W(rs1, rs2, rd, PMSLT_W) if sizeof(xlen) == 64 <->
   0b1 @ 0b1010 @ 0b01 @ rs2 @ rs1 @ 0b110 @ rd @ 0b0111011 if sizeof(xlen) == 64
+mapping clause encdec = PEXT_COMPARISON_W(rs1, rs2, rd, MSLTU) if sizeof(xlen) == 32 <->
+  0b1 @ 0b1011 @ 0b01 @ rs2 @ rs1 @ 0b110 @ rd @ 0b0111011 if sizeof(xlen) == 32
 mapping clause encdec = PEXT_COMPARISON_W(rs1, rs2, rd, PMSLTU_W) if sizeof(xlen) == 64 <->
   0b1 @ 0b1011 @ 0b01 @ rs2 @ rs1 @ 0b110 @ rd @ 0b0111011 if sizeof(xlen) == 64
 mapping clause encdec = PEXT_COMPARISON_W(rs1, rs2, rd, PMIN_W) if sizeof(xlen) == 64 <->
@@ -181,8 +187,11 @@ function clause execute (PEXT_COMPARISON_W(rs1, rs2, rd, op)) = {
     let rs1_word = slice(rs1_val, i, 32);
     let rs2_word = slice(rs2_val, i, 32);
     result[(i+31)..i] = match op {
+      MSEQ => mseq(rs1_word, rs2_word),
       PMSEQ_W => mseq(rs1_word, rs2_word),
+      MSLT => mslt(rs1_word, rs2_word),
       PMSLT_W => mslt(rs1_word, rs2_word),
+      MSLTU => msltu(rs1_word, rs2_word),
       PMSLTU_W => msltu(rs1_word, rs2_word),
       PMIN_W => mins(rs1_word, rs2_word),
       PMINU_W => minu(rs1_word, rs2_word),
@@ -195,8 +204,11 @@ function clause execute (PEXT_COMPARISON_W(rs1, rs2, rd, op)) = {
 }
 
 mapping p_comparison_w_mapping : p_comparison_w <-> string = {
+  MSEQ <-> "mseq",
   PMSEQ_W <-> "pmseq.w",
+  MSLT <-> "mslt",
   PMSLT_W <-> "pmslt.w",
+  MSLTU <-> "msltu",
   PMSLTU_W <-> "pmsltu.w",
   PMIN_W <-> "pmin.w",
   PMINU_W <-> "pmin.w",

@@ -146,6 +146,10 @@ mapping clause encdec = PEXT_SHIFT_SUM(rs1, rs2, rd, PSRL_WS) if sizeof(xlen) ==
   0b1 @ 0b000 @ 0b1 @ 0b01 @ rs2 @ rs1 @ 0b100 @ rd @ 0b0011011 if sizeof(xlen) == 64
 mapping clause encdec = PEXT_SHIFT_SUM(rs1, rs2, rd, PSRA_WS) if sizeof(xlen) == 64 <->
   0b1 @ 0b100 @ 0b1 @ 0b01 @ rs2 @ rs1 @ 0b100 @ rd @ 0b0011011 if sizeof(xlen) == 64
+mapping clause encdec = PEXT_SHIFT_SUM(rs1, rs2, rd, PREDSUM_BS) <->
+  0b1 @ 0b001 @ 0b1 @ 0b10 @ rs2 @ rs1 @ 0b100 @ rd @ 0b0011011
+mapping clause encdec = PEXT_SHIFT_SUM(rs1, rs2, rd, PREDSUMU_BS) <->
+  0b1 @ 0b011 @ 0b1 @ 0b10 @ rs2 @ rs1 @ 0b100 @ rd @ 0b0011011
 mapping clause encdec = PEXT_SHIFT_SUM(rs1, rs2, rd, PREDSUM_HS) <->
   0b1 @ 0b001 @ 0b1 @ 0b00 @ rs2 @ rs1 @ 0b100 @ rd @ 0b0011011
 mapping clause encdec = PEXT_SHIFT_SUM(rs1, rs2, rd, PREDSUMU_HS) <->
@@ -196,6 +200,24 @@ function clause execute (PEXT_SHIFT_SUM(rs1, rs2, rd, op)) = {
         result[(i+31)..i] = shift_right_arith(rs1_word, EXTZ(rs2_val[4..0]));
       };
     },
+    PREDSUM_BS => {
+      let s1 = X(rs1);
+      var sum : bits(xlen) = X(rs2);
+      foreach (i from 0 to (sizeof(xlen) - 8) by 8) {
+          let s1_b = s1[(i+7)..i];
+          sum = sum + EXTS(sizeof(xlen), s1_b);
+      };
+      result = sum;
+    },
+    PREDSUMU_BS => {
+      let s1 = X(rs1);
+      var sum : bits(xlen) = X(rs2);
+      foreach (i from 0 to (sizeof(xlen) - 8) by 8) {
+          let s1_b = s1[(i+7)..i];
+          sum = sum + EXTZ(sizeof(xlen), s1_b);
+      };
+      result = sum;
+    },
     PREDSUM_HS => {
       let s1 = X(rs1);
       var sum : bits(xlen) = X(rs2);
@@ -244,6 +266,8 @@ mapping p_shift_sum_mapping : p_shift_sum <-> string = {
   PSRA_HS <-> "psra.hs",
   PSRL_WS <-> "psrl.ws",
   PSRA_WS <-> "psra.ws",
+  PREDSUM_BS <-> "predsum.bs",
+  PREDSUMU_BS <-> "predsumu.bs",
   PREDSUM_HS <-> "predsum.hs",
   PREDSUMU_HS <-> "predsumu.hs",
   PREDSUM_WS <-> "predsum.ws",
