@@ -561,14 +561,14 @@ function clause execute (PEXT_MUL(rs1, rs2, rd, op)) = {
     PMULHSU_W_H0 => {
       foreach (i from 0 to (sizeof(xlen) - 32) by 32) {
         let rs1_word = rs1_val[(i+31)..i];
-        let rs2_word = EXTS(32, rs2_val[(i+15)..i]);
+        let rs2_word = EXTZ(32, rs2_val[(i+15)..i]);
         result[(i+31)..i] = mulhsu(rs1_word, rs2_word);
       }
     },
     PMHACCSU_W_H0 => {
       foreach (i from 0 to (sizeof(xlen) - 32) by 32) {
         let rs1_word = rs1_val[(i+31)..i];
-        let rs2_word = EXTS(32, rs2_val[(i+15)..i]);
+        let rs2_word = EXTZ(32, rs2_val[(i+15)..i]);
         let rd_word = rd_val[(i+31)..i];
         result[(i+31)..i] = rd_word + mulhsu(rs1_word, rs2_word);
       }
@@ -576,14 +576,14 @@ function clause execute (PEXT_MUL(rs1, rs2, rd, op)) = {
     PMULHSU_W_H1 => {
       foreach (i from 0 to (sizeof(xlen) - 32) by 32) {
         let rs1_word = rs1_val[(i+31)..i];
-        let rs2_word = EXTS(32, rs2_val[(i+31)..(i+16)]);
+        let rs2_word = EXTZ(32, rs2_val[(i+31)..(i+16)]);
         result[(i+31)..i] = mulhsu(rs1_word, rs2_word);
       }
     },
     PMHACCSU_W_H1 => {
       foreach (i from 0 to (sizeof(xlen) - 32) by 32) {
         let rs1_word = rs1_val[(i+31)..i];
-        let rs2_word = EXTS(32, rs2_val[(i+31)..(i+16)]);
+        let rs2_word = EXTZ(32, rs2_val[(i+31)..(i+16)]);
         let rd_word = rd_val[(i+31)..i];
         result[(i+31)..i] = rd_word + mulhsu(rs1_word, rs2_word);
       }
