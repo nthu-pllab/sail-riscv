@@ -224,10 +224,24 @@ val mulq : forall 'n, 'n == 8 | 'n == 16 | 'n == 32.
 function mulq (v1, v2) =
   shift_right_arith(muls(v1, v2), 0x00 + 'n - 1)
 
+val mulq_sat : forall 'n, 'n == 8 | 'n == 16 | 'n == 32.
+  (bits('n), bits('n)) -> bits(2 * 'n)
+function mulq_sat (v1, v2) =
+  let lb : bits(66) = not_vec(EXTS(sail_ones ('n) >> 1)) in
+  if (EXTS(v1) == lb) & (EXTS(v2) == lb) then EXTS(sail_ones ('n) >> 1)
+  else shift_right_arith(muls(v1, v2), 0x00 + 'n - 1)
+
 val mulqr : forall 'n, 'n == 8 | 'n == 16 | 'n == 32.
   (bits('n), bits('n)) -> bits(2 * 'n)
 function mulqr (v1, v2) =
   shift_right_arith_rounding(muls(v1, v2), 0x00 + 'n - 1)
+
+val mulqr_sat : forall 'n, 'n == 8 | 'n == 16 | 'n == 32.
+  (bits('n), bits('n)) -> bits(2 * 'n)
+function mulqr_sat (v1, v2) =
+  let lb : bits(66) = not_vec(EXTS(sail_ones ('n) >> 1)) in
+  if (EXTS(v1) == lb) & (EXTS(v2) == lb) then EXTS(sail_ones ('n) >> 1)
+  else shift_right_arith_rounding(muls(v1, v2), 0x00 + 'n - 1)
 
 val mseq : forall 'n, 'n == 8 | 'n == 16 | 'n == 32.
   (bits('n), bits('n)) -> bits('n)

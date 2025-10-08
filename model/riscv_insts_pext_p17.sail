@@ -236,7 +236,7 @@ function clause execute (PEXT_MUL(rs1, rs2, rd, op)) = {
       foreach (i from 0 to (sizeof(xlen) - 16) by 16) {
         let rs1_halfword = rs1_val[(i+15)..i];
         let rs2_halfword = rs2_val[(i+15)..i];
-        result[(i+15)..i] = mulq(rs1_halfword, rs2_halfword)[15..0];
+        result[(i+15)..i] = mulq_sat(rs1_halfword, rs2_halfword)[15..0];
       }
     },
     MQACC_H00 => {
@@ -344,7 +344,7 @@ function clause execute (PEXT_MUL(rs1, rs2, rd, op)) = {
       foreach (i from 0 to (sizeof(xlen) - 16) by 16) {
         let rs1_halfword = rs1_val[(i+15)..i];
         let rs2_halfword = rs2_val[(i+15)..i];
-        result[(i+15)..i] = mulqr(rs1_halfword, rs2_halfword)[15..0];
+        result[(i+15)..i] = mulqr_sat(rs1_halfword, rs2_halfword)[15..0];
       }
     },
     MQRACC_H00 => {
@@ -395,7 +395,7 @@ function clause execute (PEXT_MUL(rs1, rs2, rd, op)) = {
       result = rd_val + mulhsu(rs1_val, rs2_val);
     },
     MULQ => {
-      result = if (sizeof(xlen) == 32) then mulq(rs1_val, rs2_val)[31..0] else zeros(64);
+      result = if (sizeof(xlen) == 32) then mulq_sat(rs1_val, rs2_val)[31..0] else zeros(64);
     },
     PMULH_W => {
       foreach (i from 0 to (sizeof(xlen) - 32) by 32) {
@@ -476,7 +476,7 @@ function clause execute (PEXT_MUL(rs1, rs2, rd, op)) = {
       foreach (i from 0 to (sizeof(xlen) - 32) by 32) {
         let rs1_word = rs1_val[(i+31)..i];
         let rs2_word = rs2_val[(i+31)..i];
-        result[(i+31)..i] = mulq(rs1_word, rs2_word)[31..0];
+        result[(i+31)..i] = mulq_sat(rs1_word, rs2_word)[31..0];
       }
     },
     MQACC_W00 if sizeof(xlen) == 64 => {
@@ -526,7 +526,7 @@ function clause execute (PEXT_MUL(rs1, rs2, rd, op)) = {
       result = rd_val + mulhrsu(rs1_val, rs2_val);
     },
     MULQR => {
-      result = if (sizeof(xlen) == 32) then mulqr(rs1_val, rs2_val)[31..0] else zeros(64);
+      result = if (sizeof(xlen) == 32) then mulqr_sat(rs1_val, rs2_val)[31..0] else zeros(64);
     },
     PMULHR_W => {
       foreach (i from 0 to (sizeof(xlen) - 32) by 32) {
@@ -607,7 +607,7 @@ function clause execute (PEXT_MUL(rs1, rs2, rd, op)) = {
       foreach (i from 0 to (sizeof(xlen) - 32) by 32) {
         let rs1_word = rs1_val[(i+31)..i];
         let rs2_word = rs2_val[(i+31)..i];
-        result[(i+31)..i] = mulqr(rs1_word, rs2_word)[31..0];
+        result[(i+31)..i] = mulqr_sat(rs1_word, rs2_word)[31..0];
       }
     },
     MQRACC_W00 if sizeof(xlen) == 64 => {
