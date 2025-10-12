@@ -13,7 +13,7 @@ function clause execute (PEXT_WIDENING_SHIFT_LEFT_IMM_B(imm4, rs1, rdp, op)) = {
   foreach (i from 0 to (sizeof(xlen) - 8) by 8) {
     result[(2*i+15)..(2*i)] = match op {
       PWSLLI_B => shift_left_logic(0x00 @ rs1_val[(i+7)..i], sa),
-      PWSLAI_B => if rs1_val[i+7] == 0b1[0] then shift_left_logic(0xff @ rs1_val[(i+7)..i], sa) else shift_left_logic(0x00 @ rs1_val[(i+7)..i], sa)
+      PWSLAI_B => shift_left_logic(sign_extend(16, rs1_val[(i+7)..i]), sa)
     };
   };
   X(rdp @ 0b1) = result[63..32];
@@ -46,7 +46,7 @@ function clause execute (PEXT_WIDENING_SHIFT_LEFT_IMM_H(imm5, rs1, rdp, op)) = {
   foreach (i from 0 to (sizeof(xlen) - 16) by 16) {
     result[(2*i+31)..(2*i)] = match op {
       PWSLLI_H => shift_left_logic(0x0000 @ rs1_val[(i+15)..i], sa),
-      PWSLAI_H => if rs1_val[i+15] == 0b1[0] then shift_left_logic(0xffff @ rs1_val[(i+15)..i], sa) else shift_left_logic(0x0000 @ rs1_val[(i+15)..i], sa)
+      PWSLAI_H => shift_left_logic(sign_extend(32, rs1_val[(i+15)..i]), sa)
     };
   };
   X(rdp @ 0b1) = result[63..32];
@@ -78,7 +78,7 @@ function clause execute (PEXT_WIDENING_SHIFT_LEFT_IMM_W(imm6, rs1, rdp, op)) = {
   var result : bits(64) = zeros();
   result = match op {
     WSLLI => shift_left_logic(0x00000000 @ rs1_val, sa),
-    WSLAI => if rs1_val[31] == 0b1[0] then shift_left_logic(0xffffffff @ rs1_val[31..0], sa) else shift_left_logic(0x00000000 @ rs1_val[31..0], sa)
+    WSLAI => shift_left_logic(sign_extend(64, rs1_val), sa)
   };
   X(rdp @ 0b1) = result[63..32];
   X(rdp @ 0b0) = result[31..0];
