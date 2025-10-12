@@ -8,7 +8,7 @@ mapping clause encdec = PEXT_WIDENING_SHIFT_LEFT_B(rs1, rs2, rdp, PWSLA_BS) <->
 function clause execute (PEXT_WIDENING_SHIFT_LEFT_B(rs1, rs2, rdp, op)) = {
   if rdp == 0x0 then RETIRE_SUCCESS else {
   let rs1_val = X(rs1);
-  let sa : bits(8) = X(rs2)[7..0];
+  let sa : bits(8) = EXTZ(X(rs2)[3..0]);
   var result : bits(64) = zeros();
   foreach (i from 0 to (sizeof(xlen) - 8) by 8) {
     result[(2*i+15)..(2*i)] = match op {
@@ -41,7 +41,7 @@ mapping clause encdec = PEXT_WIDENING_SHIFT_LEFT_H(rs1, rs2, rdp, PWSLA_HS) <->
 function clause execute (PEXT_WIDENING_SHIFT_LEFT_H(rs1, rs2, rdp, op)) = {
   if rdp == 0x0 then RETIRE_SUCCESS else {
   let rs1_val = X(rs1);
-  let sa : bits(8) = X(rs2)[7..0];
+  let sa : bits(8) = EXTZ(X(rs2)[4..0]);
   var result : bits(64) = zeros();
   foreach (i from 0 to (sizeof(xlen) - 16) by 16) {
     result[(2*i+31)..(2*i)] = match op {
@@ -74,7 +74,7 @@ mapping clause encdec = PEXT_WIDENING_SHIFT_LEFT_W(rs1, rs2, rdp, WSLA) <->
 function clause execute (PEXT_WIDENING_SHIFT_LEFT_W(rs1, rs2, rdp, op)) = {
   if rdp == 0x0 then RETIRE_SUCCESS else {
   let rs1_val = X(rs1);
-  let sa : bits(8) = X(rs2)[7..0];
+  let sa : bits(8) = EXTZ(X(rs2)[5..0]);
   var result : bits(64) = zeros();
   result = match op {
     WSLL => shift_left_logic(0x00000000 @ rs1_val, sa),
