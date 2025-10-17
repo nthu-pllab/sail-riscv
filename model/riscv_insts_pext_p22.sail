@@ -138,17 +138,17 @@ mapping clause assembly = PEXT_SHIFT_SAT_W_RV32(imm5, rs1p, rdp, p_inst)
 union clause ast = PEXT_SHIFT_RV32 : (pregidx, regidx, pregidx, p_shift_rv32)
 
 mapping clause encdec = PEXT_SHIFT_RV32(rs1p, rs2, rdp, PSRL_DBS) <->
-  0b0 @ 0b000 @ 0b1 @ 0b10 @ rs2 @ rs1p @ 0b1100 @ rdp @ 0b00011011
+  0b0 @ 0b000 @ 0b1 @ 0b10 @ rs2 @ rs1p @ 0b1110 @ rdp @ 0b00011011
 mapping clause encdec = PEXT_SHIFT_RV32(rs1p, rs2, rdp, PSRA_DBS) <->
-  0b0 @ 0b100 @ 0b1 @ 0b10 @ rs2 @ rs1p @ 0b1100 @ rdp @ 0b00011011
+  0b0 @ 0b100 @ 0b1 @ 0b10 @ rs2 @ rs1p @ 0b1110 @ rdp @ 0b00011011
 mapping clause encdec = PEXT_SHIFT_RV32(rs1p, rs2, rdp, PSRL_DHS) <->
-  0b0 @ 0b000 @ 0b1 @ 0b00 @ rs2 @ rs1p @ 0b1100 @ rdp @ 0b00011011
+  0b0 @ 0b000 @ 0b1 @ 0b00 @ rs2 @ rs1p @ 0b1110 @ rdp @ 0b00011011
 mapping clause encdec = PEXT_SHIFT_RV32(rs1p, rs2, rdp, PSRA_DHS) <->
-  0b0 @ 0b100 @ 0b1 @ 0b00 @ rs2 @ rs1p @ 0b1100 @ rdp @ 0b00011011
+  0b0 @ 0b100 @ 0b1 @ 0b00 @ rs2 @ rs1p @ 0b1110 @ rdp @ 0b00011011
 mapping clause encdec = PEXT_SHIFT_RV32(rs1p, rs2, rdp, PSRL_DWS) <->
-  0b0 @ 0b000 @ 0b1 @ 0b01 @ rs2 @ rs1p @ 0b1100 @ rdp @ 0b00011011
+  0b0 @ 0b000 @ 0b1 @ 0b01 @ rs2 @ rs1p @ 0b1110 @ rdp @ 0b00011011
 mapping clause encdec = PEXT_SHIFT_RV32(rs1p, rs2, rdp, PSRA_DWS) <->
-  0b0 @ 0b100 @ 0b1 @ 0b01 @ rs2 @ rs1p @ 0b1100 @ rdp @ 0b00011011
+  0b0 @ 0b100 @ 0b1 @ 0b01 @ rs2 @ rs1p @ 0b1110 @ rdp @ 0b00011011
 
 function clause execute (PEXT_SHIFT_RV32(rs1p, rs2, rdp, op)) = {
   let rs1_val = X(rs1p @ 0b1) @ X(rs1p @ 0b0);

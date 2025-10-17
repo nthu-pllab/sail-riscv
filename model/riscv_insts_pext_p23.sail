@@ -9,7 +9,7 @@ mapping clause encdec = PEXT_ELEMENTARY_B_RV32(rs1p, rs2p, rdp, PAADD_DB) <->
 mapping clause encdec = PEXT_ELEMENTARY_B_RV32(rs1p, rs2p, rdp, PSADDU_DB) <->
   0b1 @ 0b0110 @ 0b10 @ rs2p @ 0b0 @ rs1p @ 0b0110 @ rdp @ 0b00011011
 mapping clause encdec = PEXT_ELEMENTARY_B_RV32(rs1p, rs2p, rdp, PAADDU_DB) <->
-  0b1 @ 0b0010 @ 0b10 @ rs2p @ 0b0 @ rs1p @ 0b0110 @ rdp @ 0b00011011
+  0b1 @ 0b0111 @ 0b10 @ rs2p @ 0b0 @ rs1p @ 0b0110 @ rdp @ 0b00011011
 mapping clause encdec = PEXT_ELEMENTARY_B_RV32(rs1p, rs2p, rdp, PSUB_DB) <->
   0b1 @ 0b1000 @ 0b10 @ rs2p @ 0b0 @ rs1p @ 0b0110 @ rdp @ 0b00011011
 mapping clause encdec = PEXT_ELEMENTARY_B_RV32(rs1p, rs2p, rdp, PDIF_DB) <->
@@ -83,7 +83,7 @@ mapping clause encdec = PEXT_ELEMENTARY_H_RV32(rs1p, rs2p, rdp, PAADD_DH) <->
 mapping clause encdec = PEXT_ELEMENTARY_H_RV32(rs1p, rs2p, rdp, PSADDU_DH) <->
   0b1 @ 0b0110 @ 0b00 @ rs2p @ 0b0 @ rs1p @ 0b0110 @ rdp @ 0b00011011
 mapping clause encdec = PEXT_ELEMENTARY_H_RV32(rs1p, rs2p, rdp, PAADDU_DH) <->
-  0b1 @ 0b0010 @ 0b00 @ rs2p @ 0b0 @ rs1p @ 0b0110 @ rdp @ 0b00011011
+  0b1 @ 0b0111 @ 0b00 @ rs2p @ 0b0 @ rs1p @ 0b0110 @ rdp @ 0b00011011
 mapping clause encdec = PEXT_ELEMENTARY_H_RV32(rs1p, rs2p, rdp, PSUB_DH) <->
   0b1 @ 0b1000 @ 0b00 @ rs2p @ 0b0 @ rs1p @ 0b0110 @ rdp @ 0b00011011
 mapping clause encdec = PEXT_ELEMENTARY_H_RV32(rs1p, rs2p, rdp, PDIF_DH) <->
@@ -157,7 +157,7 @@ mapping clause encdec = PEXT_ELEMENTARY_W_RV32(rs1p, rs2p, rdp, PAADD_DW) <->
 mapping clause encdec = PEXT_ELEMENTARY_W_RV32(rs1p, rs2p, rdp, PSADDU_DW) <->
   0b1 @ 0b0110 @ 0b01 @ rs2p @ 0b0 @ rs1p @ 0b0110 @ rdp @ 0b00011011
 mapping clause encdec = PEXT_ELEMENTARY_W_RV32(rs1p, rs2p, rdp, PAADDU_DW) <->
-  0b1 @ 0b0010 @ 0b01 @ rs2p @ 0b0 @ rs1p @ 0b0110 @ rdp @ 0b00011011
+  0b1 @ 0b0111 @ 0b01 @ rs2p @ 0b0 @ rs1p @ 0b0110 @ rdp @ 0b00011011
 mapping clause encdec = PEXT_ELEMENTARY_W_RV32(rs1p, rs2p, rdp, PSUB_DW) <->
   0b1 @ 0b1000 @ 0b01 @ rs2p @ 0b0 @ rs1p @ 0b0110 @ rdp @ 0b00011011
 mapping clause encdec = PEXT_ELEMENTARY_W_RV32(rs1p, rs2p, rdp, PSSUB_DW) <->
@@ -215,9 +215,9 @@ mapping clause assembly = PEXT_ELEMENTARY_W_RV32(rs1p, rs2p, rdp, p_inst)
 union clause ast = PEXT_ELEMENTARY_RV32 : (pregidx, pregidx, pregidx, p_elementary_rv32)
 
 mapping clause encdec = PEXT_ELEMENTARY_RV32(rs1p, rs2p, rdp, ADDD) <->
-  0b1 @ 0b0000 @ 0b01 @ rs2p @ 0b0 @ rs1p @ 0b0110 @ rdp @ 0b00011011
+  0b1 @ 0b0000 @ 0b11 @ rs2p @ 0b0 @ rs1p @ 0b0110 @ rdp @ 0b00011011
 mapping clause encdec = PEXT_ELEMENTARY_RV32(rs1p, rs2p, rdp, SUBD) <->
-  0b1 @ 0b1000 @ 0b01 @ rs2p @ 0b0 @ rs1p @ 0b0110 @ rdp @ 0b00011011
+  0b1 @ 0b1000 @ 0b11 @ rs2p @ 0b0 @ rs1p @ 0b0110 @ rdp @ 0b00011011
 
 function clause execute (PEXT_ELEMENTARY_RV32(rs1p, rs2p, rdp, op)) = {
   let rs1_val = X(rs1p @ 0b1) @ X(rs1p @ 0b0);
