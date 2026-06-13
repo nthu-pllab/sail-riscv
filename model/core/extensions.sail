@@ -69,6 +69,11 @@ function clause hartSupports(Ext_U) = config extensions.U.supported
 enum clause extension = Ext_H
 mapping clause extensionName = Ext_H <-> "h"
 function clause hartSupports(Ext_H) = false
+// Pack
+// [TODO] Turn on experiment flag
+enum clause extension = Ext_P
+mapping clause extensionName = Ext_P <-> "p"
+function clause hartSupports(Ext_P) = true
 
 // Cache block size is 64 bytes
 enum clause extension = Ext_Zic64b
