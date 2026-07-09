@@ -69,6 +69,12 @@ function clause hartSupports(Ext_U) = config extensions.U.supported
 enum clause extension = Ext_H
 mapping clause extensionName = Ext_H <-> "h"
 function clause hartSupports(Ext_H) = false
+// Packed-SIMD / DSP (P). Experimental: gated by the experimental-extensions
+// flag as well as its config knob, matching the other unratified extensions.
+enum clause extension = Ext_P
+mapping clause extensionName = Ext_P <-> "p"
+function clause hartSupports(Ext_P) = sys_enable_experimental_extensions() & config extensions.P.supported
+function clause currentlyEnabled(Ext_P) = hartSupports(Ext_P)
 
 enum clause extension = Ext_Zibi
 mapping clause extensionName = Ext_Zibi <-> "zibi"
@@ -684,7 +690,7 @@ let extensions_ordered_for_isa_string = [
   // Ext_Q,
   Ext_C,
   Ext_B,
-  // Ext_P,
+  Ext_P,
   Ext_V,
   Ext_H,
   // S and U are not valid extensions in the device-tree, whereas H is.
