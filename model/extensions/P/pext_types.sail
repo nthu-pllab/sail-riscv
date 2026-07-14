@@ -230,6 +230,8 @@ enum pshiftdhscalarfunct3_32only = { PSRL_DHS, PSRA_DHS }
 
 enum pshiftdwscalarfunct3_32only = { PSRL_DWS, PSRA_DWS }
 
+enum pcomparewfunct4_32only = { MSEQ, MSLT, MSLTU }
+
 enum paludbfunct4_32only = { PADD_DB, PSADD_DB, PAADD_DB, PSADDU_DB, PAADDU_DB, PSUB_DB, PABD_DB, PSSUB_DB, PASUB_DB, PABDU_DB, PSSUBU_DB, PASUBU_DB }
 
 enum paludhfunct4_32only = { PADD_DH, PSADD_DH, PAADD_DH, PSADDU_DH, PAADDU_DH, PSUB_DH, PABD_DH, PSSUB_DH, PASUB_DH, PABDU_DH, PSSUBU_DH, PASUBU_DH }

@@ -44,9 +44,15 @@ mapping clause assembly = PMISC(funct7, rs1, rd)
 // ******************************** P REV, REV16 ********************************
 union clause instruction = PREV : (regidx, regidx)
 
+// The immediate encodes the reversal span (XLEN-1), so RV32 and RV64 differ
+// in bit 25; funct3 is 0b101 per draft 020.
 mapping clause encdec = PREV(rs1, rd)
-  <-> 0b01101 @ 0b0111111 @ encdec_reg(rs1) @ 0b001 @ encdec_reg(rd) @ 0b0010011
-  when currentlyEnabled(Ext_P)
+  <-> 0b011010011111 @ encdec_reg(rs1) @ 0b101 @ encdec_reg(rd) @ 0b0010011
+  when currentlyEnabled(Ext_P) & xlen == 32
+
+mapping clause encdec = PREV(rs1, rd)
+  <-> 0b011010111111 @ encdec_reg(rs1) @ 0b101 @ encdec_reg(rd) @ 0b0010011
+  when currentlyEnabled(Ext_P) & xlen == 64
 
 function clause execute (PREV(rs1, rd)) = {
   let rs1_val = X(rs1);
@@ -742,7 +748,7 @@ mapping encdec_pshiftextendfunct4 : pshiftextendfunct4 <-> bits(4) = {
 }
 
 mapping clause encdec = PSHIFTEXTEND(funct4, rs1, rs2, rd) <->
-  0b1 @ encdec_pshiftextendfunct4(funct4) @ 0b11 @ encdec_reg(rs2) @ encdec_reg(rs1) @ 0b100 @ encdec_reg(rd) @ 0b0011011
+  0b1 @ encdec_pshiftextendfunct4(funct4) @ 0b11 @ encdec_reg(rs2) @ encdec_reg(rs1) @ 0b001 @ encdec_reg(rd) @ 0b0111011
   when currentlyEnabled(Ext_P)
 
 function clause execute (PSHIFTEXTEND(funct4, rs1, rs2, rd)) = {
@@ -777,7 +783,7 @@ mapping encdec_pmovemaskmergewidth2 : pmovemaskmergewidth2 <-> bits(2) = {
 }
 
 mapping clause encdec = PMOVEMASKMERGE(width2, rs1, rs2, rd) <->
-  0b1 @ 0b0101 @ encdec_pmovemaskmergewidth2(width2) @ encdec_reg(rs2) @ encdec_reg(rs1) @ 0b100 @ encdec_reg(rd) @ 0b0011011
+  0b1 @ 0b0101 @ encdec_pmovemaskmergewidth2(width2) @ encdec_reg(rs2) @ encdec_reg(rs1) @ 0b001 @ encdec_reg(rd) @ 0b0111011
   when currentlyEnabled(Ext_P)
 
 function clause execute (PMOVEMASKMERGE(width2, rs1, rs2, rd)) = {
@@ -817,7 +823,7 @@ mapping encdec_pmulhb01funct4 : pmulhb01funct4 <-> bits(4) = {
 }
 
 mapping clause encdec = PMULHB01(funct4, rs1, rs2, rd) <->
-  0b1 @ encdec_pmulhb01funct4(funct4) @ 0b00 @ encdec_reg(rs2) @ encdec_reg(rs1) @ 0b001 @ encdec_reg(rd) @ 0b0011011
+  0b1 @ encdec_pmulhb01funct4(funct4) @ 0b00 @ encdec_reg(rs2) @ encdec_reg(rs1) @ 0b001 @ encdec_reg(rd) @ 0b0111011
   when currentlyEnabled(Ext_P)
 
 function clause execute (PMULHB01(funct4, rs1, rs2, rd)) = {
@@ -854,7 +860,7 @@ mapping encdec_pabdsumbfunct4 : pabdsumbfunct4 <-> bits(4) = {
 }
 
 mapping clause encdec = PABDSUMB(funct4, rs1, rs2, rd) <->
-  0b1 @ encdec_pabdsumbfunct4(funct4) @ 0b10 @ encdec_reg(rs2) @ encdec_reg(rs1) @ 0b100 @ encdec_reg(rd) @ 0b0011011
+  0b1 @ encdec_pabdsumbfunct4(funct4) @ 0b10 @ encdec_reg(rs2) @ encdec_reg(rs1) @ 0b001 @ encdec_reg(rd) @ 0b0111011
   when currentlyEnabled(Ext_P)
 
 function clause execute (PABDSUMB(funct4, rs1, rs2, rd)) = {

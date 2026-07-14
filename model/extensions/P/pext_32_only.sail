@@ -184,7 +184,7 @@ mapping encdec_pmulwh01funct4_32only : pmulwh01funct4_32only <-> bits(4) = {
 }
 
 mapping clause encdec = PMULWH01_32ONLY(funct4, rs1, rs2, rd) <->
-  0b1 @ encdec_pmulwh01funct4_32only(funct4) @ 0b01 @ encdec_reg(rs2) @ encdec_reg(rs1) @ 0b001 @ encdec_reg(rd) @ 0b0011011
+  0b1 @ encdec_pmulwh01funct4_32only(funct4) @ 0b01 @ encdec_reg(rs2) @ encdec_reg(rs1) @ 0b001 @ encdec_reg(rd) @ 0b0111011
   when currentlyEnabled(Ext_P) & xlen == 32
 
 function clause execute (PMULWH01_32ONLY(funct4, rs1, rs2, rd)) = {
@@ -317,7 +317,7 @@ mapping encdec_pmulwh01contdwidth2_32only : pmulwh01contdwidth2_32only <-> bits(
 }
 
 mapping clause encdec = PMULWH01CONTD_32ONLY(width2, rs1, rs2, rd) <->
-  0b1 @ 0b1111 @ encdec_pmulwh01contdwidth2_32only(width2) @ encdec_reg(rs2) @ encdec_reg(rs1) @ 0b001 @ encdec_reg(rd) @ 0b0011011
+  0b1 @ 0b1111 @ encdec_pmulwh01contdwidth2_32only(width2) @ encdec_reg(rs2) @ encdec_reg(rs1) @ 0b101 @ encdec_reg(rd) @ 0b0111011
   when currentlyEnabled(Ext_P) & xlen == 32
 
 function clause execute (PMULWH01CONTD_32ONLY(width2, rs1, rs2, rd)) = {
@@ -437,6 +437,58 @@ mapping pmulwcontd_mnemonic_32only : pmulwcontdfunct4_32only <-> string = {
 
 mapping clause assembly = PMULWCONTD_32ONLY(funct4, rs1, rs2, rd)
   <-> pmulwcontd_mnemonic_32only(funct4) ^ spc() ^ reg_name(rd) ^ sep() ^ reg_name(rs1) ^ sep() ^ reg_name(rs2)
+  when currentlyEnabled(Ext_P) & xlen == 32
+
+// ************************ P COMPARE WORD (RV32 SCALAR) ************************
+union clause instruction = PCOMPAREW_32ONLY : (pcomparewfunct4_32only, regidx, regidx, regidx)
+
+mapping encdec_pcomparewfunct4_32only : pcomparewfunct4_32only <-> bits(4) = {
+  MSEQ <-> 0b1000,
+  MSLT <-> 0b1010,
+  MSLTU <-> 0b1011,
+}
+
+mapping clause encdec = PCOMPAREW_32ONLY(funct4, rs1, rs2, rd) <->
+  0b1 @ encdec_pcomparewfunct4_32only(funct4) @ 0b01 @ encdec_reg(rs2) @ encdec_reg(rs1) @ 0b110 @ encdec_reg(rd) @ 0b0111011
+  when currentlyEnabled(Ext_P) & xlen == 32
+
+function clause execute (PCOMPAREW_32ONLY(funct4, rs1, rs2, rd)) = {
+  assert(xlen == 32);
+  let rs1_val = X(rs1);
+  let rs2_val = X(rs2);
+  X(rd) = match funct4 {
+    MSEQ => mseq(rs1_val, rs2_val),
+    MSLT => mslt(rs1_val, rs2_val),
+    MSLTU => msltu(rs1_val, rs2_val),
+  };
+  RETIRE_SUCCESS
+}
+
+mapping pcomparew_mnemonic_32only : pcomparewfunct4_32only <-> string = {
+  MSEQ <-> "mseq",
+  MSLT <-> "mslt",
+  MSLTU <-> "msltu",
+}
+
+mapping clause assembly = PCOMPAREW_32ONLY(funct4, rs1, rs2, rd)
+  <-> pcomparew_mnemonic_32only(funct4) ^ spc() ^ reg_name(rd) ^ sep() ^ reg_name(rs1) ^ sep() ^ reg_name(rs2)
+  when currentlyEnabled(Ext_P) & xlen == 32
+
+// ****************** P SHIFT ONE SATURATING ADD (RV32 SCALAR) ******************
+union clause instruction = SSH1SADD_32ONLY : (regidx, regidx, regidx)
+
+mapping clause encdec = SSH1SADD_32ONLY(rs1, rs2, rd) <->
+  0b1 @ 0b011 @ 0b0 @ 0b01 @ encdec_reg(rs2) @ encdec_reg(rs1) @ 0b010 @ encdec_reg(rd) @ 0b0111011
+  when currentlyEnabled(Ext_P) & xlen == 32
+
+function clause execute (SSH1SADD_32ONLY(rs1, rs2, rd)) = {
+  assert(xlen == 32);
+  X(rd) = sadd(sat_shift_left_arith(X(rs1), 1), X(rs2));
+  RETIRE_SUCCESS
+}
+
+mapping clause assembly = SSH1SADD_32ONLY(rs1, rs2, rd)
+  <-> "ssh1sadd" ^ spc() ^ reg_name(rd) ^ sep() ^ reg_name(rs1) ^ sep() ^ reg_name(rs2)
   when currentlyEnabled(Ext_P) & xlen == 32
 
 // ******************* P MULTIPLICATION WORD HALFWORD SIGNED ********************
@@ -1768,6 +1820,49 @@ function clause execute (PSEXT_DH_B_32ONLY(rs1p, rdp)) = {
 
 mapping clause assembly = PSEXT_DH_B_32ONLY(rs1p, rdp)
   <-> "psext.dh.b" ^ spc() ^ preg_name(rdp) ^ sep() ^ preg_name(rs1p)
+  when currentlyEnabled(Ext_P) & xlen == 32
+
+// ********************* P SIGNED EXTENSION DOUBLE WORD *************************
+union clause instruction = PSEXT_DW_B_32ONLY : (pregidx, pregidx)
+
+mapping clause encdec = PSEXT_DW_B_32ONLY(rs1p, rdp) <->
+  0b01100 @ 0b01 @ 0b00100 @ encdec_preg(rs1p) @ 0b0110 @ encdec_preg(rdp) @ 0b00011011
+  when currentlyEnabled(Ext_P) & xlen == 32
+
+function clause execute (PSEXT_DW_B_32ONLY(rs1p, rdp)) = {
+  assert(xlen == 32);
+  let rs1_val = X_pair(regidx_of_pregidx(rs1p));
+  var result : bits(64) = zeros();
+  foreach (i from 0 to (64 - 32) by 32) {
+    result[(i+31)..i] = sign_extend(rs1_val[(i+7)..i]);
+  };
+  X_pair(regidx_of_pregidx(rdp)) = result;
+  RETIRE_SUCCESS
+}
+
+mapping clause assembly = PSEXT_DW_B_32ONLY(rs1p, rdp)
+  <-> "psext.dw.b" ^ spc() ^ preg_name(rdp) ^ sep() ^ preg_name(rs1p)
+  when currentlyEnabled(Ext_P) & xlen == 32
+
+union clause instruction = PSEXT_DW_H_32ONLY : (pregidx, pregidx)
+
+mapping clause encdec = PSEXT_DW_H_32ONLY(rs1p, rdp) <->
+  0b01100 @ 0b01 @ 0b00101 @ encdec_preg(rs1p) @ 0b0110 @ encdec_preg(rdp) @ 0b00011011
+  when currentlyEnabled(Ext_P) & xlen == 32
+
+function clause execute (PSEXT_DW_H_32ONLY(rs1p, rdp)) = {
+  assert(xlen == 32);
+  let rs1_val = X_pair(regidx_of_pregidx(rs1p));
+  var result : bits(64) = zeros();
+  foreach (i from 0 to (64 - 32) by 32) {
+    result[(i+31)..i] = sign_extend(rs1_val[(i+15)..i]);
+  };
+  X_pair(regidx_of_pregidx(rdp)) = result;
+  RETIRE_SUCCESS
+}
+
+mapping clause assembly = PSEXT_DW_H_32ONLY(rs1p, rdp)
+  <-> "psext.dw.h" ^ spc() ^ preg_name(rdp) ^ sep() ^ preg_name(rs1p)
   when currentlyEnabled(Ext_P) & xlen == 32
 
 // ************************** P SATURATING ABS DOUBLE ***************************

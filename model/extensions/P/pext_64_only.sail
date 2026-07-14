@@ -107,6 +107,55 @@ mapping clause assembly = PSEXTW(funct5, rs1, rd)
   <-> psextw_mnemonic_64only(funct5) ^ spc() ^ reg_name(rd) ^ sep() ^ reg_name(rs1)
   when currentlyEnabled(Ext_P) & xlen == 64
 
+// ***************************** P MISC WORD (RV64) *****************************
+// ABSW / CLSW: same funct7 values as the OP-IMM abs/cls, in OP-IMM-32.
+union clause instruction = PMISCW_64ONLY : (pmiscfunct7, regidx, regidx)
+
+mapping clause encdec = PMISCW_64ONLY(funct7, rs1, rd)
+  <-> 0b01100 @ encdec_pmiscfunct7(funct7) @ encdec_reg(rs1) @ 0b001 @ encdec_reg(rd) @ 0b0011011
+  when currentlyEnabled(Ext_P) & xlen == 64
+
+function clause execute (PMISCW_64ONLY(funct7, rs1, rd)) = {
+  assert(xlen == 64);
+  let w : bits(32) = X(rs1)[31 .. 0];
+  match funct7 {
+    CLS => X(rd) = to_bits(count_leading_sign_bits(w)),
+    ABS => X(rd) = sign_extend(abs(w)),
+  };
+  RETIRE_SUCCESS
+}
+
+mapping pmiscw_mnemonic_64only : pmiscfunct7 <-> string = {
+  CLS <-> "clsw",
+  ABS <-> "absw",
+}
+
+mapping clause assembly = PMISCW_64ONLY(funct7, rs1, rd)
+  <-> pmiscw_mnemonic_64only(funct7) ^ spc() ^ reg_name(rd) ^ sep() ^ reg_name(rs1)
+  when currentlyEnabled(Ext_P) & xlen == 64
+
+// ******************************* P REV16 (RV64) *******************************
+union clause instruction = PREV16_64ONLY : (regidx, regidx)
+
+mapping clause encdec = PREV16_64ONLY(rs1, rd)
+  <-> 0b011010110000 @ encdec_reg(rs1) @ 0b101 @ encdec_reg(rd) @ 0b0010011
+  when currentlyEnabled(Ext_P) & xlen == 64
+
+function clause execute (PREV16_64ONLY(rs1, rd)) = {
+  assert(xlen == 64);
+  let rs1_val = X(rs1);
+  var result : xlenbits = zeros();
+  foreach (i from 0 to (sizeof(xlen) - 16) by 16) {
+    result[(i+15)..i] = rs1_val[(sizeof(xlen) - 1 - i)..(sizeof(xlen) - 16 - i)];
+  };
+  X(rd) = result;
+  RETIRE_SUCCESS
+}
+
+mapping clause assembly = PREV16_64ONLY(rs1, rd)
+  <-> "rev16" ^ spc() ^ reg_name(rd) ^ sep() ^ reg_name(rs1)
+  when currentlyEnabled(Ext_P) & xlen == 64
+
 // ************************ P LOAD UPPER IMMEDIATE WORD *************************
 union clause instruction = PLUI_W : (bits(10), regidx)
 
@@ -271,50 +320,38 @@ mapping pshiftsatiw_mnemonic_64only : pshiftsatiwfunct3_64only <-> string = {
 mapping clause assembly = PSHIFTSATIW_64ONLY(funct3, imm5, rs1, rd)
   <-> pshiftsatiw_mnemonic_64only(funct3) ^ spc() ^ reg_name(rd) ^ sep() ^ reg_name(rs1) ^ sep() ^ hex_bits_5(imm5)
   when currentlyEnabled(Ext_P) & xlen == 64
-/*
 // ******************* P SHIFT SATURATE IMMEDIATE DOUBLEWORD ********************
-union clause instruction = PSHIFTSATIW_64ONLY : (pshiftsatiwfunct3_64only, bits(6), regidx, regidx)
+// RV64 scalar sati/usati/srari (imm6). Shares its funct3 values and mnemonics
+// with the RV32 scalar group, so the 32-only enum and mappings are reused.
+union clause instruction = PSHIFTSATID_64ONLY : (pshiftsatiwfunct3_32only, bits(6), regidx, regidx)
 
-mapping encdec_pshiftsatiwfunct3_64only : pshiftsatiwfunct3_64only <-> bits(3) = {
-  USATI <-> 0b010,
-  SRARI <-> 0b101,
-  SATI <-> 0b110,
-}
-
-mapping clause encdec = PSHIFTSATIW_64ONLY(funct3, imm6, rs1, rd)
-  <-> 0b1 @ encdec_pshiftsatiwfunct3_64only(funct3) @ 0b0 @ 0b1 @ imm6 @ encdec_reg(rs1) @ 0b100 @ encdec_reg(rd) @ 0b0011011
+mapping clause encdec = PSHIFTSATID_64ONLY(funct3, imm6, rs1, rd)
+  <-> 0b1 @ encdec_pshiftsatiwfunct3_32only(funct3) @ 0b0 @ 0b1 @ imm6 @ encdec_reg(rs1) @ 0b100 @ encdec_reg(rd) @ 0b0011011
   when currentlyEnabled(Ext_P) & xlen == 64
 
-function clause execute (PSHIFTSATIW_64ONLY(funct3, imm6, rs1, rd)) = {
+function clause execute (PSHIFTSATID_64ONLY(funct3, imm6, rs1, rd)) = {
   assert(xlen == 64);
   let rs1_val = X(rs1);
   let sa : nat = unsigned(imm6);
   let result : xlenbits = match funct3 {
     USATI =>
       let maxval : bits(xlen) = not_vec(ones(xlen) << sa) in
-      if (rs1_val <_s zeros(xlen)) then zeros(xlen)
-      else if (rs1_val >_s maxval) then maxval else rs1_val,
+      if (rs1_val <_s zeros(xlen)) then { write_vxsat(0b1); zeros(xlen) }
+      else if (rs1_val >_s maxval) then { write_vxsat(0b1); maxval } else rs1_val,
     SRARI => shift_right_arith_rounding(rs1_val, sa),
     SATI =>
       let minval : bits(xlen) = ones(xlen) << sa in
       let maxval = not_vec(minval) in
-      if (rs1_val <_s minval) then minval
-      else if (rs1_val >_s maxval) then maxval else rs1_val,
+      if (rs1_val <_s minval) then { write_vxsat(0b1); minval }
+      else if (rs1_val >_s maxval) then { write_vxsat(0b1); maxval } else rs1_val,
   };
   X(rd) = result;
   RETIRE_SUCCESS
 }
 
-mapping pshiftsatiw_mnemonic_64only : pshiftsatiwfunct3_64only <-> string = {
-  USATI <-> "usati",
-  SRARI <-> "srari",
-  SATI <-> "sati",
-}
-
-mapping clause assembly = PSHIFTSATIW_64ONLY(funct3, imm6, rs1, rd)
-  <-> pshiftsatiw_mnemonic_64only(funct3) ^ spc() ^ reg_name(rd) ^ sep() ^ reg_name(rs1) ^ sep() ^ hex_bits_6(imm6)
+mapping clause assembly = PSHIFTSATID_64ONLY(funct3, imm6, rs1, rd)
+  <-> pshiftsatiw_mnemonic_32only(funct3) ^ spc() ^ reg_name(rd) ^ sep() ^ reg_name(rs1) ^ sep() ^ hex_bits_6(imm6)
   when currentlyEnabled(Ext_P) & xlen == 64
-*/
 
 // **************************** P SHIFT WORD SCALAR *****************************
 union clause instruction = PSHIFTWSCALAR_64ONLY : (pshiftwscalarfunct3_64only, regidx, regidx, regidx)
@@ -473,7 +510,7 @@ mapping encdec_pmulwh01funct4_64only : pmulwh01funct4_64only <-> bits(4) = {
 }
 
 mapping clause encdec = PMULWH01_64ONLY(funct4, rs1, rs2, rd) <->
-  0b1 @ encdec_pmulwh01funct4_64only(funct4) @ 0b01 @ encdec_reg(rs2) @ encdec_reg(rs1) @ 0b001 @ encdec_reg(rd) @ 0b0011011
+  0b1 @ encdec_pmulwh01funct4_64only(funct4) @ 0b01 @ encdec_reg(rs2) @ encdec_reg(rs1) @ 0b001 @ encdec_reg(rd) @ 0b0111011
   when currentlyEnabled(Ext_P) & xlen == 64
 
 function clause execute (PMULWH01_64ONLY(funct4, rs1, rs2, rd)) = {
@@ -517,7 +554,7 @@ mapping encdec_pmuldw01funct4_64only : pmuldw01funct4_64only <-> bits(4) = {
 }
 
 mapping clause encdec = PMULDW01_64ONLY(funct4, rs1, rs2, rd) <->
-  0b1 @ encdec_pmuldw01funct4_64only(funct4) @ 0b11 @ encdec_reg(rs2) @ encdec_reg(rs1) @ 0b001 @ encdec_reg(rd) @ 0b0011011
+  0b1 @ encdec_pmuldw01funct4_64only(funct4) @ 0b11 @ encdec_reg(rs2) @ encdec_reg(rs1) @ 0b001 @ encdec_reg(rd) @ 0b0111011
   when currentlyEnabled(Ext_P) & xlen == 64
 
 function clause execute (PMULDW01_64ONLY(funct4, rs1, rs2, rd)) = {
@@ -1164,7 +1201,7 @@ mapping encdec_pmulwh01contdwidth2_64only : pmulwh01contdwidth2_64only <-> bits(
 }
 
 mapping clause encdec = PMULWH01CONTD_64ONLY(width2, rs1, rs2, rd) <->
-  0b1 @ 0b1111 @ encdec_pmulwh01contdwidth2_64only(width2) @ encdec_reg(rs2) @ encdec_reg(rs1) @ 0b001 @ encdec_reg(rd) @ 0b0011011
+  0b1 @ 0b1111 @ encdec_pmulwh01contdwidth2_64only(width2) @ encdec_reg(rs2) @ encdec_reg(rs1) @ 0b101 @ encdec_reg(rd) @ 0b0111011
   when currentlyEnabled(Ext_P) & xlen == 64
 
 function clause execute (PMULWH01CONTD_64ONLY(width2, rs1, rs2, rd)) = {
@@ -1203,7 +1240,7 @@ mapping encdec_pmuldw01contdwidth2_64only : pmuldw01contdwidth2_64only <-> bits(
 }
 
 mapping clause encdec = PMULDW01CONTD_64ONLY(width2, rs1, rs2, rd) <->
-  0b1 @ 0b1111 @ encdec_pmuldw01contdwidth2_64only(width2) @ encdec_reg(rs2) @ encdec_reg(rs1) @ 0b001 @ encdec_reg(rd) @ 0b0011011
+  0b1 @ 0b1111 @ encdec_pmuldw01contdwidth2_64only(width2) @ encdec_reg(rs2) @ encdec_reg(rs1) @ 0b101 @ encdec_reg(rd) @ 0b0111011
   when currentlyEnabled(Ext_P) & xlen == 64
 
 function clause execute (PMULDW01CONTD_64ONLY(width2, rs1, rs2, rd)) = {
